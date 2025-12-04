@@ -1,0 +1,276 @@
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser } from '@/lib/utils/role-check'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+
+async function getProject(id: string) {
+  const supabase = await createClient()
+
+  const { data: project, error } = await supabase
+    .from('projects')
+    .select(
+      `
+      *,
+      profiles:creator_id (
+        name,
+        public_profile_slug,
+        bio
+      )
+    `
+    )
+    .eq('id', id)
+    .single()
+
+  if (error || !project) return null
+  return project
+}
+
+async function getProjectRewards(projectId: string) {
+  const supabase = await createClient()
+
+  const { data: rewards, error } = await supabase
+    .from('rewards')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('amount', { ascending: true })
+
+  if (error) return []
+  return rewards || []
+}
+
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const project = await getProject(params.id)
+  const user = await getCurrentUser()
+
+  if (!project) {
+    notFound()
+  }
+
+  const rewards = await getProjectRewards(params.id)
+
+  const progress =
+    (Number(project.current_amount) / Number(project.goal_amount)) * 100
+  const daysLeft = project.deadline
+    ? Math.ceil(
+        (new Date(project.deadline).getTime() - Date.now()) /
+          (1000 * 60 * 60 * 24)
+      )
+    : 0
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
+      <div className="container mx-auto max-w-6xl">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Project Header */}
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <CardTitle className="text-3xl">{project.title}</CardTitle>
+                  {project.status === 'funded' && (
+                    <span className="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm">
+                      ✓ Financiado
+                    </span>
+                  )}
+                </div>
+                <CardDescription>
+                  Por: {(project.profiles as any)?.name || 'Desconocido'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* Video Preview */}
+                {project.video_id && (
+                  <div className="aspect-video bg-gray-950 mb-6 rounded-lg flex items-center justify-center">
+                    <Link href={`/watch/${project.video_id}`}>
+                      <Button variant="outline" size="lg">
+                        ▶ Ver Video del Proyecto
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+
+                {/* Description */}
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">
+                    Sobre este proyecto
+                  </h3>
+                  <p className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+                    {project.description}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Rewards */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recompensas</CardTitle>
+                <CardDescription>
+                  Apoya el proyecto y recibe recompensas exclusivas
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {rewards.length === 0 ? (
+                  <p className="text-gray-400 text-center py-4">
+                    Este proyecto aún no tiene recompensas definidas
+                  </p>
+                ) : (
+                  rewards.map((reward) => {
+                    const isAvailable =
+                      !reward.limit ||
+                      reward.backers_count < reward.limit
+                    const remaining = reward.limit
+                      ? reward.limit - reward.backers_count
+                      : null
+
+                    return (
+                      <Card
+                        key={reward.id}
+                        className={`${
+                          !isAvailable ? 'opacity-50' : ''
+                        }`}
+                      >
+                        <CardHeader>
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <CardTitle className="text-lg">
+                                {reward.title}
+                              </CardTitle>
+                              <CardDescription>
+                                ${Number(reward.amount).toLocaleString()} USD
+                              </CardDescription>
+                            </div>
+                            {!isAvailable && (
+                              <span className="bg-red-900/50 text-red-300 text-xs px-2 py-1 rounded-full">
+                                Agotado
+                              </span>
+                            )}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-300 text-sm mb-4">
+                            {reward.description}
+                          </p>
+                          {remaining !== null && (
+                            <p className="text-xs text-gray-400 mb-3">
+                              {remaining} disponibles de {reward.limit}
+                            </p>
+                          )}
+                          <Button
+                            className="w-full"
+                            disabled={!isAvailable || project.status !== 'active'}
+                          >
+                            {!user
+                              ? 'Inicia sesión para apoyar'
+                              : !isAvailable
+                                ? 'Agotado'
+                                : project.status !== 'active'
+                                  ? 'Campaña cerrada'
+                                  : 'Apoyar este nivel'}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  })
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Progress Card */}
+            <Card>
+              <CardContent className="pt-6 space-y-4">
+                <div>
+                  <p className="text-3xl font-bold text-blue-400">
+                    ${Number(project.current_amount).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    de ${Number(project.goal_amount).toLocaleString()} objetivo
+                  </p>
+                </div>
+
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div
+                    className="bg-blue-600 h-3 rounded-full transition-all"
+                    style={{ width: `${Math.min(progress, 100)}%` }}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-center pt-2">
+                  <div>
+                    <p className="text-2xl font-bold">{progress.toFixed(0)}%</p>
+                    <p className="text-xs text-gray-400">financiado</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{Math.max(0, daysLeft)}</p>
+                    <p className="text-xs text-gray-400">días restantes</p>
+                  </div>
+                </div>
+
+                {project.status === 'active' && (
+                  <Button className="w-full" size="lg">
+                    Apoyar este Proyecto
+                  </Button>
+                )}
+
+                {project.status === 'funded' && (
+                  <div className="bg-green-900/20 border border-green-500/50 p-4 rounded-lg text-center">
+                    <p className="text-green-300 font-semibold">
+                      ¡Proyecto Financiado!
+                    </p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Este proyecto alcanzó su meta
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Creator Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Sobre el Creador</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="font-semibold text-lg">
+                    {(project.profiles as any)?.name || 'Desconocido'}
+                  </p>
+                  {(project.profiles as any)?.bio && (
+                    <p className="text-sm text-gray-400 mt-2">
+                      {(project.profiles as any).bio}
+                    </p>
+                  )}
+                </div>
+                {(project.profiles as any)?.public_profile_slug && (
+                  <Link
+                    href={`/c/${(project.profiles as any).public_profile_slug}`}
+                  >
+                    <Button className="w-full" variant="outline">
+                      Ver Perfil del Creador
+                    </Button>
+                  </Link>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

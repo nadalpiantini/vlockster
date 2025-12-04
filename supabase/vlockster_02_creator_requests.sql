@@ -1,0 +1,36 @@
+-- VLOCKSTER Creator Requests
+-- Sistema de solicitudes para convertirse en creator
+
+CREATE TABLE IF NOT EXISTS public.creator_requests (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  pitch_title TEXT NOT NULL,
+  pitch_text TEXT NOT NULL,
+  portfolio_url TEXT,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  reviewed_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+  reviewed_at TIMESTAMP WITH TIME ZONE,
+  rejection_reason TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+
+  -- Constraints
+  CONSTRAINT one_pending_request_per_user UNIQUE (user_id, status)
+    WHERE status = 'pending'
+);
+
+-- Indexes
+CREATE INDEX idx_creator_requests_user ON public.creator_requests(user_id);
+CREATE INDEX idx_creator_requests_status ON public.creator_requests(status);
+CREATE INDEX idx_creator_requests_reviewed_by ON public.creator_requests(reviewed_by);
+
+-- Trigger for updated_at
+CREATE TRIGGER update_creator_requests_updated_at
+  BEFORE UPDATE ON public.creator_requests
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- Comments
+COMMENT ON TABLE public.creator_requests IS 'Solicitudes de usuarios para convertirse en creators';
+COMMENT ON CONSTRAINT one_pending_request_per_user ON public.creator_requests
+  IS 'Un usuario solo puede tener una solicitud pending a la vez';
