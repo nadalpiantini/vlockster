@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Verificar que el monto coincida
-      if (parseFloat(amount) < parseFloat((reward as any).amount)) {
+      if (Number(amount) < Number((reward as any).amount)) {
         return NextResponse.json(
           { error: 'El monto no coincide con la recompensa seleccionada' },
           { status: 400 }
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
           {
             amount: {
               currency_code: 'USD',
-              value: parseFloat(amount).toFixed(2),
+              value: Number(amount).toFixed(2),
             },
             description: `Backing for: ${(project as any).title}`,
             custom_id: JSON.stringify({

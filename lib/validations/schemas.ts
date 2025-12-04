@@ -32,6 +32,7 @@ export const rewardSchema = z.object({
   title: z.string().min(3, 'Título debe tener al menos 3 caracteres').max(100),
   description: z.string().min(10, 'Descripción debe tener al menos 10 caracteres').max(500),
   amount: z.number().positive('El monto debe ser positivo').max(100000),
+  limit: z.number().int().positive('El límite debe ser un número positivo').optional().nullable(),
   delivery_date: z.string().datetime('Fecha inválida').optional(),
 })
 

@@ -38,7 +38,7 @@ export async function DELETE(request: NextRequest) {
         avatar_url: null,
         is_deleted: true,
         deleted_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('id', user.id)
 
     if (profileError) {
