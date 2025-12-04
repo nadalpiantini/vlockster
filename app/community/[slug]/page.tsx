@@ -31,8 +31,8 @@ interface Post {
   title: string
   content: string
   created_at: string
-  likes_count: number
-  comments_count: number
+  like_count: number
+  comment_count: number
   profiles: {
     name: string
     avatar_url: string | null
@@ -270,24 +270,26 @@ export default function CommunityDetailPage({
             </Card>
           ) : (
             posts.map((post) => (
-              <Card key={post.id} className="hover:border-blue-500 transition-colors">
-                <CardHeader>
-                  <CardTitle>{post.title}</CardTitle>
-                  <CardDescription>
-                    Por: {post.profiles?.name || 'Desconocido'} •{' '}
-                    {new Date(post.created_at).toLocaleDateString('es-ES')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-300 whitespace-pre-wrap mb-4">
-                    {post.content}
-                  </p>
+              <Link key={post.id} href={`/community/post/${post.id}`}>
+                <Card className="hover:border-blue-500 transition-colors cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>{post.title}</CardTitle>
+                    <CardDescription>
+                      Por: {post.profiles?.name || 'Desconocido'} •{' '}
+                      {new Date(post.created_at).toLocaleDateString('es-ES')}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-300 whitespace-pre-wrap mb-4 line-clamp-3">
+                      {post.content}
+                    </p>
                   <div className="flex gap-4 text-sm text-gray-400">
-                    <span>👍 {post.likes_count || 0} likes</span>
-                    <span>💬 {post.comments_count || 0} comentarios</span>
+                    <span>👍 {post.like_count || 0} likes</span>
+                    <span>💬 {post.comment_count || 0} comentarios</span>
                   </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           )}
         </div>
