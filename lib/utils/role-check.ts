@@ -51,7 +51,7 @@ export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
 
 export async function checkIsCreator() {
   const user = await getCurrentUser()
-  return user && ['creator', 'admin'].includes(user.role)
+  return user !== null && ['creator', 'admin'].includes((user as UserProfile).role)
 }
 
 export async function checkIsAdmin() {

@@ -14,18 +14,18 @@ import { Button } from '@/components/ui/button'
 async function getVideo(id: string) {
   const supabase = await createClient()
 
-  const { data: video, error } = await supabase
-    .from('videos')
+  const { data: video, error } = await (supabase
+    .from('videos') as any)
     .select('*')
     .eq('id', id)
     .single()
 
   // Fetch uploader profile separately
-  if (video && video.uploader_id) {
+  if (video && (video as any).uploader_id) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug, bio')
-      .eq('id', video.uploader_id)
+      .eq('id', (video as any).uploader_id)
       .single()
 
     if (profile) {
@@ -34,7 +34,7 @@ async function getVideo(id: string) {
   }
 
   if (error || !video) return null
-  return video
+  return video as any
 }
 
 export default async function WatchVideoPage({
@@ -52,9 +52,9 @@ export default async function WatchVideoPage({
 
   // Verificar permisos de acceso según visibilidad
   const canWatch =
-    video.visibility === 'public' ||
-    (user && video.visibility === 'members') ||
-    (user && video.uploader_id === user.id)
+    (video as any).visibility === 'public' ||
+    (user && (video as any).visibility === 'members') ||
+    (user && (video as any).uploader_id === (user as any).id)
 
   if (!canWatch) {
     return (
@@ -151,7 +151,7 @@ export default async function WatchVideoPage({
                 </div>
                 {(video.uploader as any)?.public_profile_slug && (
                   <Link
-                    href={`/c/${(video.uploader as any).public_profile_slug}`}
+                    href={`/c/${(video.uploader as any).public_profile_slug}` as any}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil

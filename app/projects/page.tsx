@@ -12,30 +12,31 @@ import { Button } from '@/components/ui/button'
 async function getActiveProjects() {
   const supabase = await createClient()
 
-  const { data: projects, error } = await supabase
-    .from('projects')
+  const { data: projects, error } = await (supabase
+    .from('projects') as any)
     .select('*')
     .in('status', ['active', 'funded'])
     .order('created_at', { ascending: false })
 
   // Fetch creator profiles separately if needed
-  if (projects && projects.length > 0) {
-    const creatorIds = [...new Set(projects.map((p) => p.creator_id))]
+  const projectsArray = (projects || []) as any[]
+  if (projectsArray.length > 0) {
+    const creatorIds = [...new Set(projectsArray.map((p: any) => p.creator_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug')
       .in('id', creatorIds)
 
     if (profiles) {
-      const profileMap = new Map(profiles.map((p) => [p.id, p]))
-      projects.forEach((project) => {
-        ;(project as any).creator = profileMap.get(project.creator_id) || null
+      const profileMap = new Map(profiles.map((p: any) => [p.id, p]))
+      projectsArray.forEach((project: any) => {
+        project.creator = profileMap.get(project.creator_id) || null
       })
     }
   }
 
   if (error) throw error
-  return projects || []
+  return projectsArray
 }
 
 export default async function ProjectsPage() {
@@ -69,7 +70,7 @@ export default async function ProjectsPage() {
           </Card>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => {
+            {projects.map((project: any) => {
               const progress =
                 (Number(project.current_amount) /
                   Number(project.goal_amount)) *

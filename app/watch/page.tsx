@@ -12,8 +12,8 @@ import {
 async function getPublicVideos() {
   const supabase = await createClient()
 
-  const { data: videos, error } = await supabase
-    .from('videos')
+  const { data: videos, error } = await (supabase
+    .from('videos') as any)
     .select('*')
     .eq('visibility', 'public')
     .order('created_at', { ascending: false })
@@ -21,16 +21,16 @@ async function getPublicVideos() {
 
   // Fetch uploader profiles separately if needed
   if (videos && videos.length > 0) {
-    const uploaderIds = [...new Set(videos.map((v) => v.uploader_id))]
+    const uploaderIds = [...new Set((videos as any[]).map((v: any) => v.uploader_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug')
       .in('id', uploaderIds)
 
     if (profiles) {
-      const profileMap = new Map(profiles.map((p) => [p.id, p]))
-      videos.forEach((video) => {
-        ;(video as any).uploader = profileMap.get(video.uploader_id) || null
+      const profileMap = new Map(profiles.map((p: any) => [p.id, p]))
+      ;(videos as any[]).forEach((video: any) => {
+        video.uploader = profileMap.get(video.uploader_id) || null
       })
     }
   }

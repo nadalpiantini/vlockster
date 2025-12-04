@@ -56,16 +56,14 @@ async function getProjectRewards(projectId: string) {
     .order('amount', { ascending: true })
 
   if (error) return []
-  return (rewards || []) as Array<{
-    id: string
-    project_id: string
-    title: string
-    description: string | null
-    amount: number
-    delivery_date: string | null
-    limit: number | null
-    backers_count: number
-  }>
+  return (rewards || []).map((reward: any) => ({
+    id: reward.id,
+    title: reward.title,
+    description: reward.description ?? null,
+    amount: reward.amount,
+    limit: reward.limit ?? null,
+    backers_count: reward.backers_count ?? 0,
+  }))
 }
 
 export default async function ProjectDetailPage({
