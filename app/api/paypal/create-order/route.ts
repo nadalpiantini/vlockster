@@ -46,7 +46,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Prevenir self-backing
-    if ((project.profiles as any).id === user.id) {
+    type ProjectProfile = { id: string } | null
+    const creatorProfile = project.profiles as ProjectProfile
+    if (creatorProfile?.id === user.id) {
       return NextResponse.json(
         { error: 'No puedes respaldar tu propio proyecto' },
         { status: 400 }

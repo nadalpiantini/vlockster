@@ -33,11 +33,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
-    type ProfilesUpdate = Database['public']['Tables']['profiles']['Update']
-    const roleUpdate: ProfilesUpdate = { role: 'creator' }
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update(roleUpdate)
+      .update({ role: 'creator' } as Database['public']['Tables']['profiles']['Update'])
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {

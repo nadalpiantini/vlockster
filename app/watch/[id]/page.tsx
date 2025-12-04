@@ -16,18 +16,22 @@ async function getVideo(id: string) {
 
   const { data: video, error } = await supabase
     .from('videos')
-    .select(
-      `
-      *,
-      profiles:uploader_id (
-        name,
-        public_profile_slug,
-        bio
-      )
-    `
-    )
+    .select('*')
     .eq('id', id)
     .single()
+
+  // Fetch uploader profile separately
+  if (video && video.uploader_id) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id, name, public_profile_slug, bio')
+      .eq('id', video.uploader_id)
+      .single()
+
+    if (profile) {
+      ;(video as any).uploader = profile
+    }
+  }
 
   if (error || !video) return null
   return video
@@ -137,17 +141,17 @@ export default async function WatchVideoPage({
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-semibold text-lg">
-                    {(video.profiles as any)?.name || 'Desconocido'}
+                    {(video.uploader as any)?.name || 'Desconocido'}
                   </p>
-                  {(video.profiles as any)?.bio && (
+                  {(video.uploader as any)?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
-                      {(video.profiles as any).bio}
+                      {(video.uploader as any).bio}
                     </p>
                   )}
                 </div>
-                {(video.profiles as any)?.public_profile_slug && (
+                {(video.uploader as any)?.public_profile_slug && (
                   <Link
-                    href={`/c/${(video.profiles as any).public_profile_slug}`}
+                    href={`/c/${(video.uploader as any).public_profile_slug}`}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil

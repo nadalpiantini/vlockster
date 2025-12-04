@@ -13,18 +13,26 @@ async function getPublicVideos() {
 
   const { data: videos, error } = await supabase
     .from('videos')
-    .select(
-      `
-      *,
-      uploader:profiles!videos_uploader_id_fkey (
-        name,
-        public_profile_slug
-      )
-    `
-    )
+    .select('*')
     .eq('visibility', 'public')
     .order('created_at', { ascending: false })
     .limit(20)
+
+  // Fetch uploader profiles separately if needed
+  if (videos && videos.length > 0) {
+    const uploaderIds = [...new Set(videos.map((v) => v.uploader_id))]
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, name, public_profile_slug')
+      .in('id', uploaderIds)
+
+    if (profiles) {
+      const profileMap = new Map(profiles.map((p) => [p.id, p]))
+      videos.forEach((video) => {
+        ;(video as any).uploader = profileMap.get(video.uploader_id) || null
+      })
+    }
+  }
 
   if (error) throw error
   return videos || []

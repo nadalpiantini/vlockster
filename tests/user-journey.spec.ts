@@ -23,9 +23,9 @@ test.describe('User Journey - Todas las funcionalidades', () => {
     const testName = 'Test User'
 
     await page.fill('input[type="email"]', testEmail)
-    await page.fill('input[name="name"]', testName)
+    await page.fill('input[id="name"]', testName)
     await page.fill('input[type="password"]', testPassword)
-    await page.fill('input[name="confirmPassword"]', testPassword)
+    await page.fill('input[id="confirmPassword"]', testPassword)
 
     // Intentar registrarse (puede fallar si no hay Supabase configurado)
     try {
@@ -59,7 +59,7 @@ test.describe('User Journey - Todas las funcionalidades', () => {
     const publicRoutes = [
       { path: '/', expectedText: 'VLOCKSTER' },
       { path: '/login', expectedText: 'Iniciar Sesión' },
-      { path: '/signup', expectedText: 'Registrarse' },
+      { path: '/signup', expectedText: 'Crear Cuenta' },
       { path: '/watch', expectedText: 'Catálogo' },
       { path: '/projects', expectedText: 'Proyectos' },
       { path: '/community', expectedText: 'Comunidad' },

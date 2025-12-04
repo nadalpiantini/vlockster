@@ -24,21 +24,26 @@ async function getProject(id: string) {
 
   const { data: project, error } = await supabase
     .from('projects')
-    .select(
-      `
-      *,
-      profiles:creator_id (
-        name,
-        public_profile_slug,
-        bio
-      )
-    `
-    )
+    .select('*')
     .eq('id', id)
     .single()
 
   if (error || !project) return null
-  return project as typeof project & { profiles: ProjectProfile }
+
+  // Fetch creator profile separately
+  if (project.creator_id) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id, name, public_profile_slug, bio')
+      .eq('id', project.creator_id)
+      .single()
+
+    if (profile) {
+      ;(project as any).creator = profile
+    }
+  }
+
+  return project as typeof project & { creator: ProjectProfile }
 }
 
 async function getProjectRewards(projectId: string) {
@@ -96,7 +101,7 @@ export default async function ProjectDetailPage({
                   )}
                 </div>
                 <CardDescription>
-                  Por: {project.profiles?.name || 'Desconocido'}
+                  Por: {(project.creator as any)?.name || 'Desconocido'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -213,15 +218,15 @@ export default async function ProjectDetailPage({
                   <p className="font-semibold text-lg">
                     {project.profiles?.name || 'Desconocido'}
                   </p>
-                  {project.profiles?.bio && (
+                  {(project.creator as any)?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
-                      {project.profiles.bio}
+                      {(project.creator as any).bio}
                     </p>
                   )}
                 </div>
-                {project.profiles?.public_profile_slug && (
+                {(project.creator as any)?.public_profile_slug && (
                   <Link
-                    href={`/c/${project.profiles.public_profile_slug}`}
+                    href={`/c/${(project.creator as any).public_profile_slug}`}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador

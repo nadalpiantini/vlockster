@@ -133,7 +133,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/projects">
+                  <Link href="/projects/my">
                     <Button className="w-full" variant="outline">
                       Ver Mis Proyectos
                     </Button>
