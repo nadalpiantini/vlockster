@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtener la solicitud
+    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
     const { data: creatorRequest, error: fetchError } = await supabase
       .from('creator_requests')
       .select('user_id')
@@ -33,10 +34,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
-    // @ts-expect-error - Supabase types incomplete, role update is valid
+    type ProfilesUpdate = Database['public']['Tables']['profiles']['Update']
+    const roleUpdate: ProfilesUpdate = { role: 'creator' }
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' })
+      .update(roleUpdate)
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
@@ -48,7 +50,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar la solicitud como aprobada
-    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
     const { error: updateRequestError } = await supabase
       .from('creator_requests')
       .update({
