@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
       <div className="relative w-full max-w-md px-8">
         <Image
           src="/items/vlockster_logo.png"
