@@ -4,6 +4,9 @@ import { paypalCaptureOrderSchema } from '@/lib/validations/schemas'
 import { handleValidationError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()

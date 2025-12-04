@@ -4,6 +4,9 @@ import { videoUploadSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024 // 5GB
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime']
 

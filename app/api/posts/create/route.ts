@@ -4,6 +4,9 @@ import { postCreateSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()

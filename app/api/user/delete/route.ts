@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * Elimina la cuenta del usuario y todos sus datos (GDPR - Derecho al olvido)
  * NOTA: Esto es una eliminación suave (soft delete) para mantener integridad referencial

@@ -1,10 +1,14 @@
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  // No usar Supabase aquí. Edge runtime no soporta Supabase JS.
+  // Next 15 + Supabase recomienda NO autenticar desde middleware.
+  // La autenticación se maneja en Server Components y Route Handlers.
+  return NextResponse.next()
 }
 
+// Opcional: proteger rutas que requieren sesión
 export const config = {
   matcher: [
     /*
