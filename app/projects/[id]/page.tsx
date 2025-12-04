@@ -216,7 +216,7 @@ export default async function ProjectDetailPage({
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-semibold text-lg">
-                    {project.profiles?.name || 'Desconocido'}
+                    {(project.creator as any)?.name || 'Desconocido'}
                   </p>
                   {(project.creator as any)?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
