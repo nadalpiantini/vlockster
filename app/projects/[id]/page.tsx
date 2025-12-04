@@ -49,14 +49,21 @@ async function getProject(id: string) {
 async function getProjectRewards(projectId: string) {
   const supabase = await createClient()
 
-  const { data: rewards, error } = await supabase
-    .from('rewards')
+  const { data: rewards, error } = await (supabase
+    .from('rewards') as any)
     .select('*')
     .eq('project_id', projectId)
     .order('amount', { ascending: true })
 
   if (error) return []
-  return rewards || []
+  return (rewards || []) as Array<{
+    id: string
+    project_id: string
+    title: string
+    description: string | null
+    amount: number
+    delivery_date: string | null
+  }>
 }
 
 export default async function ProjectDetailPage({
