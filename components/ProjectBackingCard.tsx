@@ -1,8 +1,6 @@
 'use client'
 
 import { PayPalButton, PayPalButtonPlaceholder } from '@/components/PayPalButton'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 
 interface ProjectBackingCardProps {
   projectId: string

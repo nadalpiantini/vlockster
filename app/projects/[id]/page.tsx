@@ -12,10 +12,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
-import {
-  PayPalButton,
-  PayPalButtonPlaceholder,
-} from '@/components/PayPalButton'
 
 async function getProject(id: string) {
   const supabase = await createClient()
@@ -181,21 +177,12 @@ export default async function ProjectDetailPage({
                   </div>
                 </div>
 
-                {project.status === 'active' && user && (
-                  <PayPalButton
-                    projectId={project.id}
-                    amount={Number(project.goal_amount)}
-                    onSuccess={() => {
-                      window.location.reload()
-                    }}
-                    onError={(error) => {
-                      console.error('PayPal error:', error)
-                    }}
-                  />
-                )}
-                {project.status === 'active' && !user && (
-                  <PayPalButtonPlaceholder />
-                )}
+                <ProjectBackingCard
+                  projectId={project.id}
+                  projectStatus={project.status}
+                  goalAmount={Number(project.goal_amount)}
+                  user={user}
+                />
 
                 {project.status === 'funded' && (
                   <div className="bg-green-900/20 border border-green-500/50 p-4 rounded-lg text-center">

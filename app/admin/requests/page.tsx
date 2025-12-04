@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { requireRole } from '@/lib/utils/role-check'
 import { createClient } from '@/lib/supabase/server'
 import {
@@ -30,57 +29,6 @@ async function getCreatorRequests() {
   return requests || []
 }
 
-async function approveRequest(requestId: string) {
-  'use server'
-  const supabase = await createClient()
-  const admin = await requireRole(['admin'])
-
-  // Obtener la solicitud
-  const { data: request, error: fetchError } = await supabase
-    .from('creator_requests')
-    .select('user_id')
-    .eq('id', requestId)
-    .single()
-
-  if (fetchError) throw fetchError
-
-  // Actualizar el rol del usuario a creator
-  const { error: updateRoleError } = await supabase
-    .from('profiles')
-    .update({ role: 'creator' })
-    .eq('id', request.user_id)
-
-  if (updateRoleError) throw updateRoleError
-
-  // Marcar la solicitud como aprobada
-  const { error: updateRequestError } = await supabase
-    .from('creator_requests')
-    .update({
-      status: 'approved',
-      reviewed_by: admin.id,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq('id', requestId)
-
-  if (updateRequestError) throw updateRequestError
-}
-
-async function rejectRequest(requestId: string) {
-  'use server'
-  const supabase = await createClient()
-  const admin = await requireRole(['admin'])
-
-  const { error } = await supabase
-    .from('creator_requests')
-    .update({
-      status: 'rejected',
-      reviewed_by: admin.id,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq('id', requestId)
-
-  if (error) throw error
-}
 
 export default async function AdminRequestsPage() {
   await requireRole(['admin'])
