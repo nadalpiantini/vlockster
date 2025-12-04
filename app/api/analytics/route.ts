@@ -37,13 +37,13 @@ export async function GET(request: NextRequest) {
     const totalVideos = videos?.length || 0
 
     // Obtener métricas de videos
-    const { data: videoMetrics, error: metricsError } = await supabase
-      .from('video_metrics')
-      .select('video_id, watched_seconds, liked, completed')
-      .in(
-        'video_id',
-        videos?.map((v) => v.id) || []
-      )
+    const videoIds = videos?.map((v) => v.id) || []
+    const { data: videoMetrics, error: metricsError } = videoIds.length > 0
+      ? await supabase
+          .from('video_metrics')
+          .select('video_id, watched_seconds, liked, completed')
+          .in('video_id', videoIds)
+      : { data: null, error: null }
 
     const totalViews = videoMetrics?.length || 0
     const totalWatchTime = videoMetrics?.reduce(
@@ -73,13 +73,13 @@ export async function GET(request: NextRequest) {
       projects?.reduce((sum, p) => sum + Number(p.current_amount), 0) || 0
 
     // Obtener backings recibidos
-    const { data: backings, error: backingsError } = await supabase
-      .from('backings')
-      .select('amount, created_at')
-      .in(
-        'project_id',
-        projects?.map((p) => p.id) || []
-      )
+    const projectIds = projects?.map((p) => p.id) || []
+    const { data: backings, error: backingsError } = projectIds.length > 0
+      ? await supabase
+          .from('backings')
+          .select('amount, created_at')
+          .in('project_id', projectIds)
+      : { data: null, error: null }
 
     const totalBackers = backings?.length || 0
 

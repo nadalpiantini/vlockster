@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -39,11 +39,9 @@ interface Post {
   }
 }
 
-export default function CommunityDetailPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
+export default function CommunityDetailPage() {
+  const params = useParams()
+  const slug = params.slug as string
   const [community, setCommunity] = useState<Community | null>(null)
   const [posts, setPosts] = useState<Post[]>([])
   const [user, setUser] = useState<any>(null)
@@ -58,7 +56,7 @@ export default function CommunityDetailPage({
 
   useEffect(() => {
     loadData()
-  }, [params.slug])
+  }, [slug])
 
   async function loadData() {
     try {
@@ -79,7 +77,7 @@ export default function CommunityDetailPage({
           )
         `
         )
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single()
 
       if (communityError || !communityData) {
