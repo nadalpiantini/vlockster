@@ -82,8 +82,8 @@ export default function PrivacyPage() {
               <p className="mt-4">
                 Puedes ejercer estos derechos contactándonos a través de la plataforma
                 o visitando{' '}
-                <Link href="/account/settings" className="text-blue-400 hover:underline">
-                  Configuración de Cuenta
+                <Link href="/dashboard" className="text-blue-400 hover:underline">
+                  Dashboard
                 </Link>
                 .
               </p>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { sanitizeHtml, sanitizeText } from './sanitize'
+import { sanitizeHtml, sanitizeText, sanitizeObject } from './sanitize'
 
 describe('sanitize', () => {
   describe('sanitizeHtml', () => {
@@ -39,6 +39,46 @@ describe('sanitize', () => {
       const input = '<script>alert("XSS")</script>'
       const result = sanitizeText(input)
       expect(result).not.toContain('<script>')
+    })
+  })
+
+  describe('sanitizeObject', () => {
+    it('debe sanitizar campos de texto especificados', () => {
+      const obj = {
+        name: '<p>Test Name</p>',
+        bio: '<script>alert("XSS")</script>',
+        age: 25,
+      }
+
+      const result = sanitizeObject(obj, ['name', 'bio'])
+
+      expect(result.name).not.toContain('<')
+      expect(result.bio).not.toContain('<script>')
+      expect(result.age).toBe(25) // No debe cambiar
+    })
+
+    it('debe mantener campos no especificados sin cambios', () => {
+      const obj = {
+        name: '<p>Test</p>',
+        other: '<p>Other</p>',
+      }
+
+      const result = sanitizeObject(obj, ['name'])
+
+      expect(result.name).not.toContain('<')
+      expect(result.other).toBe('<p>Other</p>') // No sanitizado
+    })
+
+    it('debe manejar objetos con campos null', () => {
+      const obj = {
+        name: '<p>Test</p>',
+        bio: null,
+      }
+
+      const result = sanitizeObject(obj, ['name', 'bio'])
+
+      expect(result.name).not.toContain('<')
+      expect(result.bio).toBeNull()
     })
   })
 })

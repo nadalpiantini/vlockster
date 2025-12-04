@@ -18,7 +18,9 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:unit": "vitest",
-    "test:unit:ui": "vitest --ui"
+    "test:unit:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:all": "vitest --coverage && playwright test"
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.9.1",
@@ -63,6 +65,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.0.15",
     "@vitest/ui": "^4.0.15",
     "eslint": "^9",
     "eslint-config-next": "^15.1.0",
