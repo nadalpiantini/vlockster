@@ -33,9 +33,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
+    // @ts-expect-error - Supabase types issue with update, role is valid
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' } as Database['public']['Tables']['profiles']['Update'])
+      .update({ role: 'creator' })
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
