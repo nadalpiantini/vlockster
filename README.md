@@ -165,14 +165,14 @@ Después de completar el setup, la aplicación estará disponible en `http://loc
 - `/watch/[id]` - Reproductor de video individual
 
 ### Rutas de Creator (requieren rol creator o admin)
-- `/upload` - Subir videos (pendiente implementar)
-- `/projects/create` - Crear proyecto de crowdfunding (pendiente implementar)
-- `/my-projects` - Gestionar proyectos propios (pendiente implementar)
+- `/upload` - Subir videos ✅
+- `/projects/create` - Crear proyecto de crowdfunding ✅
+- `/projects/my` - Gestionar proyectos propios ✅
 
 ### Rutas de Admin (requieren rol admin)
 - `/admin/requests` - Aprobar/rechazar solicitudes de creators
-- `/admin/users` - Gestión de usuarios (pendiente implementar)
-- `/admin/reports` - Moderar reportes (pendiente implementar)
+- `/admin/users` - Gestión de usuarios ✅
+- `/admin/reports` - Moderar reportes ✅
 
 ## 🔑 Variables de Entorno
 
@@ -224,6 +224,28 @@ El proyecto usa **shadcn/ui** para componentes de interfaz, construidos sobre:
 ### Tema
 Soporta modo claro y oscuro out-of-the-box. Las variables CSS están en `app/globals.css`.
 
+## 🤖 BMAD-METHOD™ Integration
+
+Este proyecto utiliza **BMAD-METHOD™** (Breakthrough Method of Agile AI-driven Development) para desarrollo orquestado con agentes especializados.
+
+### Agentes Disponibles
+
+Ver `AGENTS.md` para la lista completa de agentes. Activa agentes en Cursor usando `@agent-name`:
+
+- `@bmad-master` - Agente maestro universal
+- `@dev` - Desarrollo e implementación
+- `@pm` - Product Management
+- `@architect` - Arquitectura de sistemas
+- `@qa` - Quality Assurance
+- Y más...
+
+### Documentación BMAD
+
+- **Guía de Usuario**: `.bmad-core/user-guide.md`
+- **Arquitectura**: `docs/architecture.md`
+- **PRD**: `docs/prd.md`
+- **Activity Log**: `ACTIVITY_LOG.md`
+
 ## 📚 Documentación Adicional
 
 - [Supabase Docs](https://supabase.com/docs)
@@ -231,6 +253,7 @@ Soporta modo claro y oscuro out-of-the-box. Las variables CSS están en `app/glo
 - [Cloudflare Stream Docs](https://developers.cloudflare.com/stream/)
 - [PayPal Developer Docs](https://developer.paypal.com/docs/)
 - [shadcn/ui Docs](https://ui.shadcn.com)
+- [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD)
 
 ## 🤝 Contribuir
 
