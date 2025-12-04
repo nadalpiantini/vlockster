@@ -22,8 +22,8 @@ type ProjectProfile = {
 async function getProject(id: string) {
   const supabase = await createClient()
 
-  const { data: project, error } = await supabase
-    .from('projects')
+  const { data: project, error } = await (supabase
+    .from('projects') as any)
     .select('*')
     .eq('id', id)
     .single()
@@ -31,11 +31,11 @@ async function getProject(id: string) {
   if (error || !project) return null
 
   // Fetch creator profile separately
-  if (project.creator_id) {
-    const { data: profile } = await supabase
-      .from('profiles')
+  if ((project as any).creator_id) {
+    const { data: profile } = await (supabase
+      .from('profiles') as any)
       .select('id, name, public_profile_slug, bio')
-      .eq('id', project.creator_id)
+      .eq('id', (project as any).creator_id)
       .single()
 
     if (profile) {
