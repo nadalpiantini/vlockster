@@ -73,6 +73,28 @@
 - Schema de reports usa `reviewed_by` no `resolved_by` - corregido
 - Componentes necesitaban ser client components para acciones - creados componentes separados
 
+**Tests Agregados**:
+- ✅ `tests/api/admin.update-role.spec.ts` - Tests para actualización de roles
+- ✅ `tests/api/admin.resolve-report.spec.ts` - Tests para resolución de reportes
+
+---
+
+### 2025-12-04 - Sprint 6: Integration Testing & Validation ⏳
+
+**Estado**: En progreso
+
+**Tareas Realizadas**:
+1. ✅ Verificado que todas las funcionalidades principales están implementadas
+2. ✅ Agregados tests para nuevas funcionalidades admin
+3. ⏳ Validando integración completa frontend-backend-database
+
+**Funcionalidades Verificadas**:
+- ✅ Video Upload: Frontend + Backend + Database - Completo
+- ✅ Project Creation: Frontend + Backend + Database - Completo
+- ✅ My Projects: Frontend + Queries - Completo
+- ✅ Admin User Management: Frontend + Backend - Completo (Sprint 1)
+- ✅ Admin Reports Moderation: Frontend + Backend - Completo (Sprint 1)
+
 ---
 
 ### 2025-12-04 - Inicio del Workflow
