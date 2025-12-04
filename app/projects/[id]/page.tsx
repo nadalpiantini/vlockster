@@ -235,7 +235,7 @@ export default async function ProjectDetailPage({
                 </div>
                 {(project.creator as any)?.public_profile_slug && (
                   <Link
-                    href={`/c/${(project.creator as any).public_profile_slug}`}
+                    href={`/c/${(project.creator as any).public_profile_slug}` as any}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador
