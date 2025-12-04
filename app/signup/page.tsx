@@ -193,14 +193,14 @@ export default function SignupPage() {
             <CardFooter className="flex flex-col space-y-4">
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#E50914] to-[#B20710] text-white hover:from-[#F40612] hover:to-[#C11119] transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/30 font-semibold"
+                className="w-full bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105 font-bold"
                 disabled={loading}
               >
                 {loading ? 'Creating account...' : 'Create Account'}
               </Button>
               <p className="text-sm text-gray-400 text-center">
                 Already have an account?{' '}
-                <Link href="/login" className="text-[#E50914] hover:text-[#F40612] font-semibold transition-colors">
+                <Link href="/login" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors">
                   Sign in here
                 </Link>
               </p>
