@@ -14,14 +14,14 @@ import { Button } from '@/components/ui/button'
 async function getMyProjects(userId: string) {
   const supabase = await createClient()
 
-  const { data: projects, error } = await supabase
-    .from('projects')
+  const { data: projects, error } = await (supabase
+    .from('projects') as any)
     .select('*')
     .eq('creator_id', userId)
     .order('created_at', { ascending: false })
 
   if (error) return []
-  return projects || []
+  return (projects || []) as any[]
 }
 
 export default async function MyProjectsPage() {
@@ -37,7 +37,7 @@ export default async function MyProjectsPage() {
     redirect('/dashboard')
   }
 
-  const projects = await getMyProjects(user.id)
+  const projects = await getMyProjects((user as any).id)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
@@ -72,7 +72,7 @@ export default async function MyProjectsPage() {
           </Card>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => {
+            {projects.map((project: any) => {
               const progress =
                 (Number(project.current_amount) /
                   Number(project.goal_amount)) *
