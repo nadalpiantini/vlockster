@@ -31,7 +31,7 @@ export default async function MyProjectsPage() {
     redirect('/login')
   }
 
-  const isCreator = ['creator', 'admin'].includes(user.role)
+  const isCreator = ['creator', 'admin'].includes((user as any).role)
 
   if (!isCreator) {
     redirect('/dashboard')
