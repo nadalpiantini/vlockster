@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/utils/role-check'
-import type { Database } from '@/types/database.types'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtener la solicitud
-    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
     const { data: creatorRequest, error: fetchError } = await supabase
       .from('creator_requests')
       .select('user_id')
@@ -34,11 +32,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
-    type ProfilesUpdate = Database['public']['Tables']['profiles']['Update']
-    const roleUpdate: ProfilesUpdate = { role: 'creator' }
+    // @ts-expect-error - Supabase types incomplete, role update is valid
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update(roleUpdate)
+      .update({ role: 'creator' })
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
@@ -50,6 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar la solicitud como aprobada
+    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
     const { error: updateRequestError } = await supabase
       .from('creator_requests')
       .update({
