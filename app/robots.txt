@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /upload/
+Disallow: /apply/
+
+Sitemap: https://vlockster.com/sitemap.xml
+
