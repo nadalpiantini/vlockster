@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getCurrentUser } from '@/lib/utils/role-check'
+import { getCurrentUser, type UserProfile } from '@/lib/utils/role-check'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,8 +17,9 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
-  const isCreator = ['creator', 'admin'].includes(user.role)
-  const isAdmin = user.role === 'admin'
+  const userProfile = user as UserProfile
+  const isCreator = ['creator', 'admin'].includes(userProfile.role)
+  const isAdmin = userProfile.role === 'admin'
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -26,10 +27,10 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            Bienvenido, {user.name || user.email}
+            Bienvenido, {userProfile.name || userProfile.email}
           </h1>
           <p className="text-gray-400">
-            Rol: <span className="capitalize">{user.role}</span>
+            Rol: <span className="capitalize">{userProfile.role}</span>
           </p>
         </div>
 
