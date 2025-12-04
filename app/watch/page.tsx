@@ -16,7 +16,7 @@ async function getPublicVideos() {
     .select(
       `
       *,
-      profiles:uploader_id (
+      uploader:profiles!videos_uploader_id_fkey (
         name,
         public_profile_slug
       )
@@ -83,7 +83,7 @@ export default async function WatchPage() {
 
                   <CardContent>
                     <p className="text-sm text-gray-400">
-                      Por: {(video.profiles as any)?.name || 'Desconocido'}
+                      Por: {(video.uploader as any)?.name || 'Desconocido'}
                     </p>
                   </CardContent>
                 </Card>
