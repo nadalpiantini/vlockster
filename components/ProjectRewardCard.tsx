@@ -13,7 +13,7 @@ import {
 interface Reward {
   id: string
   title: string
-  description: string
+  description: string | null
   amount: number
   limit: number | null
   backers_count: number
