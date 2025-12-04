@@ -415,7 +415,12 @@ async function main() {
 
   // Step 8: Deploy
   log('\n📋 Paso 8: Deploy a producción...', 'cyan');
-  const deploy = await question('🚀 ¿Hacer deploy ahora? (y/n): ');
+  let deploy = process.env.SKIP_DEPLOY === 'true' ? 'n' : process.argv[5];
+  if (!deploy) {
+    deploy = await question('🚀 ¿Hacer deploy ahora? (y/n): ');
+  } else {
+    log(`🚀 Deploy: ${deploy === 'n' ? 'Omitir' : 'Sí'} (desde argumento/env)`, 'blue');
+  }
   
   if (deploy.toLowerCase() === 'y') {
     log('🚀 Desplegando a producción...', 'yellow');
