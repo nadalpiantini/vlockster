@@ -1,4 +1,31 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'VLOCKSTER - El futuro del cine independiente',
+  description:
+    'Streaming, crowdfunding y comunidad para cine independiente. Descubre, financia y forma parte de historias extraordinarias.',
+  keywords: [
+    'cine independiente',
+    'streaming',
+    'crowdfunding',
+    'películas indie',
+    'creadores',
+    'comunidad cinematográfica',
+  ],
+  openGraph: {
+    title: 'VLOCKSTER - El futuro del cine independiente',
+    description:
+      'Streaming, crowdfunding y comunidad para cine independiente',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VLOCKSTER - El futuro del cine independiente',
+    description:
+      'Streaming, crowdfunding y comunidad para cine independiente',
+  },
+}
 
 export default function HomePage() {
   return (

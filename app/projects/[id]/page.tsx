@@ -55,16 +55,17 @@ async function getProjectRewards(projectId: string) {
 export default async function ProjectDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const project = await getProject(params.id)
+  const { id } = await params
+  const project = await getProject(id)
   const user = await getCurrentUser()
 
   if (!project) {
     notFound()
   }
 
-  const rewards = await getProjectRewards(params.id)
+  const rewards = await getProjectRewards(id)
 
   const progress =
     (Number(project.current_amount) / Number(project.goal_amount)) * 100
