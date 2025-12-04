@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient()
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Obtener estadísticas de videos
-    const { data: videos, error: videosError } = await supabase
+    const { data: videos } = await supabase
       .from('videos')
       .select('id, title, created_at')
       .eq('uploader_id', user.id)
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     // Obtener métricas de videos
     const videoIds = videos?.map((v) => v.id) || []
-    const { data: videoMetrics, error: metricsError } = videoIds.length > 0
+    const { data: videoMetrics } = videoIds.length > 0
       ? await supabase
           .from('video_metrics')
           .select('video_id, watched_seconds, liked, completed')
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
         : 0
 
     // Obtener estadísticas de proyectos
-    const { data: projects, error: projectsError } = await supabase
+    const { data: projects } = await supabase
       .from('projects')
       .select('id, title, goal_amount, current_amount, status, created_at')
       .eq('creator_id', user.id)
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
     // Obtener backings recibidos
     const projectIds = projects?.map((p) => p.id) || []
-    const { data: backings, error: backingsError } = projectIds.length > 0
+    const { data: backings } = projectIds.length > 0
       ? await supabase
           .from('backings')
           .select('amount, created_at')
