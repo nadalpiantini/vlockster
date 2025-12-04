@@ -9,7 +9,16 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-async function getPublicVideos() {
+type Video = {
+  id: string
+  title: string
+  description: string | null
+  thumbnail_url: string | null
+  uploader_id: string
+  uploader?: { name: string | null; public_profile_slug: string | null } | null
+}
+
+async function getPublicVideos(): Promise<Video[]> {
   const supabase = await createClient()
 
   const { data: videos, error } = await (supabase
@@ -36,7 +45,7 @@ async function getPublicVideos() {
   }
 
   if (error) throw error
-  return videos || []
+  return (videos || []) as Video[]
 }
 
 export default async function WatchPage() {
@@ -65,7 +74,7 @@ export default async function WatchPage() {
           </Card>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {videos.map((video) => (
+            {videos.map((video: Video) => (
               <Link key={video.id} href={`/watch/${video.id}`}>
                 <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full">
                   {/* Thumbnail */}

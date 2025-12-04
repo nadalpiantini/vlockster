@@ -46,7 +46,16 @@ async function getProject(id: string) {
   return project as typeof project & { creator: ProjectProfile }
 }
 
-async function getProjectRewards(projectId: string) {
+type Reward = {
+  id: string
+  title: string
+  description: string | null
+  amount: number
+  limit: number | null
+  backers_count: number
+}
+
+async function getProjectRewards(projectId: string): Promise<Reward[]> {
   const supabase = await createClient()
 
   const { data: rewards, error } = await (supabase
@@ -149,7 +158,7 @@ export default async function ProjectDetailPage({
                     Este proyecto aún no tiene recompensas definidas
                   </p>
                 ) : (
-                  rewards.map((reward) => (
+                  rewards.map((reward: Reward) => (
                     <ProjectRewardCard
                       key={reward.id}
                       reward={reward}
