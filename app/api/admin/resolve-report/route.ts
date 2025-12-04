@@ -55,8 +55,8 @@ export async function POST(request: NextRequest) {
     // Actualizar estado del reporte
     const status = action === 'resolve' ? 'resolved' : 'dismissed'
 
-    const { data: updatedReport, error: updateError } = await supabase
-      .from('reports')
+    const { data: updatedReport, error: updateError } = await (supabase
+      .from('reports') as any)
       .update({
         status,
         reviewed_by: user.id,

@@ -70,16 +70,16 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0a0a] to-black">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(229,9,20,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(20,224,110,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,113,235,0.08),transparent_50%)]" />
+    <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-4 relative overflow-hidden">
+      {/* StreamLab Style Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0a0a0a] to-[#050505]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,0,0,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,53,0.08),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(255,0,0,0.03)_50%,transparent_100%)]" />
       </div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center space-x-3 group">
@@ -107,7 +107,7 @@ export default function SignupPage() {
       </nav>
 
       <div className="w-full max-w-md relative z-10 mt-20">
-        <Card className="bg-white/5 backdrop-blur-sm border-white/10 shadow-2xl">
+        <Card className="glass-card shadow-2xl">
           <CardHeader className="text-center space-y-4">
             <div className="flex justify-center mb-4">
               <div className="relative w-16 h-16">
@@ -119,11 +119,11 @@ export default function SignupPage() {
                 />
               </div>
             </div>
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-2">
-              <Sparkles className="w-4 h-4 text-[#14E06E]" />
+            <div className="inline-flex items-center space-x-2 px-4 py-2 glass-card rounded-full mb-2">
+              <Sparkles className="w-4 h-4 text-[#FF0000]" />
               <span className="text-sm text-gray-300">Join the community</span>
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
               Create Account
             </CardTitle>
             <CardDescription className="text-gray-400 text-base">

@@ -53,12 +53,12 @@ export async function POST(request: NextRequest) {
 
     // No permitir cambiar el rol del último admin
     if (role !== 'admin') {
-      const { data: admins } = await supabase
-        .from('profiles')
+      const { data: admins } = await (supabase
+        .from('profiles') as any)
         .select('id')
         .eq('role', 'admin')
 
-      if (admins && admins.length === 1 && admins[0].id === userId) {
+      if (admins && admins.length === 1 && (admins[0] as any).id === userId) {
         return NextResponse.json(
           { error: 'No se puede quitar el rol de admin al último administrador' },
           { status: 400 }
@@ -67,8 +67,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar rol
-    const { data: updatedUser, error: updateError } = await supabase
-      .from('profiles')
+    const { data: updatedUser, error: updateError } = await (supabase
+      .from('profiles') as any)
       .update({ role })
       .eq('id', userId)
       .select()

@@ -243,18 +243,31 @@ async function main() {
   // Step 3: Get configuration
   log('\n📋 Paso 3: Configuración del deploy...', 'cyan');
   
-  const domain = await question('🌐 Dominio (ej: vlockster.com): ');
+  // Check for domain in args or env
+  let domain = process.argv[2] || process.env.VLOCKSTER_DOMAIN;
+  if (!domain) {
+    domain = await question('🌐 Dominio (ej: vlockster.com): ');
+  } else {
+    log(`🌐 Dominio: ${domain} (desde argumento/env)`, 'blue');
+  }
+  
   if (!domain) {
     log('❌ Dominio requerido', 'red');
     process.exit(1);
   }
 
-  const useCloudflare = await question('☁️  ¿Usar Cloudflare API para configurar DNS automáticamente? (y/n): ');
+  // Check for Cloudflare preference
+  let useCloudflare = process.argv[3] || process.env.USE_CLOUDFLARE_AUTO;
+  if (!useCloudflare) {
+    useCloudflare = await question('☁️  ¿Usar Cloudflare API para configurar DNS automáticamente? (y/n): ');
+  } else {
+    log(`☁️  Cloudflare Auto: ${useCloudflare} (desde argumento/env)`, 'blue');
+  }
   let cloudflareApiToken: string | null = null;
   let cloudflareZoneId: string | null = null;
 
   if (useCloudflare.toLowerCase() === 'y') {
-    cloudflareApiToken = await question('🔑 Cloudflare API Token: ');
+    cloudflareApiToken = process.env.CLOUDFLARE_API_TOKEN || await question('🔑 Cloudflare API Token: ');
     if (!cloudflareApiToken) {
       log('❌ Cloudflare API Token requerido', 'red');
       process.exit(1);
@@ -343,7 +356,12 @@ async function main() {
 
   // Step 7: Environment Variables
   log('\n📋 Paso 7: Configurando variables de entorno...', 'cyan');
-  const setupEnv = await question('🔐 ¿Configurar variables de entorno ahora? (y/n): ');
+  let setupEnv = process.env.SKIP_ENV_SETUP === 'true' ? 'n' : process.argv[4];
+  if (!setupEnv) {
+    setupEnv = await question('🔐 ¿Configurar variables de entorno ahora? (y/n): ');
+  } else {
+    log(`🔐 Configurar Env: ${setupEnv === 'n' ? 'Omitir' : 'Sí'} (desde argumento/env)`, 'blue');
+  }
   
   if (setupEnv.toLowerCase() === 'y') {
     log('\n📝 Variables de entorno requeridas:', 'cyan');

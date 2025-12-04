@@ -41,10 +41,10 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-[#050505] text-white overflow-hidden">
       {/* Navigation */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10"
+        className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5"
         role="navigation"
         aria-label="Main navigation"
       >
@@ -74,7 +74,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/signup"
-                className="px-6 py-2.5 bg-gradient-to-r from-[#E50914] to-[#B20710] text-white rounded-lg font-semibold text-sm hover:from-[#F40612] hover:to-[#C11119] transition-all duration-200 shadow-lg shadow-red-500/20 hover:shadow-red-500/30"
+                className="px-6 py-2.5 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-lg font-semibold text-sm hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105"
                 aria-label="Sign up for VLOCKSTER"
               >
                 Sign Up
@@ -87,11 +87,11 @@ export default function HomePage() {
       <main role="main" className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-          {/* Animated Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0a0a] to-black">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(229,9,20,0.15),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(20,224,110,0.1),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,113,235,0.08),transparent_50%)]" />
+          {/* StreamLab Style Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0a0a0a] to-[#050505]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,0,0,0.12),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,53,0.08),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(255,0,0,0.03)_50%,transparent_100%)]" />
           </div>
 
           {/* Floating Particles Effect */}
@@ -112,18 +112,18 @@ export default function HomePage() {
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-5xl mx-auto space-y-8 animate-fade-in-up">
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-4">
-                <Sparkles className="w-4 h-4 text-[#14E06E]" />
+              <div className="inline-flex items-center space-x-2 px-4 py-2 glass-card rounded-full mb-4">
+                <Sparkles className="w-4 h-4 text-[#FF0000]" />
                 <span className="text-sm text-gray-300">
                   The ultimate platform for independent cinema
                 </span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-tight">
-                <span className="block bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight">
+                <span className="block bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent drop-shadow-2xl">
                   The future of
                 </span>
-                <span className="block mt-2 bg-gradient-to-r from-[#E50914] via-[#F40612] to-[#E50914] bg-clip-text text-transparent animate-gradient">
+                <span className="block mt-2 bg-gradient-to-r from-[#FF0000] via-[#FF6B35] to-[#FF0000] bg-clip-text text-transparent animate-gradient drop-shadow-[0_0_30px_rgba(255,0,0,0.5)]">
                   independent cinema is here
                 </span>
               </h1>
@@ -139,14 +139,14 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                 <Link
                   href="/signup"
-                  className="group relative px-8 py-4 bg-gradient-to-r from-[#E50914] to-[#B20710] text-white rounded-xl font-semibold text-lg hover:from-[#F40612] hover:to-[#C11119] transition-all duration-300 shadow-2xl shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105 flex items-center space-x-2"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-xl font-bold text-lg hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-300 shadow-2xl shadow-red-500/40 hover:shadow-red-500/60 hover:scale-110 flex items-center space-x-2 animate-pulse-glow"
                 >
                   <span>Start Free</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   href="/watch"
-                  className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-semibold text-lg border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 flex items-center space-x-2"
+                  className="px-8 py-4 glass-card text-white rounded-xl font-semibold text-lg border border-white/10 hover:border-[#FF0000]/50 hover:bg-white/10 transition-all duration-300 hover:scale-105 flex items-center space-x-2 glass-card-hover"
                 >
                   <Play className="w-5 h-5" />
                   <span>Explore Content</span>
@@ -154,17 +154,17 @@ export default function HomePage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap justify-center items-center gap-8 pt-12 text-sm text-gray-500">
+              <div className="flex flex-wrap justify-center items-center gap-8 pt-12 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#14E06E]" />
+                  <CheckCircle2 className="w-5 h-5 text-[#FF0000]" />
                   <span>No credit card required</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#14E06E]" />
+                  <CheckCircle2 className="w-5 h-5 text-[#FF0000]" />
                   <span>Instant access</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#14E06E]" />
+                  <CheckCircle2 className="w-5 h-5 text-[#FF0000]" />
                   <span>Cancel anytime</span>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="relative py-24 bg-gradient-to-b from-black to-[#0a0a0a]">
+        <section className="relative py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a]">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
@@ -186,10 +186,10 @@ export default function HomePage() {
 
             <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
               {/* Streaming Feature */}
-              <div className="group relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-[#0071EB]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+              <div className="group relative glass-card p-8 rounded-2xl border border-white/10 hover:border-[#FF0000]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30 glass-card-hover">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#0071EB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0071EB] to-[#0056B3] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#FF0000] to-[#FF6B35] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-red-500/30">
                     <Film className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-white">Premium Streaming</h3>
@@ -198,15 +198,15 @@ export default function HomePage() {
                   </p>
                   <ul className="space-y-2 text-sm text-gray-500">
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#0071EB]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>4K quality available</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#0071EB]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>No ads</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#0071EB]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>Offline downloads</span>
                     </li>
                   </ul>
@@ -214,10 +214,10 @@ export default function HomePage() {
               </div>
 
               {/* Crowdfunding Feature */}
-              <div className="group relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-[#14E06E]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#14E06E]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+              <div className="group relative glass-card p-8 rounded-2xl border border-white/10 hover:border-[#FF6B35]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/30 glass-card-hover">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B35]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#14E06E] to-[#0FA968] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#FF6B35] to-[#FF0000] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
                     <TrendingUp className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-white">Smart Crowdfunding</h3>
@@ -226,15 +226,15 @@ export default function HomePage() {
                   </p>
                   <ul className="space-y-2 text-sm text-gray-500">
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#14E06E]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF6B35]" />
                       <span>Exclusive rewards</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#14E06E]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF6B35]" />
                       <span>Real-time progress</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#14E06E]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF6B35]" />
                       <span>Secure payments</span>
                     </li>
                   </ul>
@@ -242,10 +242,10 @@ export default function HomePage() {
               </div>
 
               {/* Community Feature */}
-              <div className="group relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-[#E50914]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#E50914]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+              <div className="group relative glass-card p-8 rounded-2xl border border-white/10 hover:border-[#FF0000]/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30 glass-card-hover">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FF0000]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#E50914] to-[#B20710] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#FF0000] to-[#FF6B35] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-red-500/30">
                     <Users className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-white">Vibrant Community</h3>
@@ -254,15 +254,15 @@ export default function HomePage() {
                   </p>
                   <ul className="space-y-2 text-sm text-gray-500">
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#E50914]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>Discussion forums</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#E50914]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>Exclusive events</span>
                     </li>
                     <li className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#E50914]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#FF0000]" />
                       <span>Professional networking</span>
                     </li>
                   </ul>
@@ -273,23 +273,23 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="relative py-20 bg-black border-y border-white/10">
+        <section className="relative py-20 bg-[#050505] border-y border-white/5">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#E50914] to-[#F40612] bg-clip-text text-transparent mb-2">
+                <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-[#FF0000] to-[#FF6B35] bg-clip-text text-transparent mb-2 drop-shadow-[0_0_20px_rgba(255,0,0,0.5)]">
                   1000+
                 </div>
                 <div className="text-sm text-gray-400">Indie Films</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#14E06E] to-[#0FA968] bg-clip-text text-transparent mb-2">
+                <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-[#FF6B35] to-[#FF0000] bg-clip-text text-transparent mb-2 drop-shadow-[0_0_20px_rgba(255,107,53,0.5)]">
                   500+
                 </div>
                 <div className="text-sm text-gray-400">Funded Projects</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#0071EB] to-[#0056B3] bg-clip-text text-transparent mb-2">
+                <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-[#FF0000] to-[#FF6B35] bg-clip-text text-transparent mb-2 drop-shadow-[0_0_20px_rgba(255,0,0,0.5)]">
                   10K+
                 </div>
                 <div className="text-sm text-gray-400">Active Members</div>
@@ -305,16 +305,16 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section for Creators */}
-        <section className="relative py-24 bg-gradient-to-b from-[#0a0a0a] to-black">
+        <section className="relative py-24 bg-gradient-to-b from-[#0a0a0a] to-[#050505]">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative max-w-4xl mx-auto bg-gradient-to-br from-[#E50914]/20 via-[#14E06E]/10 to-[#0071EB]/20 backdrop-blur-sm rounded-3xl p-12 sm:p-16 border border-white/10 overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(229,9,20,0.1),transparent_70%)]" />
+            <div className="relative max-w-4xl mx-auto glass-card rounded-3xl p-12 sm:p-16 border border-white/10 overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,0,0,0.15),transparent_70%)]" />
               <div className="relative z-10 text-center">
-                <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6">
-                  <Sparkles className="w-5 h-5 text-[#14E06E]" />
+                <div className="inline-flex items-center space-x-2 px-4 py-2 glass-card rounded-full mb-6">
+                  <Sparkles className="w-5 h-5 text-[#FF0000]" />
                   <span className="text-sm text-gray-300">For Creators</span>
                 </div>
-                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
                   Are you an indie content creator?
                 </h3>
                 <p className="text-lg sm:text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -322,7 +322,7 @@ export default function HomePage() {
                 </p>
                 <Link
                   href="/apply"
-                  className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#14E06E] to-[#0FA968] text-black rounded-xl font-semibold text-lg hover:from-[#16F075] hover:to-[#11C56E] transition-all duration-300 shadow-2xl shadow-green-500/30 hover:shadow-green-500/50 hover:scale-105"
+                  className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-xl font-bold text-lg hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-300 shadow-2xl shadow-red-500/40 hover:shadow-red-500/60 hover:scale-110"
                 >
                   <span>Request Creator Access</span>
                   <ArrowRight className="w-5 h-5" />
@@ -335,7 +335,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer
-        className="relative border-t border-white/10 bg-black py-12"
+        className="relative border-t border-white/5 bg-[#050505] py-12"
         role="contentinfo"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

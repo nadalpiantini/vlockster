@@ -76,7 +76,7 @@ export function AdminReportActions({
         <Button
           size="sm"
           variant="outline"
-          onClick={() => router.push(getContentUrl())}
+          onClick={() => router.push(getContentUrl() as any)}
           disabled={resolving}
         >
           Ver Contenido

@@ -18,6 +18,15 @@ const config: Config = {
     },
     extend: {
       colors: {
+        // StreamLab inspired colors
+        streamlab: {
+          primary: '#FF0000', // Red accent
+          secondary: '#FF6B35', // Orange accent
+          dark: '#0a0a0a', // Dark background
+          darker: '#050505', // Darker background
+          card: 'rgba(255, 255, 255, 0.05)', // Glass card
+          'card-hover': 'rgba(255, 255, 255, 0.08)', // Glass card hover
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
