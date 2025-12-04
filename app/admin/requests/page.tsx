@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { AdminRequestActions } from '@/components/AdminRequestActions'
 
 async function getCreatorRequests() {
   const supabase = await createClient()
@@ -135,28 +135,7 @@ export default async function AdminRequestsPage() {
                           {request.portfolio_url}
                         </a>
                       </div>
-                      <div className="flex gap-3">
-                        <form
-                          action={async () => {
-                            'use server'
-                            await approveRequest(request.id)
-                          }}
-                        >
-                          <Button type="submit" variant="default">
-                            Aprobar
-                          </Button>
-                        </form>
-                        <form
-                          action={async () => {
-                            'use server'
-                            await rejectRequest(request.id)
-                          }}
-                        >
-                          <Button type="submit" variant="destructive">
-                            Rechazar
-                          </Button>
-                        </form>
-                      </div>
+                      <AdminRequestActions requestId={request.id} />
                     </div>
                   </CardContent>
                 </Card>

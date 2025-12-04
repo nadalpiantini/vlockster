@@ -12,6 +12,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
+import {
+  PayPalButton,
+  PayPalButtonPlaceholder,
+} from '@/components/PayPalButton'
 
 async function getProject(id: string) {
   const supabase = await createClient()
