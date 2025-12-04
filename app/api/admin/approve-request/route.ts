@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/utils/role-check'
-import type { Database } from '@/types/database.types'
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Actualizar el rol del usuario a creator
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' } as Database['public']['Tables']['profiles']['Update'])
+      .update({ role: 'creator' } as any)
       .eq('id', (creatorRequest as any).user_id)
 
     if (updateRoleError) {
