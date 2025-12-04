@@ -1,21 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/utils/role-check'
+import { adminRejectRequestSchema } from '@/lib/validations/schemas'
+import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
+import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
     const admin = await requireRole(['admin'])
 
-    const body = await request.json()
-    const { requestId } = body
-
-    if (!requestId) {
+    // Rate limiting para operaciones admin
+    const rateLimitResult = await checkRateLimit(admin.id, criticalRateLimit)
+    if (!rateLimitResult.success) {
       return NextResponse.json(
-        { error: 'ID de solicitud requerido' },
-        { status: 400 }
+        {
+          error: 'Demasiadas solicitudes. Por favor intenta más tarde.',
+          retryAfter: rateLimitResult.reset,
+        },
+        { status: 429 }
       )
     }
+
+    const body = await request.json()
+
+    // Validar con Zod
+    const validationResult = adminRejectRequestSchema.safeParse(body)
+    if (!validationResult.success) {
+      return handleValidationError(validationResult.error)
+    }
+
+    const { requestId } = validationResult.data
 
     // Marcar la solicitud como rechazada
     const { error } = await (supabase
@@ -28,20 +43,12 @@ export async function POST(request: NextRequest) {
       .eq('id', requestId)
 
     if (error) {
-      console.error('Error rejecting request:', error)
-      return NextResponse.json(
-        { error: 'Error al rechazar solicitud' },
-        { status: 500 }
-      )
+      return handleError(error, 'Reject request')
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Reject request error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Reject request')
   }
 }
 

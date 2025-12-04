@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { projectCreateSchema } from '@/lib/validations/schemas'
+import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
+import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,38 +31,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Rate limiting
+    const rateLimitResult = await checkRateLimit(user.id, contentRateLimit)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: 'Demasiadas solicitudes. Por favor intenta más tarde.',
+          retryAfter: rateLimitResult.reset,
+        },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
-    const { title, description, goal_amount, deadline, video_id, rewards } = body
 
-    // Validaciones
-    if (!title || !description || !goal_amount || !deadline) {
-      return NextResponse.json(
-        { error: 'Todos los campos requeridos deben ser completados' },
-        { status: 400 }
-      )
+    // Validar con Zod
+    const validationResult = projectCreateSchema.safeParse(body)
+    if (!validationResult.success) {
+      return handleValidationError(validationResult.error)
     }
 
-    if (goal_amount <= 0) {
-      return NextResponse.json(
-        { error: 'El monto objetivo debe ser mayor a 0' },
-        { status: 400 }
-      )
-    }
+    const { title, description, goal_amount, deadline, video_id, rewards } = validationResult.data
 
-    const deadlineDate = new Date(deadline)
-    if (deadlineDate <= new Date()) {
-      return NextResponse.json(
-        { error: 'La fecha límite debe ser futura' },
-        { status: 400 }
-      )
-    }
+    // Sanitizar contenido
+    const sanitizedTitle = sanitizeContent(title, false)
+    const sanitizedDescription = sanitizeContent(description, true) // Permitir HTML básico
 
     // Crear proyecto
     const { data: project, error: projectError } = await (supabase
       .from('projects') as any)
       .insert({
-        title,
-        description,
+        title: sanitizedTitle,
+        description: sanitizedDescription,
         goal_amount,
         deadline,
         creator_id: user.id,
@@ -70,19 +73,15 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (projectError) {
-      console.error('Error creating project:', projectError)
-      return NextResponse.json(
-        { error: 'Error al crear proyecto' },
-        { status: 500 }
-      )
+      return handleError(projectError, 'Create project')
     }
 
     // Crear recompensas si existen
     if (rewards && Array.isArray(rewards) && rewards.length > 0) {
-      const rewardsToInsert = rewards.map((reward: any) => ({
+      const rewardsToInsert = rewards.map((reward) => ({
         project_id: (project as any).id,
-        title: reward.title,
-        description: reward.description,
+        title: sanitizeContent(reward.title, false),
+        description: sanitizeContent(reward.description, true),
         amount: reward.amount,
         limit: reward.limit || null,
       }))
@@ -92,8 +91,8 @@ export async function POST(request: NextRequest) {
         .insert(rewardsToInsert)
 
       if (rewardsError) {
+        // Loggear pero no fallar - el proyecto ya está creado
         console.error('Error creating rewards:', rewardsError)
-        // No fallar si las recompensas fallan, el proyecto ya está creado
       }
     }
 
@@ -102,10 +101,6 @@ export async function POST(request: NextRequest) {
       project,
     })
   } catch (error) {
-    console.error('Create project error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Create project')
   }
 }

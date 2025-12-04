@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { paypalCreateOrderSchema } from '@/lib/validations/schemas'
+import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
+import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,15 +17,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { project_id, reward_id, amount } = body
-
-    if (!project_id || !amount) {
+    // Rate limiting para operaciones críticas
+    const rateLimitResult = await checkRateLimit(user.id, criticalRateLimit)
+    if (!rateLimitResult.success) {
       return NextResponse.json(
-        { error: 'Faltan datos requeridos' },
-        { status: 400 }
+        {
+          error: 'Demasiadas solicitudes. Por favor intenta más tarde.',
+          retryAfter: rateLimitResult.reset,
+        },
+        { status: 429 }
       )
     }
+
+    const body = await request.json()
+
+    // Validar con Zod
+    const validationResult = paypalCreateOrderSchema.safeParse(body)
+    if (!validationResult.success) {
+      return handleValidationError(validationResult.error)
+    }
+
+    const { project_id, reward_id, amount } = validationResult.data
 
     // Verificar que el proyecto existe y está activo
     const { data: project, error: projectError } = await (supabase

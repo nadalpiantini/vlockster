@@ -1,21 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/utils/role-check'
+import { adminApproveRequestSchema } from '@/lib/validations/schemas'
+import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
+import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
     const admin = await requireRole(['admin'])
 
-    const body = (await request.json()) as { requestId?: string }
-    const { requestId } = body
-
-    if (!requestId) {
+    // Rate limiting para operaciones admin
+    const rateLimitResult = await checkRateLimit(admin.id, criticalRateLimit)
+    if (!rateLimitResult.success) {
       return NextResponse.json(
-        { error: 'ID de solicitud requerido' },
-        { status: 400 }
+        {
+          error: 'Demasiadas solicitudes. Por favor intenta más tarde.',
+          retryAfter: rateLimitResult.reset,
+        },
+        { status: 429 }
       )
     }
+
+    const body = await request.json()
+
+    // Validar con Zod
+    const validationResult = adminApproveRequestSchema.safeParse(body)
+    if (!validationResult.success) {
+      return handleValidationError(validationResult.error)
+    }
+
+    const { requestId } = validationResult.data
 
     // Obtener la solicitud
     const { data: creatorRequest, error: fetchError } = await (supabase
@@ -32,17 +47,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
+    // @ts-expect-error - Supabase types issue with update
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' } as any)
+      .update({ role: 'creator' })
       .eq('id', (creatorRequest as any).user_id)
 
     if (updateRoleError) {
-      console.error('Error updating role:', updateRoleError)
-      return NextResponse.json(
-        { error: 'Error al actualizar rol del usuario' },
-        { status: 500 }
-      )
+      return handleError(updateRoleError, 'Approve request - update role')
     }
 
     // Marcar la solicitud como aprobada
@@ -56,20 +68,12 @@ export async function POST(request: NextRequest) {
       .eq('id', requestId)
 
     if (updateRequestError) {
-      console.error('Error updating request:', updateRequestError)
-      return NextResponse.json(
-        { error: 'Error al actualizar solicitud' },
-        { status: 500 }
-      )
+      return handleError(updateRequestError, 'Approve request - update status')
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Approve request error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Approve request')
   }
 }
 
