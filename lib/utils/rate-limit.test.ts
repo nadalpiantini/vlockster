@@ -19,36 +19,33 @@ describe('rate-limit', () => {
   describe('checkRateLimit', () => {
     it('debe retornar success en desarrollo sin Redis', async () => {
       // En desarrollo sin Redis configurado
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      vi.stubEnv('NODE_ENV', 'development')
 
       const result = await checkRateLimit('test-id', null)
 
       expect(result.success).toBe(true)
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
 
     it('debe retornar success cuando limiter es null en desarrollo', async () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      vi.stubEnv('NODE_ENV', 'development')
 
       const result = await checkRateLimit('test-id', null)
 
       expect(result.success).toBe(true)
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
 
     it('debe retornar success en producción sin Redis (fallback)', async () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'production'
+      vi.stubEnv('NODE_ENV', 'production')
 
       const result = await checkRateLimit('test-id', null)
 
       expect(result.success).toBe(true)
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
 
     it('debe usar limiter cuando está disponible', async () => {

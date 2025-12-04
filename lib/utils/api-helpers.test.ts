@@ -64,8 +64,7 @@ describe('api-helpers', () => {
     })
 
     it('debe retornar respuesta de error en desarrollo', async () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      vi.stubEnv('NODE_ENV', 'development')
 
       const error = new Error('Test error')
       const response = handleError(error, 'Test context')
@@ -75,12 +74,11 @@ describe('api-helpers', () => {
       expect(json.error).toBe('Error interno del servidor')
       expect(console.error).toHaveBeenCalled()
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
 
     it('debe retornar respuesta de error en producción con errorId', async () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'production'
+      vi.stubEnv('NODE_ENV', 'production')
 
       const error = new Error('Test error')
       const response = handleError(error, 'Test context')
@@ -91,12 +89,11 @@ describe('api-helpers', () => {
       expect(json.errorId).toBeDefined()
       expect(console.error).toHaveBeenCalled()
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
 
     it('debe manejar errores sin contexto', async () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      vi.stubEnv('NODE_ENV', 'development')
 
       const error = new Error('Test error')
       const response = handleError(error)
@@ -105,7 +102,7 @@ describe('api-helpers', () => {
       expect(response.status).toBe(500)
       expect(json.error).toBe('Error interno del servidor')
 
-      process.env.NODE_ENV = originalEnv
+      vi.unstubAllEnvs()
     })
   })
 

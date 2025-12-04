@@ -82,7 +82,7 @@ export default function PrivacyPage() {
               <p className="mt-4">
                 Puedes ejercer estos derechos contactándonos a través de la plataforma
                 o visitando{' '}
-                <Link href="/dashboard" className="text-blue-400 hover:underline">
+                <Link href="/dashboard" className="text-blue-400 hover:underline" as="/dashboard">
                   Dashboard
                 </Link>
                 .
