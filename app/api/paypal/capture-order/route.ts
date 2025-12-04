@@ -111,6 +111,7 @@ export async function POST(request: NextRequest) {
         reward_id: reward_id || null,
         amount,
         payment_id: captureData.id,
+        payment_status: 'completed',
       })
       .select()
       .single()

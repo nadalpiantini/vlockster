@@ -17,10 +17,10 @@ interface Notification {
   id: string
   type: string
   title: string
-  message: string
+  content: string | null
   read: boolean
   created_at: string
-  link_url: string | null
+  link: string | null
 }
 
 export default function NotificationsPage() {
@@ -181,9 +181,11 @@ export default function NotificationsPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-300 mb-3">{notification.message}</p>
-                  {notification.link_url && (
-                    <Link href={notification.link_url}>
+                  {notification.content && (
+                    <p className="text-gray-300 mb-3">{notification.content}</p>
+                  )}
+                  {notification.link && (
+                    <Link href={notification.link}>
                       <Button variant="outline" size="sm">
                         Ver más
                       </Button>
