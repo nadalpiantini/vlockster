@@ -46,9 +46,8 @@ export type UserProfile = {
 
 export async function requireAuth(): Promise<UserProfile> {
   const user = await getCurrentUser()
-  // TEMPORAL: No redirigir si auth está deshabilitado
-  if (!user && !DISABLE_AUTH) redirect('/login')
-  // Si auth está deshabilitado y no hay user, retornar un perfil mock
+  
+  // TEMPORAL: Si auth está deshabilitado y no hay user, retornar un perfil mock
   if (!user && DISABLE_AUTH) {
     return {
       id: 'guest-user',
@@ -65,7 +64,21 @@ export async function requireAuth(): Promise<UserProfile> {
       updated_at: new Date().toISOString(),
     } as UserProfile
   }
-  return user as UserProfile
+  
+  // TEMPORAL: No redirigir si auth está deshabilitado
+  if (!user && !DISABLE_AUTH) {
+    redirect('/login')
+    // redirect nunca retorna, pero TypeScript no lo sabe
+    throw new Error('Redirect failed')
+  }
+  
+  // Si llegamos aquí, user debe existir (TypeScript necesita esta verificación explícita)
+  if (user) {
+    return user as UserProfile
+  }
+  
+  // Fallback (no debería llegar aquí)
+  throw new Error('User not found and auth is required')
 }
 
 export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
