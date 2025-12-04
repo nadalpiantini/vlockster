@@ -1,9 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  experimental: {
-    typedRoutes: true,
-  },
+  // Remove deprecated experimental.typedRoutes warning
+  typedRoutes: true,
   images: {
     remotePatterns: [
       {

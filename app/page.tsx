@@ -43,7 +43,7 @@ export default function HomePage() {
               Comenzar Gratis
             </Link>
             <Link
-              href="/browse"
+              href="/watch"
               className="px-8 py-3 bg-gray-800 rounded-md hover:bg-gray-700 transition text-lg font-semibold"
             >
               Explorar Contenido
