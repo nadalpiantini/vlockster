@@ -80,13 +80,21 @@ export default async function WatchVideoPage({
             <div className="aspect-video bg-gray-950 flex items-center justify-center">
               {video.stream_id ? (
                 <div className="w-full h-full">
-                  {/* TODO: Integrar Cloudflare Stream Player */}
-                  <iframe
-                    src={`https://customer-${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${video.stream_id}/iframe`}
-                    className="w-full h-full"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowFullScreen
-                  />
+                  {process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
+                    <iframe
+                      src={`https://customer-${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${video.stream_id}/iframe`}
+                      className="w-full h-full"
+                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="text-center p-8">
+                      <p className="text-gray-400 mb-2">Cloudflare Stream no configurado</p>
+                      <p className="text-sm text-gray-500">
+                        Video ID: {video.stream_id}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-center">
