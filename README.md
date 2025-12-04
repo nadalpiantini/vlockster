@@ -97,7 +97,7 @@ pnpm supabase:types
 pnpm dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+Abre [http://localhost:3007](http://localhost:3007) en tu navegador.
 
 ## 📁 Estructura del Proyecto
 
@@ -149,7 +149,7 @@ vlockster/
 
 ## 🎯 Quick Start
 
-Después de completar el setup, la aplicación estará disponible en `http://localhost:3000` con las siguientes rutas:
+Después de completar el setup, la aplicación estará disponible en `http://localhost:3007` con las siguientes rutas:
 
 ### Rutas Públicas
 - `/` - Landing page
