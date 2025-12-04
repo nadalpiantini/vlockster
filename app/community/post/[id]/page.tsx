@@ -39,11 +39,9 @@ interface Comment {
   }
 }
 
-export default function PostDetailPage({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default function PostDetailPage() {
+  const params = useParams()
+  const id = params.id as string
   const [post, setPost] = useState<Post | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [user, setUser] = useState<any>(null)
@@ -56,7 +54,7 @@ export default function PostDetailPage({
 
   useEffect(() => {
     loadData()
-  }, [params.id])
+  }, [id])
 
   async function loadData() {
     try {
@@ -77,7 +75,7 @@ export default function PostDetailPage({
           )
         `
         )
-        .eq('id', params.id)
+        .eq('id', id)
         .single()
 
       if (postError || !postData) {
@@ -99,7 +97,7 @@ export default function PostDetailPage({
           )
         `
         )
-        .eq('post_id', params.id)
+        .eq('post_id', id)
         .is('parent_comment_id', null)
         .order('created_at', { ascending: true })
 
