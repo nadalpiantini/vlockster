@@ -30,8 +30,29 @@ async function getMyProjects(userId: string) {
 export default async function MyProjectsPage() {
   const user = await getCurrentUser()
 
+  // TEMPORAL: Permitir acceso sin autenticación
+  // if (!user) {
+  //   redirect('/login')
+  // }
+
+  // Si no hay usuario, mostrar mensaje o proyectos vacíos
   if (!user) {
-    redirect('/login')
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <Card>
+            <CardContent className="py-12 text-center">
+              <p className="text-gray-400 mb-4">
+                Login deshabilitado temporalmente. Esta página requiere autenticación.
+              </p>
+              <Link href="/dashboard">
+                <Button>Volver al Dashboard</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
   }
 
   const isCreator = ['creator', 'admin'].includes((user as any).role)

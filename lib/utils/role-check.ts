@@ -3,7 +3,16 @@ import { redirect } from 'next/navigation'
 
 export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
 
+// TEMPORAL: Deshabilitar autenticación para acceso libre
+// Cambiar a false para reactivar autenticación
+const DISABLE_AUTH = true
+
 export async function getCurrentUser() {
+  // TEMPORAL: Si auth está deshabilitado, retornar null sin verificar
+  if (DISABLE_AUTH) {
+    return null
+  }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -37,12 +46,34 @@ export type UserProfile = {
 
 export async function requireAuth(): Promise<UserProfile> {
   const user = await getCurrentUser()
-  if (!user) redirect('/login')
+  // TEMPORAL: No redirigir si auth está deshabilitado
+  if (!user && !DISABLE_AUTH) redirect('/login')
+  // Si auth está deshabilitado y no hay user, retornar un perfil mock
+  if (!user && DISABLE_AUTH) {
+    return {
+      id: 'guest-user',
+      email: 'guest@vlockster.com',
+      name: 'Guest User',
+      bio: null,
+      avatar_url: null,
+      role: 'viewer' as Role,
+      role_scope: null,
+      is_premium_creator: false,
+      public_profile_slug: null,
+      preferred_lang: 'es',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    } as UserProfile
+  }
   return user as UserProfile
 }
 
 export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
   const user = await requireAuth()
+  // TEMPORAL: Si auth está deshabilitado, permitir acceso con rol mock
+  if (DISABLE_AUTH) {
+    return user // Ya retorna un perfil mock desde requireAuth
+  }
   if (!allowedRoles.includes(user.role as Role)) {
     redirect('/dashboard')
   }

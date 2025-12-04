@@ -16,11 +16,17 @@ export const runtime = 'nodejs'
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 
-  if (!user) {
-    redirect('/login')
-  }
+  // TEMPORAL: Permitir acceso sin autenticación
+  // if (!user) {
+  //   redirect('/login')
+  // }
 
-  const userProfile = user as UserProfile
+  // Si no hay usuario, usar valores por defecto
+  const userProfile = (user || {
+    name: 'Invitado',
+    email: 'guest@vlockster.com',
+    role: 'viewer',
+  }) as UserProfile
   const isCreator = ['creator', 'admin'].includes(userProfile.role)
   const isAdmin = userProfile.role === 'admin'
 
@@ -30,10 +36,15 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            Bienvenido, {userProfile.name || userProfile.email}
+            Bienvenido, {userProfile.name || userProfile.email || 'Invitado'}
           </h1>
           <p className="text-gray-400">
-            Rol: <span className="capitalize">{userProfile.role}</span>
+            Rol: <span className="capitalize">{userProfile.role || 'viewer'}</span>
+            {!user && (
+              <span className="ml-2 text-yellow-400 text-sm">
+                (Modo invitado - Login deshabilitado temporalmente)
+              </span>
+            )}
           </p>
         </div>
 
