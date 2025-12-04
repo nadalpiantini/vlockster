@@ -30,20 +30,23 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+      <main role="main">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
-        <nav className="flex justify-between items-center mb-16">
+        <nav className="flex justify-between items-center mb-16" role="navigation" aria-label="Navegación principal">
           <h1 className="text-3xl font-bold">VLOCKSTER</h1>
           <div className="space-x-4">
             <Link
               href="/login"
               className="px-4 py-2 rounded-md hover:bg-gray-800 transition"
+              aria-label="Iniciar sesión en VLOCKSTER"
             >
               Iniciar Sesión
             </Link>
             <Link
               href="/signup"
               className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-700 transition"
+              aria-label="Registrarse en VLOCKSTER"
             >
               Registrarse
             </Link>
@@ -130,9 +133,28 @@ export default function HomePage() {
         </div>
       </div>
 
+      </main>
+
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 text-center text-gray-400">
+      <footer className="container mx-auto px-4 py-8 text-center text-gray-400" role="contentinfo">
         <p>&copy; 2025 VLOCKSTER. Plataforma para cine independiente.</p>
+        <nav className="mt-4 space-x-4" aria-label="Enlaces legales">
+          <Link
+            href="/legal/terms"
+            className="hover:text-white transition"
+            aria-label="Leer términos de uso"
+          >
+            Términos de Uso
+          </Link>
+          <span aria-hidden="true">|</span>
+          <Link
+            href="/legal/privacy"
+            className="hover:text-white transition"
+            aria-label="Leer política de privacidad"
+          >
+            Política de Privacidad
+          </Link>
+        </nav>
       </footer>
     </div>
   )

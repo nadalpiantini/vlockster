@@ -20,13 +20,28 @@ export async function getCurrentUser() {
   return profile
 }
 
-export async function requireAuth() {
-  const user = await getCurrentUser()
-  if (!user) redirect('/login')
-  return user
+export type UserProfile = {
+  id: string
+  email: string
+  name: string | null
+  bio: string | null
+  avatar_url: string | null
+  role: Role
+  role_scope: unknown
+  is_premium_creator: boolean
+  public_profile_slug: string | null
+  preferred_lang: string
+  created_at: string
+  updated_at: string
 }
 
-export async function requireRole(allowedRoles: Role[]) {
+export async function requireAuth(): Promise<UserProfile> {
+  const user = await getCurrentUser()
+  if (!user) redirect('/login')
+  return user as UserProfile
+}
+
+export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
   const user = await requireAuth()
   if (!allowedRoles.includes(user.role as Role)) {
     redirect('/dashboard')

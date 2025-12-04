@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import {
   Card,
@@ -70,14 +71,17 @@ export default async function WatchPage() {
                   {/* Thumbnail */}
                   <div className="aspect-video bg-gray-800 relative overflow-hidden">
                     {video.thumbnail_url ? (
-                      <img
+                      <Image
                         src={video.thumbnail_url}
-                        alt={video.title}
-                        className="w-full h-full object-cover"
+                        alt={video.title || 'Video thumbnail'}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        loading="lazy"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-600">
-                        <span className="text-6xl">🎬</span>
+                      <div className="w-full h-full flex items-center justify-center text-gray-600" role="img" aria-label="Sin miniatura">
+                        <span className="text-6xl" aria-hidden="true">🎬</span>
                       </div>
                     )}
                   </div>

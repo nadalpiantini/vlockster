@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { videoUploadSchema } from '@/lib/validations/schemas'
+import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
+import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024 // 5GB
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime']
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,6 +34,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Rate limiting
+    const rateLimitResult = await checkRateLimit(user.id, contentRateLimit)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: 'Demasiadas solicitudes. Por favor intenta más tarde.',
+          retryAfter: rateLimitResult.reset,
+        },
+        { status: 429 }
+      )
+    }
+
     // Obtener el archivo del FormData
     const formData = await request.formData()
     const file = formData.get('file') as File
@@ -41,6 +59,38 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Validar tamaño de archivo
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `El archivo es demasiado grande. Máximo: ${MAX_FILE_SIZE / (1024 * 1024 * 1024)}GB` },
+        { status: 400 }
+      )
+    }
+
+    // Validar tipo de archivo
+    if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { error: 'Tipo de archivo no permitido. Use MP4, WebM o QuickTime' },
+        { status: 400 }
+      )
+    }
+
+    // Validar metadata con Zod
+    const validationResult = videoUploadSchema.safeParse({
+      title,
+      description,
+      visibility,
+    })
+    if (!validationResult.success) {
+      return handleValidationError(validationResult.error)
+    }
+
+    const { title: validatedTitle, description: validatedDescription, visibility: validatedVisibility } = validationResult.data
+
+    // Sanitizar contenido
+    const sanitizedTitle = sanitizeContent(validatedTitle, false)
+    const sanitizedDescription = sanitizeContent(validatedDescription, false)
 
     // Subir a Cloudflare Stream usando TUS protocol
     const cloudflareAccountId = process.env.CLOUDFLARE_ACCOUNT_ID
@@ -86,22 +136,18 @@ export async function POST(request: NextRequest) {
     const { data: video, error: dbError } = await (supabase
       .from('videos') as any)
       .insert({
-        title,
-        description,
+        title: sanitizedTitle,
+        description: sanitizedDescription,
         stream_id: streamId,
         uploader_id: user.id,
-        visibility,
+        visibility: validatedVisibility,
         thumbnail_url: `https://customer-${cloudflareAccountId}.cloudflarestream.com/${streamId}/thumbnails/thumbnail.jpg`,
       })
       .select()
       .single()
 
     if (dbError) {
-      console.error('Database error:', dbError)
-      return NextResponse.json(
-        { error: 'Error al guardar video en base de datos' },
-        { status: 500 }
-      )
+      return handleError(dbError, 'Video upload - database')
     }
 
     return NextResponse.json({
@@ -110,10 +156,6 @@ export async function POST(request: NextRequest) {
       streamId,
     })
   } catch (error) {
-    console.error('Upload error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Video upload')
   }
 }

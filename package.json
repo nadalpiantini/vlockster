@@ -16,7 +16,9 @@
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug"
+    "test:debug": "playwright test --debug",
+    "test:unit": "vitest",
+    "test:unit:ui": "vitest --ui"
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.9.1",
@@ -58,6 +60,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/ui": "^4.0.15",
     "eslint": "^9",
     "eslint-config-next": "^15.1.0",
     "playwright": "^1.57.0",
@@ -66,7 +69,8 @@
     "prettier-plugin-tailwindcss": "^0.5.11",
     "supabase": "^1.142.2",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.15"
   },
   "engines": {
     "node": ">=20.0.0",
