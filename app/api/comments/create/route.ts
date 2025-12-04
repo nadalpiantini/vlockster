@@ -15,7 +15,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { post_id, content, parent_id } = body
+    const { post_id, content, parent_id, parent_comment_id } = body
+    const parentCommentId = parent_comment_id || parent_id // Support both for compatibility
 
     if (!post_id || !content) {
       return NextResponse.json(
@@ -38,12 +39,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Si hay parent_id, verificar que el comentario padre existe
-    if (parent_id) {
+    // Si hay parent_comment_id, verificar que el comentario padre existe
+    if (parentCommentId) {
       const { data: parentComment, error: parentError } = await supabase
         .from('comments')
         .select('id')
-        .eq('id', parent_id)
+        .eq('id', parentCommentId)
         .single()
 
       if (parentError || !parentComment) {
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
         post_id,
         user_id: user.id,
         content,
-        parent_id: parent_id || null,
+        parent_comment_id: parentCommentId || null,
       })
       .select(
         `
