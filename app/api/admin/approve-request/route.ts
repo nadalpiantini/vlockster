@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
       .from('creator_requests') as any)
       .update({
         status: 'approved',
-        reviewed_by: (admin as any).id,
+        reviewed_by: admin.id,
         reviewed_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('id', requestId)
 
     if (updateRequestError) {
