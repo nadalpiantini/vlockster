@@ -185,7 +185,7 @@ export default function NotificationsPage() {
                     <p className="text-gray-300 mb-3">{notification.content}</p>
                   )}
                   {notification.link && (
-                    <Link href={notification.link}>
+                    <Link href={notification.link as any}>
                       <Button variant="outline" size="sm">
                         Ver más
                       </Button>
