@@ -16,6 +16,10 @@ export default function HomePage() {
           width={800}
           height={800}
           className="w-full h-auto object-contain"
+          style={{
+            filter: 'invert(1) brightness(1.1)',
+            imageRendering: 'auto',
+          }}
           priority
         />
       </div>
