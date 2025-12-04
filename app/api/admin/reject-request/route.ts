@@ -18,12 +18,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar la solicitud como rechazada
-    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
-    const { error } = await supabase
-      .from('creator_requests')
+    const { error } = await (supabase
+      .from('creator_requests') as any)
       .update({
         status: 'rejected',
-        reviewed_by: admin.id,
+        reviewed_by: (admin as any).id,
         reviewed_at: new Date().toISOString(),
       })
       .eq('id', requestId)

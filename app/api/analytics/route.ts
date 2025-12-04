@@ -21,7 +21,7 @@ export async function GET(_request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes(profile.role)) {
+    if (!profile || !['creator', 'admin'].includes((profile as any).role)) {
       return NextResponse.json(
         { error: 'Solo creators pueden acceder a analytics' },
         { status: 403 }
@@ -29,57 +29,59 @@ export async function GET(_request: NextRequest) {
     }
 
     // Obtener estadísticas de videos
-    const { data: videos } = await supabase
-      .from('videos')
+    const { data: videos } = await (supabase
+      .from('videos') as any)
       .select('id, title, created_at')
       .eq('uploader_id', user.id)
 
     const totalVideos = videos?.length || 0
 
     // Obtener métricas de videos
-    const videoIds = videos?.map((v) => v.id) || []
-    const { data: videoMetrics } = videoIds.length > 0
-      ? await supabase
-          .from('video_metrics')
+    const videoIds = videos?.map((v: any) => v.id) || []
+    const result = videoIds.length > 0
+      ? await (supabase
+          .from('video_metrics') as any)
           .select('video_id, watched_seconds, liked, completed')
           .in('video_id', videoIds)
       : { data: null, error: null }
+    const videoMetrics = result.data
 
     const totalViews = videoMetrics?.length || 0
-    const totalWatchTime = videoMetrics?.reduce(
-      (sum, m) => sum + (m.watched_seconds || 0),
+    const totalWatchTime = (videoMetrics as any[])?.reduce(
+      (sum, m: any) => sum + (m.watched_seconds || 0),
       0
-    )
-    const totalLikes = videoMetrics?.filter((m) => m.liked).length || 0
+    ) || 0
+    const totalLikes = (videoMetrics as any[])?.filter((m: any) => m.liked).length || 0
     const completionRate =
       totalViews > 0
         ? (
-            (videoMetrics?.filter((m) => m.completed).length || 0) / totalViews
+            ((videoMetrics as any[])?.filter((m: any) => m.completed).length || 0) / totalViews
           ) * 100
         : 0
 
     // Obtener estadísticas de proyectos
-    const { data: projects } = await supabase
-      .from('projects')
+    const { data: projects } = await (supabase
+      .from('projects') as any)
       .select('id, title, goal_amount, current_amount, status, created_at')
       .eq('creator_id', user.id)
 
     const totalProjects = projects?.length || 0
     const activeProjects =
-      projects?.filter((p) => p.status === 'active').length || 0
+      (projects as any[])?.filter((p: any) => p.status === 'active').length || 0
     const fundedProjects =
-      projects?.filter((p) => p.status === 'funded').length || 0
+      (projects as any[])?.filter((p: any) => p.status === 'funded').length || 0
     const totalRaised =
-      projects?.reduce((sum, p) => sum + Number(p.current_amount), 0) || 0
+      (projects as any[])?.reduce((sum: number, p: any) => sum + Number(p.current_amount), 0) || 0
 
     // Obtener backings recibidos
-    const projectIds = projects?.map((p) => p.id) || []
-    const { data: backings } = projectIds.length > 0
-      ? await supabase
-          .from('backings')
+    const projectIds = (projects as any[])?.map((p: any) => p.id) || []
+    const backingResult = projectIds.length > 0
+      ? await (supabase
+          .from('backings') as any)
           .select('amount, created_at')
           .in('project_id', projectIds)
       : { data: null, error: null }
+    const backings = backingResult.data
 
     const totalBackers = backings?.length || 0
 
@@ -87,18 +89,18 @@ export async function GET(_request: NextRequest) {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const recentVideos = videos?.filter(
-      (v) => new Date(v.created_at) >= thirtyDaysAgo
+    const recentVideos = (videos as any[])?.filter(
+      (v: any) => new Date(v.created_at) >= thirtyDaysAgo
     ).length || 0
 
-    const recentBackings = backings?.filter(
-      (b) => new Date(b.created_at) >= thirtyDaysAgo
+    const recentBackings = (backings as any[])?.filter(
+      (b: any) => new Date(b.created_at) >= thirtyDaysAgo
     ).length || 0
 
     const recentRevenue =
-      backings
-        ?.filter((b) => new Date(b.created_at) >= thirtyDaysAgo)
-        .reduce((sum, b) => sum + Number(b.amount), 0) || 0
+      (backings as any[])
+        ?.filter((b: any) => new Date(b.created_at) >= thirtyDaysAgo)
+        .reduce((sum: number, b: any) => sum + Number(b.amount), 0) || 0
 
     return NextResponse.json({
       videos: {
@@ -119,23 +121,23 @@ export async function GET(_request: NextRequest) {
         recentRevenue: recentRevenue.toFixed(2),
       },
       topVideos:
-        videos
-          ?.map((video) => {
-            const metrics = videoMetrics?.filter(
-              (m) => m.video_id === video.id
+        (videos as any[])
+          ?.map((video: any) => {
+            const metrics = (videoMetrics as any[])?.filter(
+              (m: any) => m.video_id === video.id
             )
             return {
               id: video.id,
               title: video.title,
               views: metrics?.length || 0,
-              likes: metrics?.filter((m) => m.liked).length || 0,
+              likes: metrics?.filter((m: any) => m.liked).length || 0,
             }
           })
           .sort((a, b) => b.views - a.views)
           .slice(0, 5) || [],
       topProjects:
-        projects
-          ?.map((project) => ({
+        (projects as any[])
+          ?.map((project: any) => ({
             id: project.id,
             title: project.title,
             raised: Number(project.current_amount),
