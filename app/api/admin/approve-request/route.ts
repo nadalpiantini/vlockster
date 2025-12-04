@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole } from '@/lib/utils/role-check'
+import type { Database } from '@/types/database.types'
 
 export async function POST(request: NextRequest) {
   try {
