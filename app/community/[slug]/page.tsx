@@ -42,9 +42,17 @@ interface Post {
 export default function CommunityDetailPage() {
   const params = useParams()
   const slug = params.slug as string
+  type User = {
+    id: string
+    email?: string
+    user_metadata?: {
+      name?: string
+    }
+  } | null
+
   const [community, setCommunity] = useState<Community | null>(null)
   const [posts, setPosts] = useState<Post[]>([])
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User>(null)
   const [loading, setLoading] = useState(true)
   const [showNewPost, setShowNewPost] = useState(false)
   const [newPostTitle, setNewPostTitle] = useState('')

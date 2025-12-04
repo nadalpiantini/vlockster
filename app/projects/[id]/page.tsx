@@ -13,6 +13,12 @@ import { Button } from '@/components/ui/button'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
 
+type ProjectProfile = {
+  name: string | null
+  public_profile_slug: string | null
+  bio: string | null
+} | null
+
 async function getProject(id: string) {
   const supabase = await createClient()
 
@@ -32,7 +38,7 @@ async function getProject(id: string) {
     .single()
 
   if (error || !project) return null
-  return project
+  return project as typeof project & { profiles: ProjectProfile }
 }
 
 async function getProjectRewards(projectId: string) {
@@ -90,7 +96,7 @@ export default async function ProjectDetailPage({
                   )}
                 </div>
                 <CardDescription>
-                  Por: {(project.profiles as any)?.name || 'Desconocido'}
+                  Por: {project.profiles?.name || 'Desconocido'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -205,17 +211,17 @@ export default async function ProjectDetailPage({
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-semibold text-lg">
-                    {(project.profiles as any)?.name || 'Desconocido'}
+                    {project.profiles?.name || 'Desconocido'}
                   </p>
-                  {(project.profiles as any)?.bio && (
+                  {project.profiles?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
-                      {(project.profiles as any).bio}
+                      {project.profiles.bio}
                     </p>
                   )}
                 </div>
-                {(project.profiles as any)?.public_profile_slug && (
+                {project.profiles?.public_profile_slug && (
                   <Link
-                    href={`/c/${(project.profiles as any).public_profile_slug}`}
+                    href={`/c/${project.profiles.public_profile_slug}`}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador

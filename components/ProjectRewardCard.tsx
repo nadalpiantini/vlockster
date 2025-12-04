@@ -19,11 +19,18 @@ interface Reward {
   backers_count: number
 }
 
+type User = {
+  id: string
+  email: string
+  name?: string | null
+  role: 'viewer' | 'creator' | 'moderator' | 'admin'
+} | null
+
 interface ProjectRewardCardProps {
   reward: Reward
   projectId: string
   projectStatus: string
-  user: any
+  user: User
 }
 
 export function ProjectRewardCard({

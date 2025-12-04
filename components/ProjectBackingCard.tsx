@@ -2,11 +2,18 @@
 
 import { PayPalButton, PayPalButtonPlaceholder } from '@/components/PayPalButton'
 
+type User = {
+  id: string
+  email: string
+  name?: string | null
+  role: 'viewer' | 'creator' | 'moderator' | 'admin'
+} | null
+
 interface ProjectBackingCardProps {
   projectId: string
   projectStatus: string
   goalAmount: number
-  user: any
+  user: User
 }
 
 export function ProjectBackingCard({
