@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const admin = await requireRole(['admin'])
 
-    const body = await request.json()
+    const body = (await request.json()) as { requestId?: string }
     const { requestId } = body
 
     if (!requestId) {
@@ -18,13 +18,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtener la solicitud
-    const { data: request, error: fetchError } = await supabase
+    const { data: creatorRequest, error: fetchError } = await supabase
       .from('creator_requests')
       .select('user_id')
       .eq('id', requestId)
       .single()
 
-    if (fetchError || !request) {
+    if (fetchError || !creatorRequest) {
       return NextResponse.json(
         { error: 'Solicitud no encontrada' },
         { status: 404 }
@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
     // Actualizar el rol del usuario a creator
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' as const })
-      .eq('id', request.user_id)
+      .update({ role: 'creator' })
+      .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
       console.error('Error updating role:', updateRoleError)

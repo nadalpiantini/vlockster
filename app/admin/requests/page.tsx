@@ -26,7 +26,19 @@ async function getCreatorRequests() {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return requests || []
+  return (requests || []) as Array<{
+    id: string
+    user_id: string
+    pitch_title: string
+    pitch_text: string
+    portfolio_url: string | null
+    status: string
+    created_at: string
+    reviewed_by: string | null
+    reviewed_at: string | null
+    rejection_reason: string | null
+    profiles: { name: string; email: string } | null
+  }>
 }
 
 
@@ -75,7 +87,7 @@ export default async function AdminRequestsPage() {
                       <div>
                         <h4 className="font-semibold mb-2">Portfolio:</h4>
                         <a
-                          href={request.portfolio_url}
+                          href={request.portfolio_url || undefined}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-400 hover:underline"
