@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar que el proyecto existe y está activo
-    const { data: project, error: projectError } = await supabase
-      .from('projects')
-      .select('*, profiles:creator_id(id)')
+    const { data: project, error: projectError } = await (supabase
+      .from('projects') as any)
+      .select('*, creator:profiles!creator_id(id)')
       .eq('id', project_id)
       .single()
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (project.status !== 'active') {
+    if ((project as any).status !== 'active') {
       return NextResponse.json(
         { error: 'Este proyecto no está aceptando contribuciones' },
         { status: 400 }
@@ -46,8 +46,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Prevenir self-backing
-    type ProjectProfile = { id: string } | null
-    const creatorProfile = project.profiles as ProjectProfile
+    const creatorProfile = (project as any).creator
     if (creatorProfile?.id === user.id) {
       return NextResponse.json(
         { error: 'No puedes respaldar tu propio proyecto' },
@@ -57,8 +56,8 @@ export async function POST(request: NextRequest) {
 
     // Verificar recompensa si se especificó
     if (reward_id) {
-      const { data: reward, error: rewardError } = await supabase
-        .from('rewards')
+      const { data: reward, error: rewardError } = await (supabase
+        .from('rewards') as any)
         .select('*')
         .eq('id', reward_id)
         .eq('project_id', project_id)
@@ -72,7 +71,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Verificar disponibilidad
-      if (reward.limit && reward.backers_count >= reward.limit) {
+      if ((reward as any).limit && (reward as any).backers_count >= (reward as any).limit) {
         return NextResponse.json(
           { error: 'Esta recompensa ya no está disponible' },
           { status: 400 }
@@ -80,7 +79,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Verificar que el monto coincida
-      if (parseFloat(amount) < parseFloat(reward.amount)) {
+      if (parseFloat(amount) < parseFloat((reward as any).amount)) {
         return NextResponse.json(
           { error: 'El monto no coincide con la recompensa seleccionada' },
           { status: 400 }
@@ -141,7 +140,7 @@ export async function POST(request: NextRequest) {
               currency_code: 'USD',
               value: parseFloat(amount).toFixed(2),
             },
-            description: `Backing for: ${project.title}`,
+            description: `Backing for: ${(project as any).title}`,
             custom_id: JSON.stringify({
               user_id: user.id,
               project_id,

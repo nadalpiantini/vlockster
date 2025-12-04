@@ -103,8 +103,8 @@ export async function POST(request: NextRequest) {
     )
 
     // Registrar backing en la base de datos
-    const { data: backing, error: backingError } = await supabase
-      .from('backings')
+    const { data: backing, error: backingError } = await (supabase
+      .from('backings') as any)
       .insert({
         user_id: user.id,
         project_id,

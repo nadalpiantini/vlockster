@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes(profile.role)) {
+    if (!profile || !['creator', 'admin'].includes((profile as any).role)) {
       return NextResponse.json(
         { error: 'Solo los creators pueden crear proyectos' },
         { status: 403 }
@@ -55,8 +55,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear proyecto
-    const { data: project, error: projectError } = await supabase
-      .from('projects')
+    const { data: project, error: projectError } = await (supabase
+      .from('projects') as any)
       .insert({
         title,
         description,
@@ -80,15 +80,15 @@ export async function POST(request: NextRequest) {
     // Crear recompensas si existen
     if (rewards && Array.isArray(rewards) && rewards.length > 0) {
       const rewardsToInsert = rewards.map((reward: any) => ({
-        project_id: project.id,
+        project_id: (project as any).id,
         title: reward.title,
         description: reward.description,
         amount: reward.amount,
         limit: reward.limit || null,
       }))
 
-      const { error: rewardsError } = await supabase
-        .from('rewards')
+      const { error: rewardsError } = await (supabase
+        .from('rewards') as any)
         .insert(rewardsToInsert)
 
       if (rewardsError) {

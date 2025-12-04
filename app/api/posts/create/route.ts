@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar que la comunidad existe
-    const { data: community, error: communityError } = await supabase
-      .from('communities')
+    const { data: community, error: communityError } = await (supabase
+      .from('communities') as any)
       .select('id')
       .eq('id', community_id)
       .single()
@@ -39,23 +39,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear post
-    const { data: post, error: postError } = await supabase
-      .from('posts')
+    const { data: post, error: postError } = await (supabase
+      .from('posts') as any)
       .insert({
         community_id,
         user_id: user.id,
         title,
         content,
       })
-      .select(
-        `
-        *,
-        profiles:user_id (
-          name,
-          avatar_url
-        )
-      `
-      )
+      .select('*')
       .single()
 
     if (postError) {

@@ -75,8 +75,8 @@ export default function CommunityDetailPage() {
       setUser(currentUser)
 
       // Cargar comunidad
-      const { data: communityData, error: communityError } = await supabase
-        .from('communities')
+      const { data: communityData, error: communityError } = await (supabase
+        .from('communities') as any)
         .select(
           `
           *,
@@ -93,21 +93,13 @@ export default function CommunityDetailPage() {
         return
       }
 
-      setCommunity(communityData)
+      setCommunity(communityData as Community)
 
       // Cargar posts
-      const { data: postsData, error: postsError } = await supabase
-        .from('posts')
-        .select(
-          `
-          *,
-          profiles:user_id (
-            name,
-            avatar_url
-          )
-        `
-        )
-        .eq('community_id', communityData.id)
+      const { data: postsData, error: postsError } = await (supabase
+        .from('posts') as any)
+        .select('*')
+        .eq('community_id', (communityData as Community).id)
         .order('created_at', { ascending: false })
 
       if (!postsError && postsData) {
@@ -134,7 +126,7 @@ export default function CommunityDetailPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          community_id: community.id,
+          community_id: (community as any).id,
           title: newPostTitle,
           content: newPostContent,
         }),
@@ -183,7 +175,7 @@ export default function CommunityDetailPage() {
               <div>
                 <CardTitle className="text-2xl">{community.name}</CardTitle>
                 <CardDescription>
-                  Por: {(community.profiles as any)?.name || 'Desconocido'}
+                  Por: {(community as any).owner?.name || 'Desconocido'}
                 </CardDescription>
               </div>
               <Link href="/community">

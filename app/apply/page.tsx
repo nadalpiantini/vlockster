@@ -52,8 +52,8 @@ export default function ApplyPage() {
       }
 
       // Crear la solicitud
-      const { error: insertError } = await supabase
-        .from('creator_requests')
+      const { error: insertError } = await (supabase
+        .from('creator_requests') as any)
         .insert({
           user_id: user.id,
           pitch_title: pitchTitle,
