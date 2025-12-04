@@ -1,0 +1,178 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+
+    // Verificar autenticación
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { project_id, reward_id, amount } = body
+
+    if (!project_id || !amount) {
+      return NextResponse.json(
+        { error: 'Faltan datos requeridos' },
+        { status: 400 }
+      )
+    }
+
+    // Verificar que el proyecto existe y está activo
+    const { data: project, error: projectError } = await supabase
+      .from('projects')
+      .select('*, profiles:creator_id(id)')
+      .eq('id', project_id)
+      .single()
+
+    if (projectError || !project) {
+      return NextResponse.json(
+        { error: 'Proyecto no encontrado' },
+        { status: 404 }
+      )
+    }
+
+    if (project.status !== 'active') {
+      return NextResponse.json(
+        { error: 'Este proyecto no está aceptando contribuciones' },
+        { status: 400 }
+      )
+    }
+
+    // Prevenir self-backing
+    if ((project.profiles as any).id === user.id) {
+      return NextResponse.json(
+        { error: 'No puedes respaldar tu propio proyecto' },
+        { status: 400 }
+      )
+    }
+
+    // Verificar recompensa si se especificó
+    if (reward_id) {
+      const { data: reward, error: rewardError } = await supabase
+        .from('rewards')
+        .select('*')
+        .eq('id', reward_id)
+        .eq('project_id', project_id)
+        .single()
+
+      if (rewardError || !reward) {
+        return NextResponse.json(
+          { error: 'Recompensa no encontrada' },
+          { status: 404 }
+        )
+      }
+
+      // Verificar disponibilidad
+      if (reward.limit && reward.backers_count >= reward.limit) {
+        return NextResponse.json(
+          { error: 'Esta recompensa ya no está disponible' },
+          { status: 400 }
+        )
+      }
+
+      // Verificar que el monto coincida
+      if (parseFloat(amount) < parseFloat(reward.amount)) {
+        return NextResponse.json(
+          { error: 'El monto no coincide con la recompensa seleccionada' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Crear orden en PayPal
+    const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
+    const paypalSecret = process.env.PAYPAL_CLIENT_SECRET
+    const paypalMode = process.env.PAYPAL_MODE || 'sandbox'
+
+    if (!paypalClientId || !paypalSecret) {
+      return NextResponse.json(
+        { error: 'PayPal no está configurado' },
+        { status: 500 }
+      )
+    }
+
+    const paypalUrl =
+      paypalMode === 'live'
+        ? 'https://api-m.paypal.com'
+        : 'https://api-m.sandbox.paypal.com'
+
+    // Obtener token de acceso
+    const authResponse = await fetch(`${paypalUrl}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${Buffer.from(`${paypalClientId}:${paypalSecret}`).toString('base64')}`,
+      },
+      body: 'grant_type=client_credentials',
+    })
+
+    if (!authResponse.ok) {
+      console.error('PayPal auth error:', await authResponse.text())
+      return NextResponse.json(
+        { error: 'Error al autenticar con PayPal' },
+        { status: 500 }
+      )
+    }
+
+    const authData = await authResponse.json()
+    const accessToken = authData.access_token
+
+    // Crear orden
+    const orderResponse = await fetch(`${paypalUrl}/v2/checkout/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        intent: 'CAPTURE',
+        purchase_units: [
+          {
+            amount: {
+              currency_code: 'USD',
+              value: parseFloat(amount).toFixed(2),
+            },
+            description: `Backing for: ${project.title}`,
+            custom_id: JSON.stringify({
+              user_id: user.id,
+              project_id,
+              reward_id: reward_id || null,
+            }),
+          },
+        ],
+        application_context: {
+          return_url: `${process.env.NEXT_PUBLIC_APP_URL}/projects/${project_id}?payment=success`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/projects/${project_id}?payment=cancelled`,
+        },
+      }),
+    })
+
+    if (!orderResponse.ok) {
+      const errorText = await orderResponse.text()
+      console.error('PayPal order error:', errorText)
+      return NextResponse.json(
+        { error: 'Error al crear orden de PayPal' },
+        { status: 500 }
+      )
+    }
+
+    const orderData = await orderResponse.json()
+
+    return NextResponse.json({
+      orderId: orderData.id,
+    })
+  } catch (error) {
+    console.error('Create order error:', error)
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 }
+    )
+  }
+}
