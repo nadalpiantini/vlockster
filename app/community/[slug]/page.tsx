@@ -62,11 +62,7 @@ export default function CommunityDetailPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    loadData()
-  }, [slug])
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       // Cargar usuario
       const {
@@ -103,7 +99,11 @@ export default function CommunityDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [slug, router, supabase])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   async function handleCreatePost(e: React.FormEvent) {
     e.preventDefault()

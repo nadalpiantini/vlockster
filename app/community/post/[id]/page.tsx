@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -52,11 +52,7 @@ export default function PostDetailPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    loadData()
-  }, [id])
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       const {
         data: { user: currentUser },
@@ -109,7 +105,11 @@ export default function PostDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [id, router, supabase])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   async function handleCreateComment(e: React.FormEvent) {
     e.preventDefault()

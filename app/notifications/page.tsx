@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -29,11 +29,7 @@ export default function NotificationsPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    loadNotifications()
-  }, [])
-
-  async function loadNotifications() {
+  const loadNotifications = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -59,7 +55,11 @@ export default function NotificationsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router, supabase])
+
+  useEffect(() => {
+    loadNotifications()
+  }, [loadNotifications])
 
   async function markAsRead(id: string) {
     try {

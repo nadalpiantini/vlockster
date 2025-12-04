@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -51,11 +51,7 @@ export default function MyAnalyticsPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  useEffect(() => {
-    loadAnalytics()
-  }, [])
-
-  async function loadAnalytics() {
+  const loadAnalytics = useCallback(async () => {
     try {
       const response = await fetch('/api/analytics')
 
@@ -80,7 +76,11 @@ export default function MyAnalyticsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router])
+
+  useEffect(() => {
+    loadAnalytics()
+  }, [loadAnalytics])
 
   if (loading) {
     return (
