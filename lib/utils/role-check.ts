@@ -56,5 +56,5 @@ export async function checkIsCreator() {
 
 export async function checkIsAdmin() {
   const user = await getCurrentUser()
-  return user && user.role === 'admin'
+  return user !== null && (user as UserProfile).role === 'admin'
 }
