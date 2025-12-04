@@ -12,16 +12,9 @@ import { Button } from '@/components/ui/button'
 async function getCommunities() {
   const supabase = await createClient()
 
-  const { data: communities, error } = await supabase
-    .from('communities')
-    .select(
-      `
-      *,
-      profiles:owner_id (
-        name
-      )
-    `
-    )
+  const { data: communities, error } = await (supabase
+    .from('communities') as any)
+    .select('*')
     .order('created_at', { ascending: false })
 
   if (error) throw error
@@ -59,7 +52,7 @@ export default async function CommunityPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {communities.map((community) => (
+            {communities.map((community: any) => (
               <Link
                 key={community.id}
                 href={`/community/${community.slug}`}
@@ -68,7 +61,7 @@ export default async function CommunityPage() {
                   <CardHeader>
                     <CardTitle>{community.name}</CardTitle>
                     <CardDescription>
-                      Por: {(community.profiles as any)?.name || 'Desconocido'}
+                      Por: {community.owner?.name || 'Desconocido'}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
