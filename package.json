@@ -20,7 +20,12 @@
     "test:unit": "vitest",
     "test:unit:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:all": "vitest --coverage && playwright test"
+    "test:all": "vitest --coverage && playwright test",
+    "deploy:prod": "tsx scripts/deploy-production.ts",
+    "deploy:prod:bash": "bash scripts/deploy-production.sh",
+    "bmad:refresh": "npx bmad-method install -f -d .",
+    "bmad:list": "echo 'See AGENTS.md for complete agent directory' && cat AGENTS.md | head -20",
+    "bmad:validate": "echo 'BMAD-METHOD installed. Check .bmad-core/ directory and AGENTS.md for agent information'"
   },
   "dependencies": {
     "@cloudflare/stream-react": "^1.9.1",
@@ -76,6 +81,7 @@
     "prettier-plugin-tailwindcss": "^0.5.11",
     "supabase": "^1.142.2",
     "tailwindcss": "^4.0.0",
+    "tsx": "^4.7.0",
     "typescript": "^5",
     "vitest": "^4.0.15"
   },

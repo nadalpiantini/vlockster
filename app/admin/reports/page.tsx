@@ -9,14 +9,17 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { AdminReportActions } from '@/components/AdminReportActions'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 type Report = {
   id: string
-  report_type: string
+  content_type: string
+  content_id: string
   reason: string | null
+  description: string | null
   created_at: string
   status: string
 }
@@ -77,7 +80,7 @@ export default async function AdminReportsPage() {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <p className="font-semibold">
-                          Tipo: {report.report_type}
+                          Tipo: {report.content_type}
                         </p>
                         <p className="text-sm text-gray-400">
                           Reportado el:{' '}
@@ -91,15 +94,21 @@ export default async function AdminReportsPage() {
                       </span>
                     </div>
                     {report.reason && (
-                      <p className="text-gray-300 mt-2">{report.reason}</p>
+                      <p className="text-gray-300 mt-2">
+                        <strong>Razón:</strong> {report.reason}
+                      </p>
                     )}
-                    <div className="mt-4 flex gap-2">
-                      <Button size="sm" variant="destructive">
-                        Rechazar Reporte
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        Ver Contenido
-                      </Button>
+                    {report.description && (
+                      <p className="text-gray-400 mt-2 text-sm">
+                        {report.description}
+                      </p>
+                    )}
+                    <div className="mt-4">
+                      <AdminReportActions
+                        reportId={report.id}
+                        contentType={report.content_type}
+                        contentId={report.content_id}
+                      />
                     </div>
                   </div>
                 ))}

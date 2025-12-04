@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { AdminUserActions } from '@/components/AdminUserActions'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -79,7 +80,7 @@ export default async function AdminUsersPage() {
                         Rol: {u.role}
                       </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2 items-end">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${
                           u.role === 'admin'
@@ -93,6 +94,10 @@ export default async function AdminUsersPage() {
                       >
                         {u.role}
                       </span>
+                      <AdminUserActions
+                        userId={u.id}
+                        currentRole={u.role}
+                      />
                     </div>
                   </div>
                 ))}
