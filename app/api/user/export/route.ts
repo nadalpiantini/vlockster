@@ -5,7 +5,7 @@ import { handleError } from '@/lib/utils/api-helpers'
 /**
  * Exporta todos los datos del usuario en formato JSON (GDPR)
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient()
 

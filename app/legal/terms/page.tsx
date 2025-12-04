@@ -84,7 +84,7 @@ export default function TermsPage() {
           <section className="space-y-6 mb-12">
             <h2 className="text-2xl font-semibold">6. Limitación de Responsabilidad</h2>
             <p className="text-gray-300 leading-relaxed">
-              VLOCKSTER se proporciona "tal cual" sin garantías de ningún tipo. No nos
+              VLOCKSTER se proporciona &quot;tal cual&quot; sin garantías de ningún tipo. No nos
               hacemos responsables de daños directos, indirectos, incidentales o
               consecuentes resultantes del uso de la plataforma.
             </p>

@@ -121,7 +121,7 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-semibold">8. Cambios a esta Política</h2>
             <p className="text-gray-300 leading-relaxed">
               Podemos actualizar esta política ocasionalmente. Te notificaremos de
-              cambios significativos. La fecha de "Última actualización" indica cuándo
+              cambios significativos. La fecha de &quot;Última actualización&quot; indica cuándo
               se revisó por última vez.
             </p>
           </section>

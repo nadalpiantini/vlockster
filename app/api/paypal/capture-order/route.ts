@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { paypalCaptureOrderSchema } from '@/lib/validations/schemas'
-import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
+import { handleValidationError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 
 export async function POST(request: NextRequest) {
