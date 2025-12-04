@@ -10,6 +10,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { ProjectRewardCard } from '@/components/ProjectRewardCard'
+import { ProjectBackingCard } from '@/components/ProjectBackingCard'
 
 async function getProject(id: string) {
   const supabase = await createClient()
@@ -128,63 +130,15 @@ export default async function ProjectDetailPage({
                     Este proyecto aún no tiene recompensas definidas
                   </p>
                 ) : (
-                  rewards.map((reward) => {
-                    const isAvailable =
-                      !reward.limit ||
-                      reward.backers_count < reward.limit
-                    const remaining = reward.limit
-                      ? reward.limit - reward.backers_count
-                      : null
-
-                    return (
-                      <Card
-                        key={reward.id}
-                        className={`${
-                          !isAvailable ? 'opacity-50' : ''
-                        }`}
-                      >
-                        <CardHeader>
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <CardTitle className="text-lg">
-                                {reward.title}
-                              </CardTitle>
-                              <CardDescription>
-                                ${Number(reward.amount).toLocaleString()} USD
-                              </CardDescription>
-                            </div>
-                            {!isAvailable && (
-                              <span className="bg-red-900/50 text-red-300 text-xs px-2 py-1 rounded-full">
-                                Agotado
-                              </span>
-                            )}
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-gray-300 text-sm mb-4">
-                            {reward.description}
-                          </p>
-                          {remaining !== null && (
-                            <p className="text-xs text-gray-400 mb-3">
-                              {remaining} disponibles de {reward.limit}
-                            </p>
-                          )}
-                          <Button
-                            className="w-full"
-                            disabled={!isAvailable || project.status !== 'active'}
-                          >
-                            {!user
-                              ? 'Inicia sesión para apoyar'
-                              : !isAvailable
-                                ? 'Agotado'
-                                : project.status !== 'active'
-                                  ? 'Campaña cerrada'
-                                  : 'Apoyar este nivel'}
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    )
-                  })
+                  rewards.map((reward) => (
+                    <ProjectRewardCard
+                      key={reward.id}
+                      reward={reward}
+                      projectId={project.id}
+                      projectStatus={project.status}
+                      user={user}
+                    />
+                  ))
                 )}
               </CardContent>
             </Card>
@@ -222,10 +176,20 @@ export default async function ProjectDetailPage({
                   </div>
                 </div>
 
-                {project.status === 'active' && (
-                  <Button className="w-full" size="lg">
-                    Apoyar este Proyecto
-                  </Button>
+                {project.status === 'active' && user && (
+                  <PayPalButton
+                    projectId={project.id}
+                    amount={Number(project.goal_amount)}
+                    onSuccess={() => {
+                      window.location.reload()
+                    }}
+                    onError={(error) => {
+                      console.error('PayPal error:', error)
+                    }}
+                  />
+                )}
+                {project.status === 'active' && !user && (
+                  <PayPalButtonPlaceholder />
                 )}
 
                 {project.status === 'funded' && (
