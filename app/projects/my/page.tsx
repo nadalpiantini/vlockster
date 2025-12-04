@@ -11,6 +11,9 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 async function getMyProjects(userId: string) {
   const supabase = await createClient()
 

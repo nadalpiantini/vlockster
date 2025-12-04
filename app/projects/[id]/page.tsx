@@ -13,6 +13,9 @@ import { Button } from '@/components/ui/button'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 type ProjectProfile = {
   name: string | null
   public_profile_slug: string | null

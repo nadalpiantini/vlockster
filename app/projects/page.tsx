@@ -9,6 +9,9 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 async function getActiveProjects() {
   const supabase = await createClient()
 

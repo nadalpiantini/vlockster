@@ -9,6 +9,9 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 type Video = {
   id: string
   title: string

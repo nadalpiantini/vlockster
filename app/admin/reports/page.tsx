@@ -10,6 +10,9 @@ import {
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 type Report = {
   id: string
   report_type: string

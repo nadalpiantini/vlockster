@@ -9,6 +9,9 @@ import {
 } from '@/components/ui/card'
 import { AdminRequestActions } from '@/components/AdminRequestActions'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 async function getCreatorRequests() {
   const supabase = await createClient()
 

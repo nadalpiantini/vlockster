@@ -3,6 +3,8 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   // Remove deprecated experimental.typedRoutes warning
   typedRoutes: true,
+  // Force Node.js runtime by default
+  runtime: 'nodejs',
   images: {
     remotePatterns: [
       {

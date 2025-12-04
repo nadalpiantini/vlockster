@@ -10,6 +10,9 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 
