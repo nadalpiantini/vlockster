@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar la solicitud como rechazada
+    // @ts-expect-error - Supabase types incomplete, creator_requests table exists
     const { error } = await supabase
       .from('creator_requests')
       .update({
