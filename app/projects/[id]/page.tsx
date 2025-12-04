@@ -63,6 +63,8 @@ async function getProjectRewards(projectId: string) {
     description: string | null
     amount: number
     delivery_date: string | null
+    limit: number | null
+    backers_count: number
   }>
 }
 
