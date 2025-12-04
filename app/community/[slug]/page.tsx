@@ -77,14 +77,7 @@ export default function CommunityDetailPage() {
       // Cargar comunidad
       const { data: communityData, error: communityError } = await (supabase
         .from('communities') as any)
-        .select(
-          `
-          *,
-          profiles:owner_id (
-            name
-          )
-        `
-        )
+        .select('*')
         .eq('slug', slug)
         .single()
 
