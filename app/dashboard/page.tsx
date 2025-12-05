@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         </div>
       </nav>
 
-      <main id="main-content" className="container mx-auto px-4 py-8" role="main">
+      <main id="main-content" className="container mx-auto px-4 py-8" role="main" aria-label="Dashboard principal">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
@@ -57,7 +57,8 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <section aria-labelledby="quick-actions-heading" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <h2 id="quick-actions-heading" className="sr-only">Acciones rápidas</h2>
           <Card>
             <CardHeader>
               <CardTitle>Explorar Contenido</CardTitle>
@@ -220,19 +221,21 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Actividad Reciente</CardTitle>
-            <CardDescription>
-              Tus últimas interacciones en la plataforma
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-400 text-center py-8">
-              No hay actividad reciente para mostrar
-            </p>
-          </CardContent>
-        </Card>
+        <section aria-labelledby="recent-activity-heading">
+          <Card>
+            <CardHeader>
+              <CardTitle id="recent-activity-heading">Actividad Reciente</CardTitle>
+              <CardDescription>
+                Tus últimas interacciones en la plataforma
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 text-center py-8" aria-live="polite">
+                No hay actividad reciente para mostrar
+              </p>
+            </CardContent>
+          </Card>
+        </section>
       </main>
     </div>
   )

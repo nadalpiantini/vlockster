@@ -200,7 +200,7 @@ export default function CommunityDetailPage() {
         {user && (
           <div className="mb-6">
             {!showNewPost ? (
-              <Button onClick={() => setShowNewPost(true)} className="w-full">
+              <Button onClick={() => setShowNewPost(true)} className="w-full" aria-label="Crear nuevo post en esta comunidad">
                 Crear Nuevo Post
               </Button>
             ) : (
@@ -208,10 +208,10 @@ export default function CommunityDetailPage() {
                 <CardHeader>
                   <CardTitle>Nuevo Post</CardTitle>
                 </CardHeader>
-                <form onSubmit={handleCreatePost}>
+                <form onSubmit={handleCreatePost} aria-label="Formulario de nuevo post">
                   <CardContent className="space-y-4">
                     {error && (
-                      <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm">
+                      <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
                         {error}
                       </div>
                     )}
@@ -239,6 +239,7 @@ export default function CommunityDetailPage() {
                       <Button
                         type="submit"
                         disabled={!newPostTitle || !newPostContent || creating}
+                        aria-label={creating ? 'Publicando post...' : 'Publicar post'}
                       >
                         {creating ? 'Publicando...' : 'Publicar'}
                       </Button>
@@ -250,6 +251,7 @@ export default function CommunityDetailPage() {
                           setError(null)
                         }}
                         disabled={creating}
+                        aria-label="Cancelar creación de post"
                       >
                         Cancelar
                       </Button>
@@ -262,18 +264,19 @@ export default function CommunityDetailPage() {
         )}
 
         {/* Posts */}
-        <div className="space-y-4">
+        <section aria-label="Posts de la comunidad" className="space-y-4">
           {posts.length === 0 ? (
             <Card>
-              <CardContent className="py-12 text-center text-gray-400">
+              <CardContent className="py-12 text-center text-gray-400" aria-live="polite">
                 No hay posts en esta comunidad aún
                 {user && <p className="mt-2">¡Sé el primero en publicar!</p>}
               </CardContent>
             </Card>
           ) : (
-            posts.map((post) => (
-              <Link key={post.id} href={`/community/post/${post.id}`}>
-                <Card className="hover:border-blue-500 transition-colors cursor-pointer">
+            <div role="list" aria-label="Lista de posts">
+              {posts.map((post) => (
+              <Link key={post.id} href={`/community/post/${post.id}`} aria-label={`Ver post: ${post.title}`}>
+                <Card className="hover:border-blue-500 transition-colors cursor-pointer" role="listitem">
                   <CardHeader>
                     <CardTitle>{post.title}</CardTitle>
                     <CardDescription>
@@ -292,9 +295,10 @@ export default function CommunityDetailPage() {
                   </CardContent>
                 </Card>
               </Link>
-            ))
+            ))}
+            </div>
           )}
-        </div>
+        </section>
 
         {!user && (
           <Card className="mt-6">

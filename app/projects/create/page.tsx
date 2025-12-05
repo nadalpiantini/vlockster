@@ -151,7 +151,7 @@ export default function CreateProjectPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
+      <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Crear proyecto de crowdfunding">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Crear Proyecto de Crowdfunding</CardTitle>
@@ -159,10 +159,10 @@ export default function CreateProjectPage() {
               Lanza tu campaña y financia tu próximo proyecto cinematográfico
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} aria-label="Formulario de creación de proyecto">
             <CardContent className="space-y-6">
               {error && (
-                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm">
+                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
                   {error}
                 </div>
               )}
@@ -289,8 +289,9 @@ export default function CreateProjectPage() {
                     size="sm"
                     onClick={addReward}
                     disabled={creating}
+                    aria-label="Agregar nueva recompensa"
                   >
-                    + Agregar Recompensa
+                    <span aria-hidden="true">+</span> Agregar Recompensa
                   </Button>
                 </div>
 
@@ -313,8 +314,9 @@ export default function CreateProjectPage() {
                               size="sm"
                               onClick={() => removeReward(reward.id)}
                               disabled={creating}
+                              aria-label={`Eliminar recompensa ${index + 1}`}
                             >
-                              ✕
+                              <span aria-hidden="true">✕</span>
                             </Button>
                           </div>
                         </CardHeader>
@@ -412,6 +414,7 @@ export default function CreateProjectPage() {
                   variant="outline"
                   onClick={() => router.push('/dashboard')}
                   disabled={creating}
+                  aria-label="Cancelar y volver al dashboard"
                 >
                   Cancelar
                 </Button>
@@ -419,7 +422,7 @@ export default function CreateProjectPage() {
             </CardContent>
           </form>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

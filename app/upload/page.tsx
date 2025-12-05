@@ -121,7 +121,7 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-3xl">
+      <main id="main-content" className="container mx-auto max-w-3xl" role="main" aria-label="Subir nuevo video">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Subir Nuevo Video</CardTitle>
@@ -129,10 +129,10 @@ export default function UploadPage() {
               Comparte tu contenido con la comunidad de VLOCKSTER
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} aria-label="Formulario de subida de video">
             <CardContent className="space-y-6">
               {error && (
-                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm">
+                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
                   {error}
                 </div>
               )}
@@ -148,6 +148,15 @@ export default function UploadPage() {
                     ? 'border-blue-500 bg-blue-500/10'
                     : 'border-gray-600 hover:border-gray-500'
                 }`}
+                role="button"
+                tabIndex={0}
+                aria-label="Zona de arrastrar y soltar archivo de video"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    document.getElementById('file-upload')?.click()
+                  }
+                }}
               >
                 <input
                   type="file"
@@ -156,6 +165,7 @@ export default function UploadPage() {
                   onChange={handleFileChange}
                   disabled={uploading}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Seleccionar archivo de video"
                 />
                 <div className="space-y-2">
                   {file ? (
@@ -254,6 +264,7 @@ export default function UploadPage() {
                   type="submit"
                   className="flex-1"
                   disabled={!file || !title || uploading}
+                  aria-label={uploading ? 'Subiendo video...' : 'Subir video'}
                 >
                   {uploading ? 'Subiendo...' : 'Subir Video'}
                 </Button>
@@ -262,6 +273,7 @@ export default function UploadPage() {
                   variant="outline"
                   onClick={() => router.push('/dashboard')}
                   disabled={uploading}
+                  aria-label="Cancelar y volver al dashboard"
                 >
                   Cancelar
                 </Button>
