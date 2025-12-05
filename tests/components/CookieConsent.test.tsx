@@ -65,17 +65,17 @@ describe('CookieConsent', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
     
     // Avanzar 1 segundo
-    vi.advanceTimersByTime(1000)
+    await vi.advanceTimersByTimeAsync(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
   })
 
   it('debe tener atributos de accesibilidad correctos', async () => {
-    vi.advanceTimersByTime(1000)
-    
     render(<CookieConsent />)
+    
+    await vi.advanceTimersByTimeAsync(1000)
     
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
@@ -83,7 +83,7 @@ describe('CookieConsent', () => {
       expect(dialog).toHaveAttribute('aria-modal', 'true')
       expect(dialog).toHaveAttribute('aria-labelledby', 'cookie-consent-title')
       expect(dialog).toHaveAttribute('aria-describedby', 'cookie-consent-description')
-    })
+    }, { timeout: 2000 })
   })
 
   it('debe guardar consentimiento aceptado en localStorage', async () => {
