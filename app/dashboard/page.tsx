@@ -65,42 +65,42 @@ export default async function DashboardPage() {
           <h2 id="quick-actions-heading" className="sr-only">Acciones rápidas</h2>
           <Card>
             <CardHeader>
-              <CardTitle>Explorar Contenido</CardTitle>
+              <CardTitle>Explore Content</CardTitle>
               <CardDescription>
-                Descubre películas y series independientes
+                Discover independent films and series
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/watch" aria-label="Ir al catálogo de videos">
-                <Button className="w-full">Ir al Catálogo</Button>
+                <Button className="w-full">Go to Catalog</Button>
               </Link>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Proyectos</CardTitle>
+              <CardTitle>Projects</CardTitle>
               <CardDescription>
-                Financia proyectos cinematográficos
+                Fund film projects
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/projects" aria-label="Ver proyectos de crowdfunding">
-                <Button className="w-full">Ver Proyectos</Button>
+                <Button className="w-full">View Projects</Button>
               </Link>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Comunidad</CardTitle>
+              <CardTitle>Community</CardTitle>
               <CardDescription>
-                Participa en discusiones y eventos
+                Participate in discussions and events
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/community" aria-label="Ir a comunidades">
-                <Button className="w-full">Ir a Comunidad</Button>
+                <Button className="w-full">Go to Community</Button>
               </Link>
             </CardContent>
           </Card>
@@ -108,15 +108,15 @@ export default async function DashboardPage() {
           {!isCreator && (
             <Card>
               <CardHeader>
-                <CardTitle>¿Eres Creador?</CardTitle>
+                <CardTitle>Are You a Creator?</CardTitle>
                 <CardDescription>
-                  Solicita acceso como creator para subir contenido
+                  Request creator access to upload content
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Link href="/apply" aria-label="Solicitar acceso como creador">
                   <Button className="w-full" variant="outline">
-                    Solicitar Acceso
+                    Request Access
                   </Button>
                 </Link>
               </CardContent>
@@ -127,43 +127,43 @@ export default async function DashboardPage() {
             <>
               <Card>
                 <CardHeader>
-                  <CardTitle>Subir Video</CardTitle>
-                  <CardDescription>
-                    Comparte tu contenido con la comunidad
-                  </CardDescription>
+              <CardTitle>Upload Video</CardTitle>
+              <CardDescription>
+                Share your content with the community
+              </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/upload" aria-label="Subir nuevo video">
-                    <Button className="w-full">Subir Contenido</Button>
+                    <Button className="w-full">Upload Content</Button>
                   </Link>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Crear Proyecto</CardTitle>
+                  <CardTitle>Create Project</CardTitle>
                   <CardDescription>
-                    Lanza una campaña de crowdfunding
+                    Launch a crowdfunding campaign
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/projects/create" aria-label="Crear nuevo proyecto de crowdfunding">
-                    <Button className="w-full">Nuevo Proyecto</Button>
+                    <Button className="w-full">New Project</Button>
                   </Link>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Mis Proyectos</CardTitle>
+                  <CardTitle>My Projects</CardTitle>
                   <CardDescription>
-                    Gestiona tus campañas activas
+                    Manage your active campaigns
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/projects/my" aria-label="Ver mis proyectos de crowdfunding">
                     <Button className="w-full" variant="outline">
-                      Ver Mis Proyectos
+                      View My Projects
                     </Button>
                   </Link>
                 </CardContent>
@@ -173,13 +173,13 @@ export default async function DashboardPage() {
                 <CardHeader>
                   <CardTitle>Analytics</CardTitle>
                   <CardDescription>
-                    Estadísticas de tus videos y proyectos
+                    Statistics for your videos and projects
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/my-analytics" aria-label="Ver analytics detallados">
                     <Button className="w-full" variant="outline">
-                      Ver Analytics
+                      View Analytics
                     </Button>
                   </Link>
                 </CardContent>
@@ -191,15 +191,15 @@ export default async function DashboardPage() {
             <>
               <Card>
                 <CardHeader>
-                  <CardTitle>Solicitudes de Creators</CardTitle>
+                  <CardTitle>Creator Requests</CardTitle>
                   <CardDescription>
-                    Aprobar o rechazar solicitudes
+                    Approve or reject requests
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/admin/requests" aria-label="Panel de administración - Solicitudes de creators">
                     <Button className="w-full" variant="destructive">
-                      Panel Admin
+                      Admin Panel
                     </Button>
                   </Link>
                 </CardContent>
@@ -207,15 +207,15 @@ export default async function DashboardPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Gestión de Usuarios</CardTitle>
+                  <CardTitle>User Management</CardTitle>
                   <CardDescription>
-                    Administrar usuarios y roles
+                    Manage users and roles
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/admin/users" aria-label="Gestionar usuarios y roles">
                     <Button className="w-full" variant="destructive">
-                      Gestionar Usuarios
+                      Manage Users
                     </Button>
                   </Link>
                 </CardContent>
@@ -223,15 +223,15 @@ export default async function DashboardPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Reportes</CardTitle>
+                  <CardTitle>Reports</CardTitle>
                   <CardDescription>
-                    Revisar contenido reportado
+                    Review reported content
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/admin/reports" aria-label="Ver reportes de moderación">
                     <Button className="w-full" variant="destructive">
-                      Ver Reportes
+                      View Reports
                     </Button>
                   </Link>
                 </CardContent>

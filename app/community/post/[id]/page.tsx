@@ -141,14 +141,14 @@ export default function PostDetailPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Error al crear comentario')
+        throw new Error(errorData.error || 'Error creating comment')
       }
 
       const data = await response.json()
       setComments([...comments, data.comment])
       setNewComment('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear comentario')
+      setError(err instanceof Error ? err.message : 'Error creating comment')
     } finally {
       setCreating(false)
     }
@@ -157,7 +157,7 @@ export default function PostDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center">
-        <p>Cargando...</p>
+        <p>Loading...</p>
       </div>
     )
   }
@@ -171,7 +171,7 @@ export default function PostDetailPage() {
       <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Post de comunidad">
         <Link href="/community">
           <Button variant="outline" className="mb-6">
-            ← Volver a Comunidades
+            ← Back to Communities
           </Button>
         </Link>
 
@@ -180,8 +180,8 @@ export default function PostDetailPage() {
           <CardHeader>
             <CardTitle className="text-2xl">{post.title}</CardTitle>
             <CardDescription>
-              Por: {post.profiles?.name || 'Desconocido'} •{' '}
-              {new Date(post.created_at).toLocaleDateString('es-ES')}
+              By: {post.profiles?.name || 'Unknown'} •{' '}
+              {new Date(post.created_at).toLocaleDateString('en-US')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -190,7 +190,7 @@ export default function PostDetailPage() {
             </p>
             <div className="flex gap-4 text-sm text-gray-300">
               <span>👍 {post.like_count || 0} likes</span>
-              <span>💬 {post.comment_count || 0} comentarios</span>
+              <span>💬 {post.comment_count || 0} comments</span>
             </div>
           </CardContent>
         </Card>
@@ -199,7 +199,7 @@ export default function PostDetailPage() {
         {user && (
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Escribir comentario</CardTitle>
+              <CardTitle>Write Comment</CardTitle>
             </CardHeader>
             <form onSubmit={handleCreateComment}>
               <CardContent className="space-y-4">
@@ -209,7 +209,7 @@ export default function PostDetailPage() {
                   </div>
                 )}
                 <Textarea
-                  placeholder="Escribe tu comentario..."
+                  placeholder="Write your comment..."
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   required
@@ -217,7 +217,7 @@ export default function PostDetailPage() {
                   rows={4}
                 />
                 <Button type="submit" disabled={!newComment.trim() || creating}>
-                  {creating ? 'Publicando...' : 'Publicar Comentario'}
+                  {creating ? 'Publishing...' : 'Publish Comment'}
                 </Button>
               </CardContent>
             </form>
@@ -227,13 +227,13 @@ export default function PostDetailPage() {
         {/* Comments */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold">
-            Comentarios ({comments.length})
+            Comments ({comments.length})
           </h2>
           {comments.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center text-gray-300">
-                No hay comentarios aún
-                {user && <p className="mt-2 text-gray-300">¡Sé el primero en comentar!</p>}
+                No comments yet
+                {user && <p className="mt-2 text-gray-300">Be the first to comment!</p>}
               </CardContent>
             </Card>
           ) : (
@@ -241,8 +241,8 @@ export default function PostDetailPage() {
               <Card key={comment.id}>
                 <CardHeader>
                   <CardDescription>
-                    {comment.profiles?.name || 'Desconocido'} •{' '}
-                    {new Date(comment.created_at).toLocaleDateString('es-ES')}
+                    {comment.profiles?.name || 'Unknown'} •{' '}
+                    {new Date(comment.created_at).toLocaleDateString('en-US')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -262,10 +262,10 @@ export default function PostDetailPage() {
           <Card className="mt-6">
             <CardContent className="py-6 text-center">
               <p className="text-gray-300 mb-4">
-                Inicia sesión para comentar
+                Sign in to comment
               </p>
               <Link href="/login">
-                <Button>Iniciar Sesión</Button>
+                <Button>Sign In</Button>
               </Link>
             </CardContent>
           </Card>

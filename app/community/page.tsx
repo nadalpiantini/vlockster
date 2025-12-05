@@ -53,13 +53,13 @@ export default async function CommunityPage({
       <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Comunidades">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Comunidades</h1>
+            <h1 className="text-3xl font-bold mb-2">Communities</h1>
             <p className="text-gray-300">
-              Únete a discusiones sobre cine independiente
+              Join discussions about independent cinema
             </p>
           </div>
           <Link href="/dashboard" aria-label="Volver al dashboard">
-            <Button variant="outline">Volver</Button>
+            <Button variant="outline">Back</Button>
           </Link>
         </div>
 
@@ -67,10 +67,10 @@ export default async function CommunityPage({
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-gray-300 mb-4">
-                Aún no hay comunidades creadas
+                No communities created yet
               </p>
               <p className="text-sm text-gray-300">
-                Los creadores pronto lanzarán espacios de discusión
+                Creators will launch discussion spaces soon
               </p>
             </CardContent>
           </Card>
@@ -87,12 +87,12 @@ export default async function CommunityPage({
                     <CardHeader>
                       <CardTitle aria-label={`Comunidad: ${community.name}`}>{community.name}</CardTitle>
                       <CardDescription>
-                        <span role="status" aria-label="Comunidad pública">Comunidad pública</span>
+                        <span role="status" aria-label="Public community">Public community</span>
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-300" aria-label={`Descripción: ${community.description || 'Sin descripción'}`}>
-                        {community.description || 'Sin descripción'}
+                        {community.description || 'No description'}
                       </p>
                     </CardContent>
                   </Card>

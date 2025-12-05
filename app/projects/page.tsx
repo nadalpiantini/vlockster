@@ -73,9 +73,9 @@ export default async function ProjectsPage({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
+              <h1 className="text-3xl font-bold mb-2">Crowdfunding Projects</h1>
               <p className="text-gray-300">
-                Apoya proyectos cinematográficos independientes
+                Support independent film projects
               </p>
             </div>
             <div className="flex gap-4">
@@ -83,7 +83,7 @@ export default async function ProjectsPage({
                 <SearchBar />
               </div>
               <Link href="/dashboard" aria-label="Volver al dashboard">
-                <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
+                <Button variant="outline" aria-label="Back to dashboard">Back</Button>
               </Link>
             </div>
           </div>
@@ -93,10 +93,10 @@ export default async function ProjectsPage({
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-gray-300 mb-4">
-                No hay proyectos activos en este momento
+                No active projects at the moment
               </p>
               <p className="text-sm text-gray-300">
-                Los creadores pronto lanzarán nuevas campañas
+                Creators will launch new campaigns soon
               </p>
             </CardContent>
           </Card>
@@ -129,7 +129,7 @@ export default async function ProjectsPage({
                             role="status"
                             aria-label="Proyecto financiado exitosamente"
                           >
-                            Financiado
+                            Funded
                           </span>
                         )}
                       </div>
@@ -142,7 +142,7 @@ export default async function ProjectsPage({
                       {/* Progress Bar */}
                       <div role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de financiamiento: ${progress.toFixed(0)}%`}>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-300">Progreso</span>
+                          <span className="text-gray-300">Progress</span>
                           <span className="font-semibold" aria-live="polite">
                             {progress.toFixed(0)}%
                           </span>
@@ -170,12 +170,12 @@ export default async function ProjectsPage({
                           <p className="text-2xl font-bold text-blue-400" aria-label={`Días restantes: ${daysLeft}`}>
                             {daysLeft}
                           </p>
-                          <p className="text-xs text-gray-300">días restantes</p>
+                          <p className="text-xs text-gray-300">days left</p>
                         </div>
                       </div>
 
                       <p className="text-sm text-gray-300 text-center">
-                        Por: {(project as Project & { creator: Profile | null }).creator?.name || 'Desconocido'}
+                        By: {(project as Project & { creator: Profile | null }).creator?.name || 'Unknown'}
                       </p>
                     </CardContent>
                   </Card>

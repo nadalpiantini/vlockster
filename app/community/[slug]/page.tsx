@@ -139,7 +139,7 @@ export default function CommunityDetailPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Error al crear post')
+        throw new Error(errorData.error || 'Error creating post')
       }
 
       const data = await response.json()
@@ -152,7 +152,7 @@ export default function CommunityDetailPage() {
       setNewPostContent('')
       setShowNewPost(false)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear post')
+      setError(err instanceof Error ? err.message : 'Error creating post')
     } finally {
       setCreating(false)
     }
@@ -161,7 +161,7 @@ export default function CommunityDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center">
-        <p>Cargando...</p>
+        <p>Loading...</p>
       </div>
     )
   }
@@ -180,12 +180,12 @@ export default function CommunityDetailPage() {
               <div>
                 <CardTitle className="text-2xl">{community.name}</CardTitle>
                 <CardDescription>
-                  Por: {community.profiles?.name || 'Desconocido'}
+                  By: {community.profiles?.name || 'Unknown'}
                 </CardDescription>
               </div>
               <Link href="/community">
                 <Button variant="outline" size="sm">
-                  Volver
+                  Back
                 </Button>
               </Link>
             </div>
@@ -202,12 +202,12 @@ export default function CommunityDetailPage() {
           <div className="mb-6">
             {!showNewPost ? (
               <Button onClick={() => setShowNewPost(true)} className="w-full" aria-label="Crear nuevo post en esta comunidad">
-                Crear Nuevo Post
+                Create New Post
               </Button>
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle>Nuevo Post</CardTitle>
+                  <CardTitle>New Post</CardTitle>
                 </CardHeader>
                 <form onSubmit={handleCreatePost} aria-label="Formulario de nuevo post">
                   <CardContent className="space-y-4">
@@ -219,7 +219,7 @@ export default function CommunityDetailPage() {
                     <div>
                       <Input
                         type="text"
-                        placeholder="Título del post"
+                        placeholder="Post title"
                         value={newPostTitle}
                         onChange={(e) => setNewPostTitle(e.target.value)}
                         required
@@ -228,7 +228,7 @@ export default function CommunityDetailPage() {
                     </div>
                     <div>
                       <Textarea
-                        placeholder="Contenido..."
+                        placeholder="Content..."
                         value={newPostContent}
                         onChange={(e) => setNewPostContent(e.target.value)}
                         required
@@ -242,7 +242,7 @@ export default function CommunityDetailPage() {
                         disabled={!newPostTitle || !newPostContent || creating}
                         aria-label={creating ? 'Publicando post...' : 'Publicar post'}
                       >
-                        {creating ? 'Publicando...' : 'Publicar'}
+                        {creating ? 'Publishing...' : 'Publish'}
                       </Button>
                       <Button
                         type="button"
@@ -254,7 +254,7 @@ export default function CommunityDetailPage() {
                         disabled={creating}
                         aria-label="Cancelar creación de post"
                       >
-                        Cancelar
+                        Cancel
                       </Button>
                     </div>
                   </CardContent>
@@ -269,34 +269,34 @@ export default function CommunityDetailPage() {
           {posts.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center text-gray-300" aria-live="polite">
-                No hay posts en esta comunidad aún
-                {user && <p className="mt-2 text-gray-300">¡Sé el primero en publicar!</p>}
+                No posts in this community yet
+                {user && <p className="mt-2 text-gray-300">Be the first to post!</p>}
               </CardContent>
             </Card>
           ) : (
             <div role="list" aria-label="Lista de posts">
               {posts.map((post) => (
-              <Link key={post.id} href={`/community/post/${post.id}`} aria-label={`Ver post: ${post.title}`}>
-                <Card className="hover:border-blue-500 transition-colors cursor-pointer" role="listitem">
-                  <CardHeader>
-                    <CardTitle>{post.title}</CardTitle>
-                    <CardDescription>
-                      Por: {post.profiles?.name || 'Desconocido'} •{' '}
-                      {new Date(post.created_at).toLocaleDateString('es-ES')}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300 whitespace-pre-wrap mb-4 line-clamp-3">
-                      {post.content}
-                    </p>
-                  <div className="flex gap-4 text-sm text-gray-300">
-                    <span>👍 {post.like_count || 0} likes</span>
-                    <span>💬 {post.comment_count || 0} comentarios</span>
-                  </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                <Link key={post.id} href={`/community/post/${post.id}`} aria-label={`Ver post: ${post.title}`}>
+                  <Card className="hover:border-blue-500 transition-colors cursor-pointer" role="listitem">
+                    <CardHeader>
+                      <CardTitle>{post.title}</CardTitle>
+                      <CardDescription>
+                        By: {post.profiles?.name || 'Unknown'} •{' '}
+                        {new Date(post.created_at).toLocaleDateString('en-US')}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-300 whitespace-pre-wrap mb-4 line-clamp-3">
+                        {post.content}
+                      </p>
+                      <div className="flex gap-4 text-sm text-gray-300">
+                        <span>👍 {post.like_count || 0} likes</span>
+                        <span>💬 {post.comment_count || 0} comments</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
             </div>
           )}
         </section>
@@ -305,15 +305,15 @@ export default function CommunityDetailPage() {
           <Card className="mt-6">
             <CardContent className="py-6 text-center">
               <p className="text-gray-300 mb-4">
-                Inicia sesión para participar en la comunidad
+                Sign in to participate in the community
               </p>
               <Link href="/login">
-                <Button>Iniciar Sesión</Button>
+                <Button>Sign In</Button>
               </Link>
             </CardContent>
           </Card>
         )}
-      </main>
+      </div>
     </div>
   )
 }

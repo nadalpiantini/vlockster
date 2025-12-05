@@ -87,9 +87,9 @@ export default async function WatchPage({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
+              <h1 className="text-3xl font-bold mb-2">Video Catalog</h1>
               <p className="text-gray-300">
-                Descubre contenido independiente de creadores de todo el mundo
+                Discover independent content from creators around the world
               </p>
             </div>
             <div className="w-full md:w-auto max-w-md">
@@ -102,10 +102,10 @@ export default async function WatchPage({
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-gray-300 mb-4">
-                Aún no hay videos disponibles
+                No videos available yet
               </p>
               <p className="text-sm text-gray-300">
-                Los creadores pronto comenzarán a subir contenido
+                Creators will start uploading content soon
               </p>
             </CardContent>
           </Card>
@@ -136,13 +136,13 @@ export default async function WatchPage({
                   <CardHeader>
                     <CardTitle className="line-clamp-2">{video.title}</CardTitle>
                     <CardDescription className="line-clamp-2">
-                      {video.description || 'Sin descripción'}
+                      {video.description || 'No description'}
                     </CardDescription>
                   </CardHeader>
 
                   <CardContent>
                     <p className="text-sm text-gray-300">
-                      Por: {video.uploader?.name || 'Desconocido'}
+                      By: {video.uploader?.name || 'Unknown'}
                     </p>
                   </CardContent>
                 </Card>

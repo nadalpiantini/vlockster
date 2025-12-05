@@ -6,9 +6,9 @@
   "author": "Alan Nadal",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev --turbopack -p 3007",
+    "dev": "next dev --turbopack -p 3001",
     "build": "next build",
-    "start": "next start -p 3007",
+    "start": "next start -p 3001",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
