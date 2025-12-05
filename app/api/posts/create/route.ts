@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         title: sanitizedTitle,
         content: sanitizedContent,
-      })
+      } as Database['public']['Tables']['posts']['Insert'])
       .select('*')
       .single()
 

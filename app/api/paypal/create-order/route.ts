@@ -97,7 +97,8 @@ export async function POST(request: NextRequest) {
       }
 
       // Verificar disponibilidad
-      if (reward.limit && reward.backers_count && reward.backers_count >= reward.limit) {
+      const rewardTyped = reward as Database['public']['Tables']['rewards']['Row']
+      if (rewardTyped.limit && rewardTyped.backers_count && rewardTyped.backers_count >= rewardTyped.limit) {
         return NextResponse.json(
           { error: 'Esta recompensa ya no está disponible' },
           { status: 400 }
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Verificar que el monto coincida
-      if (Number(amount) < Number(reward.amount)) {
+      if (Number(amount) < Number(rewardTyped.amount)) {
         return NextResponse.json(
           { error: 'El monto no coincide con la recompensa seleccionada' },
           { status: 400 }

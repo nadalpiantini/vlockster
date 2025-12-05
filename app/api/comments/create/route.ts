@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         content: sanitizedContent,
         parent_comment_id: parentCommentId || null,
-      })
+      } as Database['public']['Tables']['comments']['Insert'])
       .select('*')
       .single()
 

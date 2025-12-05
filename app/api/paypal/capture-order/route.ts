@@ -4,6 +4,7 @@ import { paypalCaptureOrderSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 import { logger } from '@/lib/utils/logger'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -139,7 +140,7 @@ export async function POST(request: NextRequest) {
         amount,
         payment_id: captureData.id,
         payment_status: 'completed',
-      })
+      } as Database['public']['Tables']['backings']['Insert'])
       .select()
       .single()
 
