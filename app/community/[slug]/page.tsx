@@ -268,9 +268,9 @@ export default function CommunityDetailPage() {
         <section aria-label="Posts de la comunidad" className="space-y-4">
           {posts.length === 0 ? (
             <Card>
-              <CardContent className="py-12 text-center text-gray-400" aria-live="polite">
+              <CardContent className="py-12 text-center text-gray-300" aria-live="polite">
                 No hay posts en esta comunidad aún
-                {user && <p className="mt-2">¡Sé el primero en publicar!</p>}
+                {user && <p className="mt-2 text-gray-300">¡Sé el primero en publicar!</p>}
               </CardContent>
             </Card>
           ) : (

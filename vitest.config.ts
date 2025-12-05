@@ -40,6 +40,8 @@ export default defineConfig({
         branches: 75, // Algunas ramas son casos edge (config Redis)
         statements: 80,
       },
+      // Fail CI if coverage drops below thresholds
+      reportOnFailure: true,
     },
   },
   resolve: {

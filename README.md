@@ -42,6 +42,32 @@ Plataforma completa que une streaming de contenido, crowdfunding de proyectos cr
 - **Moderator**: Modera contenido en comunidades
 - **Admin**: Control total de la plataforma
 
+## 🧪 Testing
+
+VLOCKSTER includes comprehensive test coverage:
+
+- **Unit Tests**: Vitest with React Testing Library
+- **E2E Tests**: Playwright for complete user flows
+- **Coverage**: 80%+ target (lines, functions, statements), 75%+ branches
+
+### Quick Start
+
+```bash
+# Run all tests
+pnpm test:all
+
+# Unit tests only
+pnpm test:unit
+
+# E2E tests only
+pnpm test
+
+# Coverage report
+pnpm test:coverage
+```
+
+See [docs/TESTING.md](docs/TESTING.md) for complete testing documentation.
+
 ## 📦 Instalación
 
 ### Requisitos
