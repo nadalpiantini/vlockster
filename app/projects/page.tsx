@@ -68,7 +68,7 @@ export default async function ProjectsPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <main id="main-content" className="container mx-auto" role="main">
+      <main id="main-content" className="container mx-auto" role="main" aria-label="Proyectos de crowdfunding">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
@@ -76,7 +76,7 @@ export default async function ProjectsPage({
               Apoya proyectos cinematográficos independientes
             </p>
           </div>
-          <Link href="/dashboard">
+          <Link href="/dashboard" aria-label="Volver al dashboard">
             <Button variant="outline">Volver</Button>
           </Link>
         </div>
@@ -94,7 +94,7 @@ export default async function ProjectsPage({
           </Card>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Lista de proyectos">
               {projects.map((project) => {
               const progress =
                 (Number(project.current_amount) /
@@ -108,8 +108,8 @@ export default async function ProjectsPage({
                 : 0
 
               return (
-                <Link key={project.id} href={`/projects/${project.id}`}>
-                  <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full">
+                <Link key={project.id} href={`/projects/${project.id}`} aria-label={`Ver proyecto: ${project.title}`}>
+                  <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full" role="listitem">
                     <CardHeader>
                       <div className="flex justify-between items-start mb-2">
                         <CardTitle className="line-clamp-2">

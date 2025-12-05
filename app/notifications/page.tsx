@@ -71,7 +71,8 @@ export default function NotificationsPage() {
 
   async function markAsRead(id: string) {
     try {
-      await supabase.from('notifications').update({ read: true } as Database['public']['Tables']['notifications']['Update']).eq('id', id)
+      const updateData: Database['public']['Tables']['notifications']['Update'] = { read: true }
+      await supabase.from('notifications').update(updateData).eq('id', id)
 
       setNotifications(
         notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
@@ -92,9 +93,10 @@ export default function NotificationsPage() {
 
       if (!user) return
 
+      const updateData: Database['public']['Tables']['notifications']['Update'] = { read: true }
       await supabase
         .from('notifications')
-        .update({ read: true } as Database['public']['Tables']['notifications']['Update'])
+        .update(updateData)
         .eq('user_id', user.id)
         .eq('read', false)
 

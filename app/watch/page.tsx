@@ -82,7 +82,7 @@ export default async function WatchPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <main id="main-content" className="container mx-auto" role="main">
+      <main id="main-content" className="container mx-auto" role="main" aria-label="Catálogo de videos">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
           <p className="text-gray-400">
@@ -103,10 +103,10 @@ export default async function WatchPage({
           </Card>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" role="list" aria-label="Lista de videos">
               {videos.map((video: Video) => (
-              <Link key={video.id} href={`/watch/${video.id}`}>
-                <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full">
+              <Link key={video.id} href={`/watch/${video.id}`} aria-label={`Ver video: ${video.title}`}>
+                <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full" role="listitem">
                   {/* Thumbnail */}
                   <div className="aspect-video bg-gray-800 relative overflow-hidden">
                     {video.thumbnail_url ? (

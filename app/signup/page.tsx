@@ -79,10 +79,10 @@ export default function SignupPage() {
       </div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5" role="navigation" aria-label="Navegación principal">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center space-x-3 group">
+            <Link href="/" className="flex items-center space-x-3 group" aria-label="VLOCKSTER - Ir al inicio">
               <div className="relative w-10 h-10">
                 <Image
                   src="/items/vlockster_logo.jpeg"
@@ -99,6 +99,7 @@ export default function SignupPage() {
             <Link
               href="/login"
               className="px-5 py-2.5 text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200"
+              aria-label="Iniciar sesión"
             >
               Sign In
             </Link>
@@ -106,7 +107,7 @@ export default function SignupPage() {
         </div>
       </nav>
 
-      <div className="w-full max-w-md relative z-10 mt-20">
+      <main id="main-content" className="w-full max-w-md relative z-10 mt-20" role="main" aria-label="Crear cuenta">
         <Card className="glass-card shadow-2xl">
           <CardHeader className="text-center space-y-4">
             <div className="flex justify-center mb-4">
@@ -120,7 +121,7 @@ export default function SignupPage() {
               </div>
             </div>
             <div className="inline-flex items-center space-x-2 px-4 py-2 glass-card rounded-full mb-2">
-              <Sparkles className="w-4 h-4 text-[#FF0000]" />
+              <Sparkles className="w-4 h-4 text-[#FF0000]" aria-hidden="true" />
               <span className="text-sm text-gray-300">Join the community</span>
             </div>
             <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
@@ -130,10 +131,10 @@ export default function SignupPage() {
               Join VLOCKSTER and discover the best independent cinema
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSignup}>
+          <form onSubmit={handleSignup} aria-label="Formulario de registro">
             <CardContent className="space-y-4">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
+                <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm" role="alert" aria-live="polite">
                   {error}
                 </div>
               )}
@@ -195,19 +196,20 @@ export default function SignupPage() {
                 type="submit"
                 className="w-full bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105 font-bold"
                 disabled={loading}
+                aria-label={loading ? 'Creando cuenta...' : 'Crear cuenta'}
               >
                 {loading ? 'Creating account...' : 'Create Account'}
               </Button>
               <p className="text-sm text-gray-400 text-center">
                 Already have an account?{' '}
-                <Link href="/login" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors">
+                <Link href="/login" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Iniciar sesión">
                   Sign in here
                 </Link>
               </p>
             </CardFooter>
           </form>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

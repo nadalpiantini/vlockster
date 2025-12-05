@@ -35,7 +35,7 @@ export default async function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <main id="main-content" className="container mx-auto max-w-4xl" role="main">
+      <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Comunidades">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Comunidades</h1>
@@ -43,7 +43,7 @@ export default async function CommunityPage() {
               Únete a discusiones sobre cine independiente
             </p>
           </div>
-          <Link href="/dashboard">
+          <Link href="/dashboard" aria-label="Volver al dashboard">
             <Button variant="outline">Volver</Button>
           </Link>
         </div>
@@ -60,13 +60,14 @@ export default async function CommunityPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4" role="list" aria-label="Lista de comunidades">
             {communities.map((community) => (
               <Link
                 key={community.id}
                 href={`/community/${community.slug}`}
+                aria-label={`Unirse a la comunidad: ${community.name}`}
               >
-                <Card className="hover:border-blue-500 transition-colors cursor-pointer">
+                <Card className="hover:border-blue-500 transition-colors cursor-pointer" role="listitem">
                   <CardHeader>
                     <CardTitle>{community.name}</CardTitle>
                     <CardDescription>
