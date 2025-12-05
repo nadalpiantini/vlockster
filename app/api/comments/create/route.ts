@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { commentCreateSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
+import { moderateComment } from '@/lib/ai/comment-moderator'
 import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
@@ -52,6 +53,78 @@ export async function POST(request: NextRequest) {
 
     // Sanitizar contenido
     const sanitizedContent = sanitizeContent(content, false)
+
+    // Moderación automática con IA
+    let moderationResult
+    try {
+      // Obtener historial del autor para contexto
+      const { data: authorComments } = await supabase
+        .from('comments')
+        .select('id')
+        .eq('user_id', user.id)
+
+      const { data: authorProfile } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('id', user.id)
+        .single()
+
+      const { data: moderationLogs } = await supabase
+        .from('moderation_logs')
+        .select('action')
+        .eq('user_id', user.id)
+        .in('action', ['delete', 'ban'])
+
+      moderationResult = await moderateComment({
+        comment_text: sanitizedContent,
+        author_id: user.id,
+        author_name: authorProfile?.name || 'Usuario',
+        context: `post: ${post_id}`,
+        author_history: {
+          total_comments: authorComments?.length || 0,
+          moderated_comments: moderationLogs?.length || 0,
+          warnings: 0, // Puedes agregar tracking de warnings después
+        },
+      })
+
+      // Si es severe, eliminar inmediatamente
+      if (moderationResult.severity === 'severe' && moderationResult.action === 'delete') {
+        return NextResponse.json(
+          {
+            error: 'Tu comentario no cumple con nuestras políticas de comunidad',
+            moderation: {
+              severity: moderationResult.severity,
+              reason: moderationResult.reasons.join(', '),
+            },
+          },
+          { status: 403 }
+        )
+      }
+
+      // Si es ban, también rechazar
+      if (moderationResult.action === 'ban') {
+        return NextResponse.json(
+          {
+            error: 'Tu comentario ha sido rechazado. Si continúas, tu cuenta puede ser suspendida.',
+            moderation: {
+              severity: moderationResult.severity,
+              reason: moderationResult.reasons.join(', '),
+            },
+          },
+          { status: 403 }
+        )
+      }
+    } catch (moderationError) {
+      // Si falla la moderación, continuar pero marcar para revisión
+      console.error('Error en moderación automática:', moderationError)
+      moderationResult = {
+        severity: 'moderate' as const,
+        action: 'review' as const,
+        reasons: ['Error en análisis automático'],
+        explanation: '',
+        confidence: 0.3,
+      }
+    }
 
     // Verificar que el post existe
     const { data: post, error: postError } = await supabase

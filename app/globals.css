@@ -5,7 +5,7 @@
 /* Accessibility: Enhanced focus indicators for keyboard navigation */
 @layer base {
   *:focus-visible {
-    outline: 2px solid theme('colors.blue.500');
+    outline: 2px solid #3b82f6;
     outline-offset: 2px;
   }
   

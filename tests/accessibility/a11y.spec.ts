@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 /**
- * Tests de accesibilidad básicos
+ * Tests de accesibilidad básicos y con axe-core
  */
 test.describe('Accessibility: Basic Checks', () => {
   test('debe tener un título de página', async ({ page }) => {
@@ -57,6 +58,55 @@ test.describe('Accessibility: Basic Checks', () => {
       // Alt puede ser string vacío si es decorativa, pero debe existir
       expect(alt).not.toBeNull()
     }
+  })
+})
+
+/**
+ * Tests de accesibilidad con axe-core (WCAG 2.1 AA)
+ */
+test.describe('Accessibility: Axe Core Tests', () => {
+  test('página principal debe pasar tests de accesibilidad', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
+      .analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
+  })
+
+  test('página de login debe pasar tests de accesibilidad', async ({ page }) => {
+    await page.goto('/login')
+    await page.waitForLoadState('networkidle')
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
+      .analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
+  })
+
+  test('página de watch debe pasar tests de accesibilidad', async ({ page }) => {
+    await page.goto('/watch')
+    await page.waitForLoadState('networkidle')
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
+      .analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
+  })
+
+  test('página de proyectos debe pasar tests de accesibilidad', async ({ page }) => {
+    await page.goto('/projects')
+    await page.waitForLoadState('networkidle')
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
+      .analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
   })
 })
 
