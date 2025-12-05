@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     }
     
     type BackingWithProject = Database['public']['Tables']['backings']['Row'] & {
-      projects: Pick<Database['public']['Tables']['projects']['Row'], 'id' | 'title' | 'genre' | 'creator_id'> | null
+      projects: Pick<Database['public']['Tables']['projects']['Row'], 'id' | 'title' | 'category' | 'creator_id'> | null
     }
 
     const videos_viewed =
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       (backings as BackingWithProject[] | null)?.map((b) => ({
         project_id: b.project_id,
         title: b.projects?.title || '',
-        genre: b.projects?.genre || '',
+        genre: b.projects?.category || '', // Projects use 'category', not 'genre'
         creator_id: b.projects?.creator_id || '',
         amount: b.amount,
       })) || []
