@@ -193,15 +193,16 @@ export default function UploadPage() {
 
               {/* Progress Bar */}
               {uploading && (
-                <div className="space-y-2">
+                <div className="space-y-2" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de subida: ${progress}%`}>
                   <div className="flex justify-between text-sm">
                     <span>Subiendo...</span>
-                    <span>{progress}%</span>
+                    <span aria-live="polite">{progress}%</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-gray-700 rounded-full h-2" role="presentation">
                     <div
                       className="bg-blue-600 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${progress}%` }}
+                      aria-hidden="true"
                     />
                   </div>
                 </div>
@@ -210,7 +211,7 @@ export default function UploadPage() {
               {/* Title */}
               <div className="space-y-2">
                 <Label htmlFor="title">
-                  Título <span className="text-red-500">*</span>
+                  Título <span className="text-red-500" aria-label="Campo requerido">*</span>
                 </Label>
                 <Input
                   id="title"
@@ -220,7 +221,10 @@ export default function UploadPage() {
                   onChange={(e) => setTitle(e.target.value)}
                   required
                   disabled={uploading}
+                  aria-describedby="title-description"
+                  aria-invalid={false}
                 />
+                <span id="title-description" className="sr-only">Ingresa un título descriptivo para tu video</span>
               </div>
 
               {/* Description */}
@@ -233,7 +237,9 @@ export default function UploadPage() {
                   onChange={(e) => setDescription(e.target.value)}
                   disabled={uploading}
                   rows={4}
+                  aria-describedby="description-description"
                 />
+                <span id="description-description" className="sr-only">Opcional: Describe el contenido de tu video</span>
               </div>
 
               {/* Visibility */}
@@ -244,13 +250,14 @@ export default function UploadPage() {
                   value={visibility}
                   onChange={(e) => setVisibility(e.target.value)}
                   disabled={uploading}
+                  aria-describedby="visibility-description"
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <option value="public">Público</option>
                   <option value="members">Solo Miembros</option>
                   <option value="backers">Solo Backers</option>
                 </select>
-                <p className="text-xs text-gray-400">
+                <p id="visibility-description" className="text-xs text-gray-400" role="status" aria-live="polite">
                   {visibility === 'public' && 'Visible para todos'}
                   {visibility === 'members' && 'Solo usuarios registrados'}
                   {visibility === 'backers' &&

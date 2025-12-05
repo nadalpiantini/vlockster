@@ -160,3 +160,44 @@
 Seleccionar siguiente mini sprint (Task #1, #3, #4, o #5)
 
 ---
+
+### 2025-12-05 - Mini Sprint 1: Epic 4 - Fix Test Failures + Baseline Coverage ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Iniciado Epic 4: Test Coverage Expansion (objetivo: 80%+ cobertura)
+- Workflow: Mini sprints autoconclusivos con validación incremental
+- Primer paso: Arreglar tests fallidos y establecer baseline
+
+**Tareas Realizadas**:
+1. ✅ Identificado problema en `lib/utils/role-check.test.ts` (cookies fuera de request scope)
+2. ✅ Mockeado `createClient` de Supabase server correctamente
+3. ✅ Mockeado `next/navigation` redirect
+4. ✅ Tests de role-check ahora pasan (3/3 tests)
+5. ✅ Baseline de cobertura establecido:
+   - Statements: 63.92% (objetivo: 80%+)
+   - Branches: 51.26% (objetivo: 75%+)
+   - Functions: 75.55% (objetivo: 80%+)
+   - Lines: 62.91% (objetivo: 80%+)
+
+**Archivos Modificados**:
+- `lib/utils/role-check.test.ts` - Tests arreglados con mocks correctos
+
+**Resultados**:
+- ✅ Todos los tests unitarios pasan (86 tests)
+- ✅ Baseline de cobertura establecido
+- ✅ Listo para continuar con expansión de cobertura
+
+**Git**:
+- ⏳ Pendiente: Commit Mini Sprint 1
+
+**Métricas**:
+- Tests pasando: 86/86
+- Cobertura actual: 63.92% statements
+- Gap para objetivo: ~16% statements, ~24% branches
+
+**Próximos Pasos**:
+Mini Sprint 2: Component Unit Tests - Admin Components
+
+---
