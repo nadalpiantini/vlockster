@@ -1,29 +1,10 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { BrandHeader } from '@/components/BrandHeader'
 import { Play, Film, Users, DollarSign, ArrowRight } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'VLOCKSTER - Independent Cinema Platform',
-  description: 'Streaming, crowdfunding, and community for independent filmmakers. Watch, fund, and be part of extraordinary stories.',
-  keywords: ['independent cinema', 'streaming', 'crowdfunding', 'indie films', 'creators', 'cinema community'],
-  openGraph: {
-    title: 'VLOCKSTER - Independent Cinema Platform',
-    description: 'Streaming, crowdfunding, and community for independent filmmakers',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'VLOCKSTER - Independent Cinema Platform',
-    description: 'Streaming, crowdfunding, and community for independent filmmakers',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-}
 
 export default function HomePage() {
   return (
