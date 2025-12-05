@@ -136,6 +136,11 @@ export default function UploadPage() {
                   {error}
                 </div>
               )}
+              {uploading && (
+                <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+                  Subiendo video, por favor espera...
+                </div>
+              )}
 
               {/* Drag & Drop Zone */}
               <div
