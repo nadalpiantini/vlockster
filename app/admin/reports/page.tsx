@@ -48,7 +48,7 @@ export default async function AdminReportsPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Reportes de Contenido</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Revisa y modera contenido reportado por usuarios
             </p>
           </div>
@@ -67,7 +67,7 @@ export default async function AdminReportsPage() {
           </CardHeader>
           <CardContent>
             {reports.length === 0 ? (
-              <p className="text-gray-400 text-center py-8" role="status" aria-label="No hay reportes pendientes">
+              <p className="text-gray-300 text-center py-8" role="status" aria-label="No hay reportes pendientes">
                 No hay reportes pendientes
               </p>
             ) : (
@@ -84,7 +84,7 @@ export default async function AdminReportsPage() {
                         <p className="font-semibold" aria-label={`Tipo de contenido: ${report.content_type}`}>
                           Tipo: {report.content_type}
                         </p>
-                        <p className="text-sm text-gray-400" aria-label={`Fecha de reporte: ${new Date(report.created_at).toLocaleDateString('es-ES')}`}>
+                        <p className="text-sm text-gray-300" aria-label={`Fecha de reporte: ${new Date(report.created_at).toLocaleDateString('es-ES')}`}>
                           Reportado el:{' '}
                           {new Date(report.created_at).toLocaleDateString(
                             'es-ES'
@@ -105,7 +105,7 @@ export default async function AdminReportsPage() {
                       </p>
                     )}
                     {report.description && (
-                      <p className="text-gray-400 mt-2 text-sm" aria-label={`Descripción del reporte: ${report.description}`}>
+                      <p className="text-gray-300 mt-2 text-sm" aria-label={`Descripción del reporte: ${report.description}`}>
                         {report.description}
                       </p>
                     )}

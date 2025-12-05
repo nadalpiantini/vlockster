@@ -75,7 +75,7 @@ export default async function AdminRequestsPage() {
           </h2>
           {pendingRequests.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-gray-400" role="status" aria-label="No hay solicitudes pendientes">
+              <CardContent className="py-8 text-center text-gray-300" role="status" aria-label="No hay solicitudes pendientes">
                 No hay solicitudes pendientes
               </CardContent>
             </Card>
@@ -126,7 +126,7 @@ export default async function AdminRequestsPage() {
           </h2>
           {reviewedRequests.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-gray-400" role="status" aria-label="No hay solicitudes revisadas">
+              <CardContent className="py-8 text-center text-gray-300" role="status" aria-label="No hay solicitudes revisadas">
                 No hay solicitudes revisadas
               </CardContent>
             </Card>

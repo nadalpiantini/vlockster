@@ -60,5 +60,31 @@ test.describe('API: Admin Update User Role', () => {
 
     expect(response.status()).toBe(401) // Primero falla auth
   })
+
+  test('debe rechazar request con body vacío', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/admin/update-user-role`, {
+      data: {},
+    })
+
+    expect(response.status()).toBe(401)
+  })
+
+  test('debe rechazar request con método incorrecto', async ({ request }) => {
+    const response = await request.get(`${API_BASE}/admin/update-user-role`)
+
+    expect(response.status()).toBe(405) // Method Not Allowed
+  })
+
+  test('debe validar formato de role', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/admin/update-user-role`, {
+      data: {
+        userId: '00000000-0000-0000-0000-000000000000',
+        role: 'super_admin', // Role inválido
+      },
+    })
+
+    // Primero falla auth, pero si pasara, fallaría validación
+    expect([400, 401]).toContain(response.status())
+  })
 })
 

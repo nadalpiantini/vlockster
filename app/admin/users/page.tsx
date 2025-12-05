@@ -45,7 +45,7 @@ export default async function AdminUsersPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Gestión de Usuarios</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Administra usuarios y roles de la plataforma
             </p>
           </div>
@@ -63,7 +63,7 @@ export default async function AdminUsersPage() {
           </CardHeader>
           <CardContent>
             {users.length === 0 ? (
-              <p className="text-gray-400 text-center py-8" role="status" aria-label="No hay usuarios registrados">
+              <p className="text-gray-300 text-center py-8" role="status" aria-label="No hay usuarios registrados">
                 No hay usuarios registrados
               </p>
             ) : (
@@ -77,8 +77,8 @@ export default async function AdminUsersPage() {
                   >
                     <div>
                       <p className="font-semibold" aria-label={`Nombre: ${u.name || u.email}`}>{u.name || u.email}</p>
-                      <p className="text-sm text-gray-400" aria-label={`Email: ${u.email}`}>{u.email}</p>
-                      <p className="text-xs text-gray-500 capitalize" aria-label={`Rol actual: ${u.role}`}>
+                      <p className="text-sm text-gray-300" aria-label={`Email: ${u.email}`}>{u.email}</p>
+                      <p className="text-xs text-gray-300 capitalize" aria-label={`Rol actual: ${u.role}`}>
                         Rol: {u.role}
                       </p>
                     </div>

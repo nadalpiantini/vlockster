@@ -134,7 +134,7 @@ export default async function MyProjectsPage() {
                     <CardContent className="space-y-4">
                       <div>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-400">Progreso</span>
+                          <span className="text-gray-300">Progreso</span>
                           <span className="font-semibold">
                             {progress.toFixed(0)}%
                           </span>
@@ -152,7 +152,7 @@ export default async function MyProjectsPage() {
                           <p className="text-2xl font-bold text-blue-400">
                             ${Number(project.current_amount).toLocaleString()}
                           </p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-gray-300">
                             de ${Number(project.goal_amount).toLocaleString()}
                           </p>
                         </div>
@@ -160,7 +160,7 @@ export default async function MyProjectsPage() {
                           <p className="text-2xl font-bold text-blue-400">
                             {project.backers_count || 0}
                           </p>
-                          <p className="text-xs text-gray-400">backers</p>
+                          <p className="text-xs text-gray-300">backers</p>
                         </div>
                       </div>
                     </CardContent>

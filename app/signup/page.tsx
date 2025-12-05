@@ -225,6 +225,7 @@ export default function SignupPage() {
                 className="w-full bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105 font-bold"
                 disabled={loading}
                 aria-label={loading ? 'Creando cuenta...' : 'Crear cuenta'}
+                aria-busy={loading}
               >
                 {loading ? 'Creating account...' : 'Create Account'}
               </Button>

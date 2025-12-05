@@ -219,7 +219,7 @@ export default function CreateProjectPage() {
                   rows={6}
                 />
                 {generatingDescription && (
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-300">
                     La IA está creando una descripción convincente para tu proyecto...
                   </p>
                 )}
@@ -274,7 +274,7 @@ export default function CreateProjectPage() {
                   onChange={(e) => setVideoId(e.target.value)}
                   disabled={creating}
                 />
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-300">
                   Puedes subir un video primero en /upload y luego pegar su ID aquí
                 </p>
               </div>
@@ -296,7 +296,7 @@ export default function CreateProjectPage() {
                 </div>
 
                 {rewards.length === 0 ? (
-                  <p className="text-sm text-gray-400 text-center py-4">
+                  <p className="text-sm text-gray-300 text-center py-4">
                     Agrega recompensas para incentivar a los backers
                   </p>
                 ) : (
