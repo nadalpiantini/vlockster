@@ -71,21 +71,17 @@ describe('checkRateLimit', () => {
 
   it('debe retornar success cuando no hay limiter (desarrollo)', async () => {
     const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'development',
-      writable: true,
-      configurable: true,
-    })
+    process.env.NODE_ENV = 'development'
 
     const result = await checkRateLimit('user-123', null)
 
     expect(result.success).toBe(true)
 
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
+    if (originalEnv) {
+      process.env.NODE_ENV = originalEnv
+    } else {
+      delete process.env.NODE_ENV
+    }
   })
 
   it('debe manejar errores de Redis gracefully', async () => {

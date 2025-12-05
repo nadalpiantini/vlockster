@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { BrandHeader } from '@/components/BrandHeader'
+import { SearchBar } from '@/components/SearchBar'
+import { RecommendationsSection } from '@/components/RecommendationsSection'
 import { Play, Film, Users, DollarSign, ArrowRight } from 'lucide-react'
 
 export default function HomePage() {
@@ -18,7 +20,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <BrandHeader />
-            <div className="flex items-center space-x-6" role="menubar">
+            <div className="flex items-center space-x-4" role="menubar">
+              <div className="hidden md:block">
+                <SearchBar />
+              </div>
               <Link 
                 href="/watch" 
                 className="text-gray-300 hover:text-white transition-colors"
@@ -107,6 +112,13 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Recommendations Section - Only for logged in users */}
+      <section className="py-12 px-4 bg-black/30" aria-label="Recomendaciones personalizadas">
+        <div className="container mx-auto">
+          <RecommendationsSection />
         </div>
       </section>
 

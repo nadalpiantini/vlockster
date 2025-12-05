@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { SearchBar } from '@/components/SearchBar'
 import {
   Card,
   CardContent,
@@ -69,16 +70,23 @@ export default async function ProjectsPage({
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
       <main id="main-content" className="container mx-auto" role="main" aria-label="Proyectos de crowdfunding">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
-            <p className="text-gray-300">
-              Apoya proyectos cinematográficos independientes
-            </p>
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
+              <p className="text-gray-300">
+                Apoya proyectos cinematográficos independientes
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-full md:w-auto max-w-md">
+                <SearchBar />
+              </div>
+              <Link href="/dashboard" aria-label="Volver al dashboard">
+                <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
+              </Link>
+            </div>
           </div>
-          <Link href="/dashboard" aria-label="Volver al dashboard">
-            <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
-          </Link>
         </div>
 
         {projects.length === 0 ? (

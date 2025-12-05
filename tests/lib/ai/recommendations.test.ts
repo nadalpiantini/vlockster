@@ -10,9 +10,35 @@ vi.mock('@/lib/utils/logger', () => ({
   },
 }))
 
+// Mock fetch for API calls
+global.fetch = vi.fn()
+
 describe('generateRecommendations', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Mock successful API response
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{
+          message: {
+            content: JSON.stringify({
+              recommendations: [
+                {
+                  id: 'v1',
+                  type: 'video',
+                  title: 'Video 1',
+                  description: 'Desc 1',
+                  reason: 'Based on your viewing history',
+                  confidence_score: 0.85,
+                },
+              ],
+              insights: 'You enjoy drama content',
+            }),
+          },
+        }],
+      }),
+    } as Response)
   })
 
   const mockAvailableContent = {

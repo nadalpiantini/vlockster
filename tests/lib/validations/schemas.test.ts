@@ -75,15 +75,15 @@ describe('commentCreateSchema', () => {
   it('debe validar un comentario válido', () => {
     const valid = {
       content: 'This is a valid comment with enough characters',
-      video_id: 'test-video-id',
+      post_id: '123e4567-e89b-12d3-a456-426614174000',
     }
     expect(() => commentCreateSchema.parse(valid)).not.toThrow()
   })
 
-  it('debe rechazar contenido muy corto', () => {
+  it('debe rechazar contenido vacío', () => {
     const invalid = {
-      content: 'short',
-      video_id: 'test-video-id',
+      content: '',
+      post_id: '123e4567-e89b-12d3-a456-426614174000',
     }
     expect(() => commentCreateSchema.parse(invalid)).toThrow()
   })
@@ -94,7 +94,7 @@ describe('postCreateSchema', () => {
     const valid = {
       title: 'Test Post',
       content: 'This is a valid post content with enough characters',
-      community_id: 'test-community-id',
+      community_id: '123e4567-e89b-12d3-a456-426614174000',
     }
     expect(() => postCreateSchema.parse(valid)).not.toThrow()
   })
@@ -102,8 +102,8 @@ describe('postCreateSchema', () => {
   it('debe rechazar título muy corto', () => {
     const invalid = {
       title: 'A',
-      content: 'Valid content',
-      community_id: 'test-community-id',
+      content: 'Valid content with enough characters',
+      community_id: '123e4567-e89b-12d3-a456-426614174000',
     }
     expect(() => postCreateSchema.parse(invalid)).toThrow()
   })

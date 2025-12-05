@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
+import { SearchBar } from '@/components/SearchBar'
 import {
   Card,
   CardContent,
@@ -84,10 +85,17 @@ export default async function WatchPage({
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
       <main id="main-content" className="container mx-auto" role="main" aria-label="Catálogo de videos">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
-          <p className="text-gray-300">
-            Descubre contenido independiente de creadores de todo el mundo
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
+              <p className="text-gray-300">
+                Descubre contenido independiente de creadores de todo el mundo
+              </p>
+            </div>
+            <div className="w-full md:w-auto max-w-md">
+              <SearchBar />
+            </div>
+          </div>
         </div>
 
         {videos.length === 0 ? (

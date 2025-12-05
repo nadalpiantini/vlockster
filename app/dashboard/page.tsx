@@ -10,6 +10,9 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { BrandHeader } from '@/components/BrandHeader'
+import { RecommendationsSection } from '@/components/RecommendationsSection'
+import { CreatorAnalytics } from '@/components/CreatorAnalytics'
+import { NotificationsBell } from '@/components/NotificationsBell'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -35,8 +38,9 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       {/* Navigation Header */}
       <nav className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <BrandHeader />
+          <NotificationsBell />
         </div>
       </nav>
 
@@ -164,6 +168,22 @@ export default async function DashboardPage() {
                   </Link>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analytics</CardTitle>
+                  <CardDescription>
+                    Estadísticas de tus videos y proyectos
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/my-analytics" aria-label="Ver analytics detallados">
+                    <Button className="w-full" variant="outline">
+                      Ver Analytics
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
             </>
           )}
 
@@ -219,6 +239,18 @@ export default async function DashboardPage() {
             </>
           )}
         </section>
+
+        {/* Recommendations Section */}
+        <section className="mb-8" aria-labelledby="recommendations-heading">
+          <RecommendationsSection />
+        </section>
+
+        {/* Analytics for Creators */}
+        {isCreator && (
+          <section className="mb-8" aria-labelledby="analytics-heading">
+            <CreatorAnalytics />
+          </section>
+        )}
 
         {/* Recent Activity */}
         <section aria-labelledby="recent-activity-heading">
