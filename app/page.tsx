@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Play, Film, Users, DollarSign, ArrowRight, Star, ChevronLeft, ChevronRight, TrendingUp, Heart, MessageCircle } from 'lucide-react'
+import type { Route } from 'next'
+import { Play, Film, Users, DollarSign, ArrowRight, Star, Heart, MessageCircle } from 'lucide-react'
 
 export default function HomePage() {
   const featuredContent = [
@@ -105,7 +106,7 @@ export default function HomePage() {
               <Link href="/watch" className="text-gray-300 hover:text-white transition-colors">
                 Watch
               </Link>
-              <Link href="/menu" className="text-gray-300 hover:text-white transition-colors">
+              <Link href={"/menu" as Route} className="text-gray-300 hover:text-white transition-colors">
                 Gallery
               </Link>
               <Link href="/login" className="text-gray-300 hover:text-white transition-colors">
@@ -525,7 +526,7 @@ export default function HomePage() {
               <Link href="/legal/terms" className="text-gray-400 hover:text-white transition-colors">
                 Terms
               </Link>
-              <Link href="/menu" className="text-gray-400 hover:text-white transition-colors">
+              <Link href={"/menu" as Route} className="text-gray-400 hover:text-white transition-colors">
                 Gallery
               </Link>
             </div>
