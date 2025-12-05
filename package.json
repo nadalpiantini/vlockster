@@ -21,6 +21,7 @@
     "test:unit:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:all": "vitest --coverage && playwright test",
+    "analyze-bundle": "ANALYZE=true next build",
     "deploy:prod": "tsx scripts/deploy-production.ts",
     "deploy:prod:bash": "bash scripts/deploy-production.sh",
     "bmad:refresh": "npx bmad-method install -f -d .",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
+    "@next/bundle-analyzer": "^16.0.7",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.10",
