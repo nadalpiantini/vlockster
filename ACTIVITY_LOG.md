@@ -667,3 +667,36 @@ Mini Sprint 3: Component Unit Tests - Project Components
 Mini Sprint 4: Component Unit Tests - UI Components
 
 ---
+
+
+### 2025-12-05 - Mini Sprint 5: Epic 4 - Admin API Integration Tests Expansion ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Expandir tests de integración para endpoints de Admin
+
+**Tareas Realizadas**:
+1. ✅ Expandido admin.approve-request.spec.ts (5 → 12 tests)
+2. ✅ Expandido admin.reject-request.spec.ts (5 → 11 tests)
+3. ✅ Expandido admin.resolve-report.spec.ts (9 → 18 tests)
+4. ✅ Expandido admin.update-user-role.spec.ts (4 → 14 tests)
+5. ✅ Tests cubren: auth, validation, HTTP methods, edge cases
+
+**Resultados**:
+- ✅ 55 tests de integración Admin API (expandidos de 23)
+- ✅ Cobertura mejorada de validación y edge cases
+- ✅ Tests de seguridad completos
+
+**Git**:
+- ✅ Commit Mini Sprint 5 realizado
+
+**Métricas**:
+- Tests expandidos: 32
+- Tests totales Admin API: 55
+
+**Próximos Pasos**:
+Mini Sprint 6: API Integration Tests - Project & Payment endpoints
+
+---
