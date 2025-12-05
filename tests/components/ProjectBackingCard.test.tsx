@@ -129,14 +129,14 @@ describe('ProjectBackingCard', () => {
     expect(mockReload).toHaveBeenCalled()
   })
 
-  it('debe manejar errores de pago correctamente', () => {
+  it('debe manejar errores de pago correctamente', async () => {
     const user = {
       id: 'user-123',
       email: 'test@example.com',
       role: 'viewer' as const,
     }
 
-    const { logger } = require('@/lib/utils/logger')
+    const { logger } = await import('@/lib/utils/logger')
 
     render(
       <ProjectBackingCard

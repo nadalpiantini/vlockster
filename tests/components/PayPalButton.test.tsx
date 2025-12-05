@@ -254,7 +254,7 @@ describe('PayPalButton', () => {
       ;(global.fetch as any) = mockFetch
 
       const onError = vi.fn()
-      const { logger } = require('@/lib/utils/logger')
+      const { logger } = await import('@/lib/utils/logger')
 
       render(
         <PayPalButton
