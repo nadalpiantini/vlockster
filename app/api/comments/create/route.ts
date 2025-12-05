@@ -156,15 +156,23 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Crear comentario
+    // Crear comentario con estado de moderación
+    const commentData: Database['public']['Tables']['comments']['Insert'] = {
+      post_id,
+      user_id: user.id,
+      content: sanitizedContent,
+      parent_comment_id: parentCommentId || null,
+      moderation_status:
+        moderationResult.action === 'approve'
+          ? 'approved'
+          : moderationResult.action === 'review'
+            ? 'pending_review'
+            : 'pending_review', // Por seguridad, si no es approve, revisar
+    }
+
     const { data: comment, error: commentError } = await supabase
       .from('comments')
-      .insert({
-        post_id,
-        user_id: user.id,
-        content: sanitizedContent,
-        parent_comment_id: parentCommentId || null,
-      } as Database['public']['Tables']['comments']['Insert'])
+      .insert(commentData)
       .select('*')
       .single()
 
@@ -172,9 +180,42 @@ export async function POST(request: NextRequest) {
       return handleError(commentError, 'Create comment')
     }
 
+    // Si requiere revisión, agregar a cola de moderación
+    if (moderationResult.action === 'review' && comment) {
+      await supabase.from('moderation_queue').insert({
+        comment_id: comment.id,
+        severity: moderationResult.severity,
+        reasons: moderationResult.reasons,
+        created_at: new Date().toISOString(),
+      })
+    }
+
+    // Registrar en logs de moderación
+    if (moderationResult && comment) {
+      await supabase.from('moderation_logs').insert({
+        comment_id: comment.id,
+        user_id: user.id,
+        action: moderationResult.action,
+        severity: moderationResult.severity,
+        reasons: moderationResult.reasons,
+        confidence: moderationResult.confidence,
+        created_at: new Date().toISOString(),
+      })
+    }
+
     return NextResponse.json({
       success: true,
       comment,
+      moderation:
+        moderationResult.action !== 'approve'
+          ? {
+              status: moderationResult.action,
+              message:
+                moderationResult.action === 'review'
+                  ? 'Tu comentario está siendo revisado y se publicará pronto si cumple con nuestras políticas.'
+                  : 'Tu comentario requiere revisión.',
+            }
+          : undefined,
     })
   } catch (error) {
     return handleError(error, 'Create comment')

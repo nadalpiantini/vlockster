@@ -33,12 +33,8 @@ async function getMyProjects(userId: string) {
 export default async function MyProjectsPage() {
   const user = await getCurrentUser()
 
-  // TEMPORAL: Permitir acceso sin autenticación
-  // if (!user) {
-  //   redirect('/login')
-  // }
-
-  // Si no hay usuario, mostrar mensaje o proyectos vacíos
+  // Auth check: Redirect to login if authentication is enabled
+  // Fallback: Show login prompt if no user
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">

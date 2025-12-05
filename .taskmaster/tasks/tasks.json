@@ -1,6 +1,6 @@
 {
-  "master": [
-    {
+  "master": {
+    "0": {
       "id": "1",
       "title": "Epic 1: TypeScript Type Safety",
       "description": "Eliminate all 99 instances of 'as any' and achieve 100% type safety across the codebase",
@@ -26,7 +26,9 @@
           "description": "Replace all 'as any' type assertions in API route handlers",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["1.1"],
+          "dependencies": [
+            "1.1"
+          ],
           "details": "Files to fix: app/api/videos/upload/route.ts, app/api/projects/create/route.ts, app/api/comments/create/route.ts, app/api/posts/create/route.ts, app/api/admin/* (4 files), app/api/paypal/* (3 files), app/api/analytics/route.ts, app/api/user/* (2 files). Replace 'as any' with proper Supabase types from database.types.ts.",
           "testStrategy": "Run pnpm typecheck after each file. Verify API routes still function correctly with proper types."
         },
@@ -36,7 +38,9 @@
           "description": "Replace all 'as any' type assertions in Next.js pages",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["1.1"],
+          "dependencies": [
+            "1.1"
+          ],
           "details": "Files to fix: app/projects/my/page.tsx, app/admin/users/page.tsx, app/admin/reports/page.tsx, app/watch/page.tsx, app/projects/page.tsx, app/community/page.tsx, and 3 additional pages. Use proper TypeScript types for Supabase queries and responses.",
           "testStrategy": "Run pnpm typecheck. Test each page to ensure functionality is preserved."
         },
@@ -46,13 +50,16 @@
           "description": "Run full typecheck and update tsconfig if needed",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["1.2", "1.3"],
+          "dependencies": [
+            "1.2",
+            "1.3"
+          ],
           "details": "Execute 'pnpm typecheck' and verify zero 'as any' errors (excluding external/ directory). Update tsconfig.json with stricter settings if needed. Document TypeScript patterns in coding standards.",
           "testStrategy": "pnpm typecheck must pass completely. Document any patterns or conventions established during the refactoring."
         }
       ]
     },
-    {
+    "1": {
       "id": "2",
       "title": "Epic 2: Structured Logging System",
       "description": "Replace all console.log/error calls with structured logging system",
@@ -78,7 +85,9 @@
           "description": "Add context objects to all logger calls",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["2.1"],
+          "dependencies": [
+            "2.1"
+          ],
           "details": "Replace console.error(...) with logger.error(...) and console.log(...) with logger.info(...) or logger.debug(...). Add context objects to all logger calls including userId, endpoint, timestamp, etc.",
           "testStrategy": "Verify all logger calls include appropriate context. Test error logging with errorId generation."
         },
@@ -88,13 +97,15 @@
           "description": "Verify structured logging is working correctly",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["2.2"],
+          "dependencies": [
+            "2.2"
+          ],
           "details": "Run grep to verify zero console.log/error in app/api/. Test logger output in development mode. Verify JSON output in production mode. Document logging patterns in docs/.",
           "testStrategy": "Verify structured JSON logs in production. Test that errorId is generated for all errors. Document logging best practices."
         }
       ]
     },
-    {
+    "2": {
       "id": "3",
       "title": "Epic 3: Accessibility (WCAG 2.1 AA)",
       "description": "Achieve WCAG 2.1 AA compliance with 100+ ARIA labels and complete keyboard navigation",
@@ -120,7 +131,9 @@
           "description": "Implement complete keyboard navigation support",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["3.1"],
+          "dependencies": [
+            "3.1"
+          ],
           "details": "Implement skip-to-main-content link. Verify tab order in all pages. Test keyboard navigation in forms, modals, and dropdowns. Implement focus indicators for all interactive elements.",
           "testStrategy": "Test complete keyboard navigation flow. Verify tab order is logical. Test all interactive elements are keyboard accessible."
         },
@@ -140,7 +153,10 @@
           "description": "Test and fix screen reader compatibility",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["3.1", "3.2"],
+          "dependencies": [
+            "3.1",
+            "3.2"
+          ],
           "details": "Test with VoiceOver (macOS) on key flows. Test with NVDA (Windows) if available. Fix screen reader announcements for dynamic content. Add live regions for notifications and updates.",
           "testStrategy": "Manual testing with VoiceOver and NVDA. Verify all dynamic content is announced correctly."
         },
@@ -150,13 +166,17 @@
           "description": "Add automated accessibility testing",
           "status": "pending",
           "priority": "high",
-          "dependencies": ["3.1", "3.2", "3.3"],
+          "dependencies": [
+            "3.1",
+            "3.2",
+            "3.3"
+          ],
           "details": "Add axe-core to Playwright tests. Create a11y tests for all pages. Set up automated a11y checks in CI. Document accessibility patterns.",
           "testStrategy": "Run automated a11y tests in CI. Verify all pages pass axe-core checks. Document accessibility patterns in docs/."
         }
       ]
     },
-    {
+    "3": {
       "id": "4",
       "title": "Epic 4: Test Coverage Expansion",
       "description": "Expand test coverage to 80%+ across all components and API routes",
@@ -192,7 +212,10 @@
           "description": "Add E2E tests for all critical user flows",
           "status": "pending",
           "priority": "medium",
-          "dependencies": ["4.1", "4.2"],
+          "dependencies": [
+            "4.1",
+            "4.2"
+          ],
           "details": "Add E2E test for complete video upload flow, complete project creation flow, complete backing flow, admin moderation flow, and community interaction flow. Use Playwright.",
           "testStrategy": "Each flow should test the complete user journey from start to finish."
         },
@@ -202,18 +225,22 @@
           "description": "Set up coverage reporting and thresholds",
           "status": "pending",
           "priority": "medium",
-          "dependencies": ["4.1", "4.2", "4.3"],
+          "dependencies": [
+            "4.1",
+            "4.2",
+            "4.3"
+          ],
           "details": "Run pnpm test:coverage and establish baseline. Set up coverage thresholds (target: 80%). Add coverage reports to CI. Document testing strategy.",
           "testStrategy": "Verify coverage is 80%+. Set up CI to fail if coverage drops below threshold."
         }
       ]
     },
-    {
+    "4": {
       "id": "5",
       "title": "Epic 5: Performance and Observability",
       "description": "Implement Web Vitals, optimize queries, and establish performance monitoring",
       "status": "pending",
-          "priority": "medium",
+      "priority": "medium",
       "dependencies": [],
       "details": "Currently performance is not measured. This epic implements Web Vitals tracking, query optimization, bundle analysis, and performance monitoring dashboards.",
       "testStrategy": "Establish Web Vitals baseline. Monitor performance metrics. Set up alerts for regressions.",
@@ -254,12 +281,77 @@
           "description": "Set up performance dashboards and alerts",
           "status": "pending",
           "priority": "medium",
-          "dependencies": ["5.1", "5.2", "5.3"],
+          "dependencies": [
+            "5.1",
+            "5.2",
+            "5.3"
+          ],
           "details": "Set up performance dashboards. Configure alerts for performance regressions. Document performance baselines. Create performance budget.",
           "testStrategy": "Verify dashboards are working. Test alert system. Document performance baselines."
         }
       ]
+    },
+    "tasks": [
+      {
+        "id": 1,
+        "title": "TypeScript Type Safety - Eliminate all `as any`",
+        "description": "Regenerate Supabase types and eliminate all 99 instances of `as any` across 22 files to achieve 100% type safety",
+        "details": "**Problem**: 99 instances of `as any` in 22 files compromise TypeScript's type safety.\n\n**Approach**:\n1. Regenerate Supabase types: `pnpm supabase:types`\n2. Update API routes (13 files) to use generated types\n3. Update frontend pages (9 files) to use generated types\n4. Run `pnpm typecheck` to verify zero type errors\n\n**Files**: app/api/videos/upload/route.ts, app/api/projects/create/route.ts, app/api/comments/create/route.ts, app/api/posts/create/route.ts, app/api/admin/* (4 files), app/api/paypal/* (3 files), app/api/analytics/route.ts, app/api/user/* (2 files), app/projects/my/page.tsx, app/admin/users/page.tsx, app/admin/reports/page.tsx, app/watch/page.tsx, app/projects/page.tsx, app/community/page.tsx, + 3 more",
+        "testStrategy": "Run full test suite after each batch of type fixes. Verify typecheck passes. Test affected pages manually.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Structured Logging System - Replace all console calls",
+        "description": "Replace all 10 instances of console.log/error with structured logging system to enable production-safe logging with error tracking",
+        "details": "**Problem**: 10 instances of console.log/error in production code expose sensitive information.\n\n**Approach**:\n1. Import logger from lib/utils/logger.ts in all API routes\n2. Replace console.error with logger.error (includes errorId)\n3. Replace console.log with logger.info or logger.debug\n4. Add context objects (userId, endpoint, action)\n\n**Files**: app/api/projects/create/route.ts:98, app/api/videos/upload/route.ts, app/api/paypal/*, app/api/analytics/route.ts",
+        "testStrategy": "Test API endpoints in both dev and production modes. Verify error logging includes errorId. Check no sensitive data is logged.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Accessibility (WCAG 2.1 AA) - Complete Implementation",
+        "description": "Implement complete WCAG 2.1 AA compliance: ARIA labels, keyboard navigation, color contrast, screen reader support. Target: 100+ ARIA attributes (currently 11)",
+        "details": "**Problem**: Limited accessibility violates legal compliance requirements.\n\n**Approach**:\n1. Add aria-label to all buttons/icons without visible text\n2. Implement skip-to-main link, verify tab order, focus indicators\n3. Audit with axe DevTools, fix color contrast (4.5:1 normal, 3:1 large)\n4. Test with VoiceOver/NVDA, add live regions\n5. Add axe-core to Playwright tests\n\n**Priority Pages**: /, /dashboard, /watch, /projects, /community, /admin/*",
+        "testStrategy": "Run axe DevTools on all pages. Test keyboard navigation manually. Test with VoiceOver. Add automated a11y tests.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Test Coverage Expansion - Achieve 80%+ Coverage",
+        "description": "Expand test coverage from ~40% to 80%+ by adding unit tests for all components, integration tests for all API routes, and E2E tests for critical flows",
+        "details": "**Problem**: Current coverage ~40% (72 tests in 8 files).\n\n**Approach**:\n1. Add unit tests for 20+ untested components\n2. Expand API integration tests for all 13 routes\n3. Add E2E flow tests for critical journeys\n4. Set up coverage reporting and thresholds\n\n**Components**: AdminUserActions, AdminReportActions, PayPalButton, ProjectBackingCard, BrandHeader, CookieConsent, Pagination, +13 more\n\n**E2E Flows**: Video upload, project creation/backing, admin moderation, community interaction",
+        "testStrategy": "Write tests incrementally. Run coverage reports after each batch. Focus on critical paths first. Add CI coverage checks.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Performance and Observability - Web Vitals & Monitoring",
+        "description": "Implement Web Vitals tracking, optimize database queries with pagination, analyze bundle size, and set up performance monitoring",
+        "details": "**Problem**: No performance metrics, potential N+1 queries, no pagination, bundle size not analyzed.\n\n**Approach**:\n1. Install @vercel/analytics, track LCP/FID/CLS\n2. Add pagination to all lists (/watch, /projects, /community, /admin/*)\n3. Use @next/bundle-analyzer, implement code splitting\n4. Set up dashboards, alerts, performance budgets\n\n**Indexes to add**: idx_videos_uploader, idx_projects_creator, idx_backings_project, idx_posts_community_created",
+        "testStrategy": "Test pagination on all list views. Run bundle analyzer. Verify Web Vitals tracking. Load test paginated endpoints.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-12-05T11:56:49.498Z",
+      "updated": "2025-12-05T11:56:50.348Z",
+      "description": "Tasks for master context"
     }
-  ]
+  }
 }
-

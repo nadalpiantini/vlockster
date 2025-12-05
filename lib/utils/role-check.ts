@@ -8,7 +8,7 @@ export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
 const DISABLE_AUTH = false
 
 export async function getCurrentUser() {
-  // TEMPORAL: Si auth está deshabilitado, retornar null sin verificar
+  // Auth bypass: Skip auth check when DISABLE_AUTH=true (testing only)
   if (DISABLE_AUTH) {
     return null
   }
@@ -46,8 +46,8 @@ export type UserProfile = {
 
 export async function requireAuth(): Promise<UserProfile> {
   const user = await getCurrentUser()
-  
-  // TEMPORAL: Si auth está deshabilitado y no hay user, retornar un perfil mock
+
+  // Auth bypass: Return mock guest user when DISABLE_AUTH=true
   if (!user && DISABLE_AUTH) {
     return {
       id: 'guest-user',
@@ -64,8 +64,8 @@ export async function requireAuth(): Promise<UserProfile> {
       updated_at: new Date().toISOString(),
     } as UserProfile
   }
-  
-  // TEMPORAL: No redirigir si auth está deshabilitado
+
+  // Redirect to login if user not authenticated
   if (!user && !DISABLE_AUTH) {
     redirect('/login')
     // redirect nunca retorna, pero TypeScript no lo sabe
@@ -83,9 +83,9 @@ export async function requireAuth(): Promise<UserProfile> {
 
 export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
   const user = await requireAuth()
-  // TEMPORAL: Si auth está deshabilitado, permitir acceso con rol mock
+  // Auth bypass: Allow access with mock user when DISABLE_AUTH=true
   if (DISABLE_AUTH) {
-    return user // Ya retorna un perfil mock desde requireAuth
+    return user // Already returns mock profile from requireAuth
   }
   if (!allowedRoles.includes(user.role as Role)) {
     redirect('/dashboard')

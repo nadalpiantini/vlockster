@@ -17,7 +17,7 @@ export const runtime = 'nodejs'
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 
-  // TEMPORAL: Permitir acceso sin autenticación
+  // Auth check: Redirects to login if authentication is enabled
   // if (!user) {
   //   redirect('/login')
   // }

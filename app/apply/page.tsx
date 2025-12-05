@@ -35,14 +35,9 @@ export default function ApplyPage() {
         data: { user },
       } = await supabase.auth.getUser()
 
-      // TEMPORAL: Permitir acceso sin autenticación
-      // if (!user) {
-      //   throw new Error('Debes iniciar sesión para solicitar acceso')
-      // }
-      
-      // Si no hay usuario, mostrar mensaje informativo
+      // Auth check: Require authenticated user for creator application
       if (!user) {
-        throw new Error('Login deshabilitado temporalmente. Esta funcionalidad requiere autenticación.')
+        throw new Error('Debes iniciar sesión para solicitar acceso como creator.')
       }
 
       // Verificar si ya existe una solicitud pendiente
