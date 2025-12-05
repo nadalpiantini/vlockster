@@ -20,7 +20,13 @@ export const runtime = 'nodejs'
  * - Notifica al creator
  */
 
-const PAYPAL_WEBHOOK_SECRET = process.env.PAYPAL_WEBHOOK_SECRET || ''
+const PAYPAL_WEBHOOK_SECRET = process.env.PAYPAL_WEBHOOK_SECRET
+
+if (!PAYPAL_WEBHOOK_SECRET) {
+  throw new Error(
+    'Missing PAYPAL_WEBHOOK_SECRET environment variable. This is required for webhook signature verification.'
+  )
+}
 
 function verifyPayPalSignature(
   headers: Headers,
@@ -160,7 +166,17 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.text()
     const headers = request.headers
-    const webhookId = process.env.PAYPAL_WEBHOOK_ID || ''
+    const webhookId = process.env.PAYPAL_WEBHOOK_ID
+
+    if (!webhookId) {
+      logger.error('Missing PAYPAL_WEBHOOK_ID environment variable', null, {
+        endpoint: '/api/paypal/webhook',
+      })
+      return NextResponse.json(
+        { error: 'Webhook configuration error' },
+        { status: 500 }
+      )
+    }
 
     // Validar firma
     if (!verifyPayPalSignature(headers, body, webhookId)) {
