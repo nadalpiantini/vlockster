@@ -39,8 +39,16 @@ export async function GET(request: NextRequest) {
       .limit(50)
 
     // Preparar historial
+    type VideoMetricWithVideo = Database['public']['Tables']['video_metrics']['Row'] & {
+      videos: Pick<Database['public']['Tables']['videos']['Row'], 'id' | 'title' | 'genre' | 'uploader_id'> | null
+    }
+    
+    type BackingWithProject = Database['public']['Tables']['backings']['Row'] & {
+      projects: Pick<Database['public']['Tables']['projects']['Row'], 'id' | 'title' | 'genre' | 'creator_id'> | null
+    }
+
     const videos_viewed =
-      videoMetrics?.map((vm: any) => ({
+      (videoMetrics as VideoMetricWithVideo[] | null)?.map((vm) => ({
         video_id: vm.video_id,
         title: vm.videos?.title || '',
         genre: vm.videos?.genre || '',
@@ -49,7 +57,7 @@ export async function GET(request: NextRequest) {
       })) || []
 
     const projects_backed =
-      backings?.map((b: any) => ({
+      (backings as BackingWithProject[] | null)?.map((b) => ({
         project_id: b.project_id,
         title: b.projects?.title || '',
         genre: b.projects?.genre || '',
