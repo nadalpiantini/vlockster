@@ -139,9 +139,9 @@ export default async function ProjectDetailPage({
                 {/* Video Preview */}
                 {project.video_id && (
                   <div className="aspect-video bg-gray-950 mb-6 rounded-lg flex items-center justify-center">
-                    <Link href={`/watch/${project.video_id}`}>
-                      <Button variant="outline" size="lg">
-                        ▶ Ver Video del Proyecto
+                    <Link href={`/watch/${project.video_id}`} aria-label="Ver video del proyecto">
+                      <Button variant="outline" size="lg" aria-label="Ver video del proyecto">
+                        <span aria-hidden="true">▶</span> Ver Video del Proyecto
                       </Button>
                     </Link>
                   </div>
@@ -169,7 +169,7 @@ export default async function ProjectDetailPage({
               </CardHeader>
               <CardContent className="space-y-4">
                 {rewards.length === 0 ? (
-                  <p className="text-gray-400 text-center py-4">
+                  <p className="text-gray-300 text-center py-4" aria-live="polite">
                     Este proyecto aún no tiene recompensas definidas
                   </p>
                 ) : (
@@ -268,7 +268,7 @@ export default async function ProjectDetailPage({
                     href={`/c/${project.creator.public_profile_slug}` as any}
                     aria-label={`Ver perfil de ${project.creator?.name || 'creador'}`}
                   >
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full" variant="outline" aria-label={`Ver perfil del creador ${project.creator.name || ''}`}>
                       Ver Perfil del Creador
                     </Button>
                   </Link>

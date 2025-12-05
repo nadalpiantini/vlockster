@@ -295,7 +295,7 @@ describe('PayPalButton', () => {
       ;(global.fetch as any) = mockFetch
 
       const onError = vi.fn()
-      const { logger } = require('@/lib/utils/logger')
+      const { logger } = await import('@/lib/utils/logger')
 
       render(
         <PayPalButton
@@ -330,10 +330,10 @@ describe('PayPalButton', () => {
       })
     })
 
-    it('debe manejar errores del SDK de PayPal', () => {
+    it('debe manejar errores del SDK de PayPal', async () => {
       process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
       const onError = vi.fn()
-      const { logger } = require('@/lib/utils/logger')
+      const { logger } = await import('@/lib/utils/logger')
 
       render(
         <PayPalButton
