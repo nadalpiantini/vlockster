@@ -142,7 +142,10 @@ Analiza y retorna el JSON.`
           confidence: typeof result.confidence === 'number' ? result.confidence : 0.5,
         }
       } catch (parseError) {
-        console.error('Error parsing moderation JSON:', parseError)
+        logger.error('Error parsing moderation JSON', parseError, {
+          function: 'moderateComment',
+          step: 'parse_json',
+        })
       }
     }
 
@@ -194,7 +197,9 @@ Analiza y retorna el JSON.`
       confidence: 0.8,
     }
   } catch (error) {
-    console.error('Error moderating comment:', error)
+    logger.error('Error moderating comment', error, {
+      function: 'moderateComment',
+    })
     // En caso de error, ser conservador: enviar a revisión
     return {
       severity: 'moderate',

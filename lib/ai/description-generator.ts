@@ -116,7 +116,9 @@ Genera la descripción completa. Retorna SOLO la descripción, sin explicaciones
       description,
     }
   } catch (error) {
-    console.error('Error generating description:', error)
+    logger.error('Error generating description', error, {
+      function: 'generateDescription',
+    })
     throw error
   }
 }
@@ -170,7 +172,9 @@ Retorna las 3 variantes separadas por "---VARIANTE---".`
 
     return variants.length > 0 ? variants : [text]
   } catch (error) {
-    console.error('Error generating variants:', error)
+    logger.error('Error generating variants', error, {
+      function: 'generateDescriptionVariants',
+    })
     return []
   }
 }
@@ -224,7 +228,9 @@ Retorna SOLO los tags separados por comas, sin explicaciones.`
 
     return tags
   } catch (error) {
-    console.error('Error generating tags:', error)
+    logger.error('Error generating tags', error, {
+      function: 'generateProjectTags',
+    })
     return []
   }
 }

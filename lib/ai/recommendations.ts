@@ -144,7 +144,10 @@ Retorna SOLO un JSON válido con este formato:
       try {
         return JSON.parse(jsonMatch[0]) as RecommendationsResponse
       } catch (parseError) {
-        console.error('Error parsing recommendations JSON:', parseError)
+        logger.error('Error parsing recommendations JSON', parseError, {
+          function: 'generateRecommendations',
+          step: 'parse_json',
+        })
       }
     }
 
@@ -161,7 +164,9 @@ Retorna SOLO un JSON válido con este formato:
       insights: 'Recomendaciones basadas en contenido popular',
     }
   } catch (error) {
-    console.error('Error generating recommendations:', error)
+    logger.error('Error generating recommendations', error, {
+      function: 'generateRecommendations',
+    })
     throw error
   }
 }

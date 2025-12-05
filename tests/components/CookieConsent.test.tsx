@@ -1,7 +1,8 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { CookieConsent } from '@/components/CookieConsent'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { CookieConsent, useCookieConsent } from '@/components/CookieConsent'
 
 // Mock next/link
 vi.mock('next/link', () => ({
@@ -13,64 +14,216 @@ vi.mock('next/link', () => ({
   ),
 }))
 
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value.toString()
+    },
+    removeItem: (key: string) => {
+      delete store[key]
+    },
+    clear: () => {
+      store = {}
+    },
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
 describe('CookieConsent', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     localStorage.clear()
-    vi.clearAllMocks()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    localStorage.clear()
+    vi.useRealTimers()
   })
 
-  it('debe renderizar el banner cuando no hay consentimiento', () => {
-    render(<CookieConsent />)
-    expect(screen.getByText(/utilizamos cookies/i)).toBeDefined()
-    expect(screen.getByRole('dialog')).toBeDefined()
-  })
+  it('no debe mostrar banner si ya hay consentimiento', () => {
+    const consentData = {
+      accepted: true,
+      timestamp: new Date().toISOString(),
+      version: '1.0',
+    }
+    localStorage.setItem('vlockster-cookie-consent', JSON.stringify(consentData))
 
-  it('no debe renderizar el banner cuando ya hay consentimiento', () => {
-    localStorage.setItem('cookie-consent', 'accepted')
     const { container } = render(<CookieConsent />)
+    
     expect(container.firstChild).toBeNull()
   })
 
-  it('debe aceptar cookies al hacer clic en "Aceptar"', async () => {
+  it('debe mostrar banner después de 1 segundo si no hay consentimiento', async () => {
     render(<CookieConsent />)
-    const acceptButton = screen.getByLabelText('Aceptar cookies')
     
-    fireEvent.click(acceptButton)
+    // Inicialmente no debe estar visible
+    expect(screen.queryByRole('dialog')).toBeNull()
+    
+    // Avanzar 1 segundo
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
-      expect(localStorage.getItem('cookie-consent')).toBe('accepted')
+      expect(screen.getByRole('dialog')).toBeDefined()
     })
   })
 
-  it('debe rechazar cookies al hacer clic en "Rechazar"', async () => {
-    render(<CookieConsent />)
-    const rejectButton = screen.getByLabelText('Rechazar cookies')
+  it('debe tener atributos de accesibilidad correctos', async () => {
+    vi.advanceTimersByTime(1000)
     
-    fireEvent.click(rejectButton)
+    render(<CookieConsent />)
     
     await waitFor(() => {
-      expect(localStorage.getItem('cookie-consent')).toBe('rejected')
+      const dialog = screen.getByRole('dialog')
+      expect(dialog).toHaveAttribute('aria-live', 'polite')
+      expect(dialog).toHaveAttribute('aria-modal', 'true')
+      expect(dialog).toHaveAttribute('aria-labelledby', 'cookie-consent-title')
+      expect(dialog).toHaveAttribute('aria-describedby', 'cookie-consent-description')
     })
   })
 
-  it('debe tener aria-labels accesibles', () => {
+  it('debe guardar consentimiento aceptado en localStorage', async () => {
+    const user = userEvent.setup({ delay: null })
+    vi.advanceTimersByTime(1000)
+    
     render(<CookieConsent />)
-    expect(screen.getByLabelText('Política de privacidad')).toBeDefined()
-    expect(screen.getByLabelText('Términos de uso')).toBeDefined()
-    expect(screen.getByLabelText('Aceptar cookies')).toBeDefined()
-    expect(screen.getByLabelText('Rechazar cookies')).toBeDefined()
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    const acceptButton = screen.getByLabelText(/aceptar cookies/i)
+    await user.click(acceptButton)
+    
+    const consentData = JSON.parse(localStorage.getItem('vlockster-cookie-consent') || '{}')
+    expect(consentData.accepted).toBe(true)
+    expect(consentData.timestamp).toBeDefined()
+    expect(consentData.version).toBe('1.0')
   })
 
-  it('debe tener role="dialog" y aria-labelledby/aria-describedby', () => {
+  it('debe guardar consentimiento rechazado en localStorage', async () => {
+    const user = userEvent.setup({ delay: null })
+    vi.advanceTimersByTime(1000)
+    
     render(<CookieConsent />)
-    const dialog = screen.getByRole('dialog')
-    expect(dialog).toHaveAttribute('aria-labelledby', 'cookie-consent-title')
-    expect(dialog).toHaveAttribute('aria-describedby', 'cookie-consent-description')
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    const rejectButton = screen.getByLabelText(/rechazar cookies/i)
+    await user.click(rejectButton)
+    
+    const consentData = JSON.parse(localStorage.getItem('vlockster-cookie-consent') || '{}')
+    expect(consentData.accepted).toBe(false)
+    expect(consentData.timestamp).toBeDefined()
+    expect(consentData.version).toBe('1.0')
+  })
+
+  it('debe ocultar banner después de aceptar', async () => {
+    const user = userEvent.setup({ delay: null })
+    vi.advanceTimersByTime(1000)
+    
+    const { container } = render(<CookieConsent />)
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    const acceptButton = screen.getByLabelText(/aceptar cookies/i)
+    await user.click(acceptButton)
+    
+    await waitFor(() => {
+      expect(container.firstChild).toBeNull()
+    })
+  })
+
+  it('debe ocultar banner después de rechazar', async () => {
+    const user = userEvent.setup({ delay: null })
+    vi.advanceTimersByTime(1000)
+    
+    const { container } = render(<CookieConsent />)
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    const rejectButton = screen.getByLabelText(/rechazar cookies/i)
+    await user.click(rejectButton)
+    
+    await waitFor(() => {
+      expect(container.firstChild).toBeNull()
+    })
+  })
+
+  it('debe mostrar enlaces a política de privacidad y términos', async () => {
+    vi.advanceTimersByTime(1000)
+    
+    render(<CookieConsent />)
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    const privacyLink = screen.getByLabelText(/política de privacidad/i)
+    expect(privacyLink).toHaveAttribute('href', '/legal/privacy')
+    
+    const termsLink = screen.getByLabelText(/términos de uso/i)
+    expect(termsLink).toHaveAttribute('href', '/legal/terms')
+  })
+
+  it('debe tener título y descripción accesibles', async () => {
+    vi.advanceTimersByTime(1000)
+    
+    render(<CookieConsent />)
+    
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeDefined()
+    })
+    
+    expect(screen.getByText(/uso de cookies/i)).toBeDefined()
+    expect(screen.getByText(/utilizamos cookies para mejorar/i)).toBeDefined()
   })
 })
 
+describe('useCookieConsent hook', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('debe retornar null cuando no hay consentimiento', () => {
+    // Este test requiere un componente de prueba
+    const TestComponent = () => {
+      const consent = useCookieConsent()
+      return <div data-testid="consent">{consent ? 'has-consent' : 'no-consent'}</div>
+    }
+
+    render(<TestComponent />)
+    
+    expect(screen.getByTestId('consent')).toHaveTextContent('no-consent')
+  })
+
+  it('debe retornar consentimiento cuando existe en localStorage', () => {
+    const consentData = {
+      accepted: true,
+      timestamp: new Date().toISOString(),
+      version: '1.0',
+    }
+    localStorage.setItem('vlockster-cookie-consent', JSON.stringify(consentData))
+
+    const TestComponent = () => {
+      const consent = useCookieConsent()
+      return <div data-testid="consent">{consent ? JSON.stringify(consent) : 'no-consent'}</div>
+    }
+
+    render(<TestComponent />)
+    
+    const consentText = screen.getByTestId('consent').textContent
+    expect(consentText).toContain('accepted')
+    expect(consentText).toContain('true')
+  })
+})

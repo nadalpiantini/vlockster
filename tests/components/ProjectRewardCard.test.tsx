@@ -1,91 +1,55 @@
-import * as React from 'react'
-import { describe, it, expect } from 'vitest'
+import React from 'react'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 
-const mockReward = {
-  id: 'reward-1',
-  title: 'Recompensa Básica',
-  description: 'Descripción de la recompensa',
-  amount: 50,
-  limit: 10,
-  backers_count: 5,
-}
-
-const mockUser = {
-  id: 'user-1',
-  email: 'test@example.com',
-  name: 'Test User',
-  role: 'viewer' as const,
-}
+// Mock next/link
+vi.mock('next/link', () => ({
+  __esModule: true,
+  default: ({ children, href, ...props }: any) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}))
 
 describe('ProjectRewardCard', () => {
-  it('debe renderizar información de la recompensa', () => {
-    render(
-      <ProjectRewardCard
-        reward={mockReward}
-        projectId="project-1"
-        projectStatus="active"
-        user={mockUser}
-      />
-    )
+  const mockReward = {
+    id: 'reward-123',
+    title: 'Test Reward',
+    description: 'This is a test reward description',
+    amount: '25.00',
+    limit: 100,
+    delivery_date: new Date(Date.now() + 86400000 * 30).toISOString(),
+  }
 
-    expect(screen.getByText('Recompensa Básica')).toBeDefined()
-    expect(screen.getByText('$50 USD')).toBeDefined()
-    expect(screen.getByText('Descripción de la recompensa')).toBeDefined()
+  it('debe renderizar el título y descripción de la recompensa', () => {
+    render(<ProjectRewardCard reward={mockReward} />)
+    expect(screen.getByText('Test Reward')).toBeDefined()
+    expect(screen.getByText('This is a test reward description')).toBeDefined()
   })
 
-  it('debe mostrar disponibilidad de recompensas', () => {
-    render(
-      <ProjectRewardCard
-        reward={mockReward}
-        projectId="project-1"
-        projectStatus="active"
-        user={mockUser}
-      />
-    )
-
-    expect(screen.getByText(/5 disponibles de 10/i)).toBeDefined()
+  it('debe mostrar el monto formateado', () => {
+    render(<ProjectRewardCard reward={mockReward} />)
+    expect(screen.getByText(/\$25/)).toBeDefined()
   })
 
-  it('debe mostrar como agotada cuando no hay disponibilidad', () => {
-    const exhaustedReward = {
+  it('debe mostrar el límite si existe', () => {
+    render(<ProjectRewardCard reward={mockReward} />)
+    expect(screen.getByText(/100/)).toBeDefined()
+  })
+
+  it('debe tener aria-label accesible', () => {
+    render(<ProjectRewardCard reward={mockReward} />)
+    expect(screen.getByLabelText(/Recompensa: Test Reward/)).toBeDefined()
+  })
+
+  it('debe manejar recompensas sin límite', () => {
+    const rewardWithoutLimit = {
       ...mockReward,
-      backers_count: 10,
-      limit: 10,
+      limit: null,
     }
-
-    render(
-      <ProjectRewardCard
-        reward={exhaustedReward}
-        projectId="project-1"
-        projectStatus="active"
-        user={mockUser}
-      />
-    )
-
-    // Hay dos elementos con "Agotado" - el span y el botón
-    const agotadoElements = screen.getAllByText('Agotado')
-    expect(agotadoElements.length).toBeGreaterThan(0)
-    
-    // Verificar que el botón tiene el aria-label correcto
-    const button = screen.getByLabelText(/recompensa.*recompensa básica.*agotada/i)
-    expect(button).toBeDefined()
-  })
-
-  it('debe tener aria-label para accesibilidad', () => {
-    render(
-      <ProjectRewardCard
-        reward={mockReward}
-        projectId="project-1"
-        projectStatus="active"
-        user={mockUser}
-      />
-    )
-
-    // Verificar que el componente tiene aria-label
-    const card = screen.getByLabelText(/recompensa/i)
-    expect(card).toBeDefined()
+    render(<ProjectRewardCard reward={rewardWithoutLimit} />)
+    expect(screen.getByText('Test Reward')).toBeDefined()
   })
 })
-

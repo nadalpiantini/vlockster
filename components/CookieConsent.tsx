@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -9,6 +9,8 @@ const CONSENT_EXPIRY_DAYS = 365
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const acceptButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     // Verificar si ya hay consentimiento
@@ -21,6 +23,47 @@ export function CookieConsent() {
       return () => clearTimeout(timer)
     }
   }, [])
+
+  // Focus trap and keyboard navigation
+  useEffect(() => {
+    if (!showBanner || !dialogRef.current) return
+
+    const dialog = dialogRef.current
+    const focusableElements = dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements[0] as HTMLElement
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+    // Focus first element when dialog opens
+    if (acceptButtonRef.current) {
+      acceptButtonRef.current.focus()
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleReject()
+        return
+      }
+
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    dialog.addEventListener('keydown', handleKeyDown)
+    return () => dialog.removeEventListener('keydown', handleKeyDown)
+  }, [showBanner])
 
   const handleAccept = () => {
     const consentData = {
@@ -46,6 +89,7 @@ export function CookieConsent() {
 
   return (
     <div
+      ref={dialogRef}
       className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-50 p-4 shadow-lg"
       role="dialog"
       aria-live="polite"
@@ -97,14 +141,25 @@ export function CookieConsent() {
               size="sm"
               onClick={handleReject}
               aria-label="Rechazar cookies"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  handleReject()
+                }
+              }}
             >
               Rechazar
             </Button>
             <Button
+              ref={acceptButtonRef}
               variant="default"
               size="sm"
               onClick={handleAccept}
               aria-label="Aceptar cookies"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  handleReject()
+                }
+              }}
             >
               Aceptar
             </Button>
