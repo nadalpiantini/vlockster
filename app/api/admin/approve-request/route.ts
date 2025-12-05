@@ -51,10 +51,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
-    const updateData: Database['public']['Tables']['profiles']['Update'] = { role: 'creator' }
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update(updateData)
+      .update({ role: 'creator' } as any)
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
@@ -62,14 +61,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar la solicitud como aprobada
-    const requestUpdateData: Database['public']['Tables']['creator_requests']['Update'] = {
-      status: 'approved',
-      reviewed_by: admin.id,
-      reviewed_at: new Date().toISOString(),
-    }
     const { error: updateRequestError } = await supabase
       .from('creator_requests')
-      .update(requestUpdateData)
+      .update({
+        status: 'approved',
+        reviewed_by: admin.id,
+        reviewed_at: new Date().toISOString(),
+      } as any)
       .eq('id', requestId)
 
     if (updateRequestError) {
