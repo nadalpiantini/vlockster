@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import type { Route } from 'next'
 
 interface AdminReportActionsProps {
   reportId: string
@@ -78,7 +79,7 @@ export function AdminReportActions({
         <Button
           size="sm"
           variant="outline"
-          onClick={() => router.push(getContentUrl())}
+          onClick={() => router.push(getContentUrl() as Route)}
           disabled={resolving}
           aria-label={`Ver contenido reportado: ${contentType} ${contentId}`}
         >

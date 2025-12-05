@@ -176,7 +176,7 @@ export default async function WatchVideoPage({
                 </div>
                 {video.uploader?.public_profile_slug && (
                   <Link
-                    href={`/c/${video.uploader.public_profile_slug}`}
+                    href={`/c/${video.uploader.public_profile_slug}` as Route}
                     aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
                   >
                     <Button className="w-full" variant="outline" aria-label={`Ver perfil de ${video.uploader.name || 'creador'}`}>

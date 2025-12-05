@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import type { Route } from 'next'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/utils/logger'
@@ -205,7 +206,7 @@ export default function NotificationsPage() {
                     <p className="text-gray-300 mb-3">{notification.content}</p>
                   )}
                   {notification.link && (
-                    <Link href={notification.link}>
+                    <Link href={notification.link as Route}>
                       <Button variant="outline" size="sm">
                         Ver más
                       </Button>

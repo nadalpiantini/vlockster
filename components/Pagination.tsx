@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import type { Route } from 'next'
 import { Button } from '@/components/ui/button'
 
 interface PaginationProps {
@@ -24,7 +25,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       role="navigation"
     >
       <Link
-        href={currentPage === 1 ? '#' : getPageUrl(currentPage - 1)}
+        href={(currentPage === 1 ? '#' : getPageUrl(currentPage - 1)) as Route}
         aria-label="Página anterior"
         aria-disabled={currentPage === 1}
         tabIndex={currentPage === 1 ? -1 : 0}
@@ -65,7 +66,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
           return (
             <Link
               key={pageNum}
-              href={getPageUrl(pageNum)}
+              href={getPageUrl(pageNum) as Route}
               aria-label={`Ir a página ${pageNum}`}
               aria-current={pageNum === currentPage ? 'page' : undefined}
             >
@@ -82,7 +83,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       </div>
 
       <Link
-        href={currentPage === totalPages ? '#' : getPageUrl(currentPage + 1)}
+        href={(currentPage === totalPages ? '#' : getPageUrl(currentPage + 1)) as Route}
         aria-label="Página siguiente"
         aria-disabled={currentPage === totalPages}
         tabIndex={currentPage === totalPages ? -1 : 0}

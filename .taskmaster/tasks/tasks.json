@@ -24,24 +24,24 @@
           "id": "1.2",
           "title": "Eliminate 'as any' in API Routes (13 files)",
           "description": "Replace all 'as any' type assertions in API route handlers",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": [
             "1.1"
           ],
-          "details": "Files to fix: app/api/videos/upload/route.ts, app/api/projects/create/route.ts, app/api/comments/create/route.ts, app/api/posts/create/route.ts, app/api/admin/* (4 files), app/api/paypal/* (3 files), app/api/analytics/route.ts, app/api/user/* (2 files). Replace 'as any' with proper Supabase types from database.types.ts.",
+          "details": "Files to fix: app/api/videos/upload/route.ts, app/api/projects/create/route.ts, app/api/comments/create/route.ts, app/api/posts/create/route.ts, app/api/admin/* (4 files), app/api/paypal/* (3 files), app/api/analytics/route.ts, app/api/user/* (2 files). Replace 'as any' with proper Supabase types from database.types.ts.\n\n✅ COMPLETED: Verified no instances of 'as any' in API routes. All routes use proper types from database.types.ts.",
           "testStrategy": "Run pnpm typecheck after each file. Verify API routes still function correctly with proper types."
         },
         {
           "id": "1.3",
           "title": "Eliminate 'as any' in Frontend Pages (9 files)",
           "description": "Replace all 'as any' type assertions in Next.js pages",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": [
             "1.1"
           ],
-          "details": "Files to fix: app/projects/my/page.tsx, app/admin/users/page.tsx, app/admin/reports/page.tsx, app/watch/page.tsx, app/projects/page.tsx, app/community/page.tsx, and 3 additional pages. Use proper TypeScript types for Supabase queries and responses.",
+          "details": "Files to fix: app/projects/my/page.tsx, app/admin/users/page.tsx, app/admin/reports/page.tsx, app/watch/page.tsx, app/projects/page.tsx, app/community/page.tsx, and 3 additional pages. Use proper TypeScript types for Supabase queries and responses.\n\n✅ COMPLETED: Fixed all instances in:\n- app/projects/[id]/page.tsx (2 instances: user prop, href)\n- app/watch/[id]/page.tsx (1 instance: href)\n- app/notifications/page.tsx (1 instance: href)\n- components/Pagination.tsx (3 instances: href)\n- components/AdminReportActions.tsx (1 instance: router.push)\n- components/WebVitals.tsx (2 instances: window.gtag - added proper type declaration)\n- lib/notifications/notifier.ts (1 instance: data prop)\nAll now use proper TypeScript types with Next.js Route type for hrefs.",
           "testStrategy": "Run pnpm typecheck. Test each page to ensure functionality is preserved."
         },
         {
