@@ -51,6 +51,8 @@ export function CookieConsent() {
       aria-live="polite"
       aria-labelledby="cookie-consent-title"
       aria-describedby="cookie-consent-description"
+      aria-modal="true"
+      tabIndex={-1}
     >
       <div className="container mx-auto max-w-4xl">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">

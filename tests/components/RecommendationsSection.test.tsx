@@ -1,59 +1,106 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, waitFor } from '@testing-library/react'
 import { RecommendationsSection } from '@/components/RecommendationsSection'
 
-// Mock next/navigation
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    refresh: vi.fn(),
-  }),
-}))
+// Mock fetch
+global.fetch = vi.fn()
 
 describe('RecommendationsSection', () => {
-  const mockRecommendations = {
-    projects: [
-      {
-        id: '1',
-        title: 'Test Project',
-        description: 'Test description',
-        current_amount: 1000,
-        goal_amount: 5000,
-        status: 'active',
-      },
-    ],
-    videos: [
-      {
-        id: '1',
-        title: 'Test Video',
-        description: 'Test video description',
-        thumbnail_url: 'https://example.com/thumb.jpg',
-      },
-    ],
-  }
-
-  it('should render projects section when projects are provided', () => {
-    render(<RecommendationsSection recommendations={mockRecommendations} />)
-    const projectsHeading = screen.getByText(/proyectos recomendados/i)
-    expect(projectsHeading).toBeInTheDocument()
+  beforeEach(() => {
+    vi.clearAllMocks()
   })
 
-  it('should render videos section when videos are provided', () => {
-    render(<RecommendationsSection recommendations={mockRecommendations} />)
-    const videosHeading = screen.getByText(/videos recomendados/i)
-    expect(videosHeading).toBeInTheDocument()
+  it('should show loading state initially', () => {
+    ;(global.fetch as any).mockImplementation(() => 
+      new Promise(() => {}) // Never resolves to keep loading
+    )
+
+    render(<RecommendationsSection />)
+    
+    expect(screen.getByText(/recomendaciones para ti/i)).toBeInTheDocument()
+    expect(screen.getByText(/analizando tu historial/i)).toBeInTheDocument()
   })
 
-  it('should render empty state when no recommendations', () => {
-    render(<RecommendationsSection recommendations={{ projects: [], videos: [] }} />)
-    const emptyText = screen.getByText(/no hay recomendaciones/i)
-    expect(emptyText).toBeInTheDocument()
+  it('should render recommendations when loaded', async () => {
+    const mockRecommendations = {
+      recommendations: [
+        {
+          id: '1',
+          type: 'video' as const,
+          title: 'Test Video',
+          description: 'Test video description',
+          reason: 'Based on your viewing history',
+          confidence_score: 0.85,
+        },
+        {
+          id: '2',
+          type: 'project' as const,
+          title: 'Test Project',
+          description: 'Test project description',
+          reason: 'Similar to projects you backed',
+          confidence_score: 0.75,
+        },
+      ],
+      insights: 'Personalized recommendations based on your activity',
+    }
+
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRecommendations,
+    })
+
+    render(<RecommendationsSection />)
+
+    await waitFor(() => {
+      expect(screen.getByText(/recomendaciones para ti/i)).toBeInTheDocument()
+    })
+
+    expect(screen.getByText('Test Video')).toBeInTheDocument()
+    expect(screen.getByText('Test Project')).toBeInTheDocument()
   })
 
-  it('should have proper ARIA labels', () => {
-    render(<RecommendationsSection recommendations={mockRecommendations} />)
-    const sections = screen.getAllByRole('region')
-    expect(sections.length).toBeGreaterThan(0)
+  it('should not render when there are no recommendations', async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        recommendations: [],
+        insights: '',
+      }),
+    })
+
+    const { container } = render(<RecommendationsSection />)
+
+    await waitFor(() => {
+      // Component returns null when no recommendations
+      expect(container.firstChild).toBeNull()
+    })
+  })
+
+  it('should not render when there is an error', async () => {
+    ;(global.fetch as any).mockRejectedValueOnce(new Error('Network error'))
+
+    const { container } = render(<RecommendationsSection />)
+
+    await waitFor(() => {
+      // Component returns null when there's an error
+      expect(container.firstChild).toBeNull()
+    })
+  })
+
+  it('should fetch recommendations from API', async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        recommendations: [],
+        insights: '',
+      }),
+    })
+
+    render(<RecommendationsSection />)
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('/api/recommendations')
+    })
   })
 })
 

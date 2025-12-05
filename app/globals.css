@@ -15,10 +15,25 @@
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible,
-  select:focus-visible {
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [role="link"]:focus-visible,
+  [tabindex]:focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
     border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Ensure all interactive elements are keyboard accessible */
+  [role="button"]:not([tabindex]),
+  [role="link"]:not([tabindex]) {
+    cursor: pointer;
+  }
+  
+  /* Remove outline for mouse users, keep for keyboard */
+  *:focus:not(:focus-visible) {
+    outline: none;
   }
   
   /* Skip to main content link - hidden by default, visible on focus */

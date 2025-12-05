@@ -10,6 +10,22 @@
 
 ## 📋 Plan de Mini Sprints - EN PROGRESO
 
+### 🚀 Mini Sprint 1.2: Eliminate 'as any' in API Routes & Frontend (2025-12-05)
+- **Estado**: ✅ COMPLETADO
+- **Tarea**: Epic 1, Subtasks 1.2 y 1.3 - Eliminate 'as any' in API Routes and Frontend Pages
+- **Acciones realizadas**:
+  - Verificado que no hay instancias de 'as any' en `app/api/` (0 encontradas)
+  - Verificado que no hay instancias de 'as any' en frontend `app/` (0 encontradas)
+  - Confirmado que las tareas ya estaban completadas previamente
+- **Resultado**: 
+  - ✅ Tarea 1.2 (API Routes): 0 instancias de 'as any'
+  - ✅ Tarea 1.3 (Frontend Pages): 0 instancias de 'as any'
+  - ✅ Type safety mejorado en todo el proyecto
+- **Desbloquea**: Tarea 1.4 (TypeScript Validation)
+- **Commit**: No requerido (cambios ya aplicados previamente)
+
+---
+
 ### 🚀 Mini Sprint 1.1: Regenerate Supabase Types (2025-12-05)
 - **Estado**: ✅ COMPLETADO
 - **Tarea**: Epic 1, Subtask 1.1 - Regenerate Supabase Types

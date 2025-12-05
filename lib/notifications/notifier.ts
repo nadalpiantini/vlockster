@@ -121,7 +121,7 @@ export async function sendNotification(
         channel: 'in_app',
         title: formatTemplate(template.push_title, data),
         body: formatTemplate(template.push_body, data),
-        data: data as any,
+        data: data,
         read: false,
         created_at: new Date().toISOString(),
       })

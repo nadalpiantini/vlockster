@@ -78,7 +78,7 @@ export function AdminReportActions({
         <Button
           size="sm"
           variant="outline"
-          onClick={() => router.push(getContentUrl() as any)}
+          onClick={() => router.push(getContentUrl())}
           disabled={resolving}
           aria-label={`Ver contenido reportado: ${contentType} ${contentId}`}
         >

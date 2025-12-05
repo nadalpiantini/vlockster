@@ -3,6 +3,22 @@
 import { useEffect } from 'react'
 import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals'
 
+// Extend Window interface for gtag
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      targetId: string,
+      config?: {
+        value?: number
+        metric_id?: string
+        metric_value?: number
+        metric_rating?: string
+      }
+    ) => void
+  }
+}
+
 /**
  * Componente para medir y reportar Web Vitals
  * Implementa Core Web Vitals para performance monitoring
@@ -18,8 +34,8 @@ export function WebVitals() {
         rating: 'good' | 'needs-improvement' | 'poor'
       }) => {
         // Enviar a Vercel Analytics (si está configurado)
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          ;(window as any).gtag('event', metric.name, {
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', metric.name, {
             value: Math.round(metric.value),
             metric_id: metric.id,
             metric_value: metric.value,

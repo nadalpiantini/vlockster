@@ -231,7 +231,7 @@ export default async function ProjectDetailPage({
                   projectId={project.id}
                   projectStatus={project.status}
                   goalAmount={Number(project.goal_amount)}
-                  user={user as any}
+                  user={user ? { id: user.id, email: user.email || '', name: user.name, role: user.role } : null}
                 />
 
                 {project.status === 'funded' && (
@@ -265,7 +265,7 @@ export default async function ProjectDetailPage({
                 </div>
                 {project.creator?.public_profile_slug && (
                   <Link 
-                    href={`/c/${project.creator.public_profile_slug}` as any}
+                    href={`/c/${project.creator.public_profile_slug}`}
                     aria-label={`Ver perfil de ${project.creator?.name || 'creador'}`}
                   >
                     <Button className="w-full" variant="outline" aria-label={`Ver perfil del creador ${project.creator.name || ''}`}>

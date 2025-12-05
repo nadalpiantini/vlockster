@@ -24,7 +24,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       role="navigation"
     >
       <Link
-        href={getPageUrl(currentPage - 1) as any}
+        href={getPageUrl(currentPage - 1)}
         aria-label="Página anterior"
         aria-disabled={currentPage === 1}
       >
@@ -54,7 +54,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
           return (
             <Link
               key={pageNum}
-              href={getPageUrl(pageNum) as any}
+              href={getPageUrl(pageNum)}
               aria-label={`Ir a página ${pageNum}`}
               aria-current={pageNum === currentPage ? 'page' : undefined}
             >
@@ -71,7 +71,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       </div>
 
       <Link
-        href={getPageUrl(currentPage + 1) as any}
+        href={getPageUrl(currentPage + 1)}
         aria-label="Página siguiente"
         aria-disabled={currentPage === totalPages}
       >
