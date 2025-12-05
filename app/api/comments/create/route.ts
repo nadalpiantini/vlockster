@@ -71,10 +71,10 @@ export async function POST(request: NextRequest) {
         .single()
 
       const { data: moderationLogs } = await supabase
-        .from('moderation_logs')
+        .from('moderation_logs' as any)
         .select('action')
         .eq('user_id', user.id)
-        .in('action', ['delete', 'ban'])
+        .in('action', ['delete', 'ban'] as string[])
 
       moderationResult = await moderateComment({
         comment_text: sanitizedContent,
@@ -161,18 +161,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Crear comentario con estado de moderación
+    // Crear comentario (moderation_status no existe en schema, se maneja en moderation_queue)
     const commentData: Database['public']['Tables']['comments']['Insert'] = {
       post_id,
       user_id: user.id,
       content: sanitizedContent,
       parent_comment_id: parentCommentId || null,
-      moderation_status:
-        moderationResult.action === 'approve'
-          ? 'approved'
-          : moderationResult.action === 'review'
-            ? 'pending_review'
-            : 'pending_review', // Por seguridad, si no es approve, revisar
     }
 
     const { data: comment, error: commentError } = await supabase
@@ -187,17 +181,17 @@ export async function POST(request: NextRequest) {
 
     // Si requiere revisión, agregar a cola de moderación
     if (moderationResult.action === 'review' && comment) {
-      await supabase.from('moderation_queue').insert({
+      await supabase.from('moderation_queue' as any).insert({
         comment_id: comment.id,
         severity: moderationResult.severity,
         reasons: moderationResult.reasons,
         created_at: new Date().toISOString(),
-      })
+      } as any)
     }
 
     // Registrar en logs de moderación
     if (moderationResult && comment) {
-      await supabase.from('moderation_logs').insert({
+      await supabase.from('moderation_logs' as any).insert({
         comment_id: comment.id,
         user_id: user.id,
         action: moderationResult.action,
@@ -205,7 +199,7 @@ export async function POST(request: NextRequest) {
         reasons: moderationResult.reasons,
         confidence: moderationResult.confidence,
         created_at: new Date().toISOString(),
-      })
+      } as any)
     }
 
     return NextResponse.json({

@@ -166,7 +166,7 @@ Retorna las 3 variantes separadas por "---VARIANTE---".`
     const text = data.choices[0]?.message?.content?.trim() || ''
 
     // Dividir por separador
-    const variants = text.split('---VARIANTE---').map((v) => v.trim()).filter((v) => v.length > 0)
+    const variants = text.split('---VARIANTE---').map((v: string) => v.trim()).filter((v: string) => v.length > 0)
 
     return variants.length > 0 ? variants : [text]
   } catch (error) {
@@ -218,8 +218,8 @@ Retorna SOLO los tags separados por comas, sin explicaciones.`
     // Parsear tags (separados por comas)
     const tags = text
       .split(',')
-      .map((tag) => tag.trim())
-      .filter((tag) => tag.length > 0)
+      .map((tag: string) => tag.trim())
+      .filter((tag: string) => tag.length > 0)
       .slice(0, 10)
 
     return tags

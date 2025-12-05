@@ -44,17 +44,17 @@ export async function GET(request: NextRequest) {
     // Proyectos del creator
     const { data: projects } = await supabase
       .from('projects')
-      .select('id, title, goal_amount, total_raised, status, created_at')
+      .select('id, title, goal_amount, current_amount, status, created_at')
       .eq('creator_id', creatorId)
       .gte('created_at', startDate.toISOString())
 
     // Backings recibidos
-    const projectIds = projects?.map((p) => p.id) || []
+    const projectIds = (projects?.map((p) => p.id) || []) as string[]
     const { data: backings } = await supabase
       .from('backings')
       .select('id, amount, project_id, created_at')
-      .in('project_id', projectIds)
-      .eq('status', 'completed')
+      .in('project_id', projectIds.length > 0 ? projectIds : [''])
+      .eq('payment_status', 'completed')
       .gte('created_at', startDate.toISOString())
 
     // Métricas de videos
@@ -69,13 +69,11 @@ export async function GET(request: NextRequest) {
     const avgBacking = backings?.length ? totalRevenue / backings.length : 0
 
     // Engagement
+    const postIds = (projects?.map((p) => p.id) || []) as string[]
     const { data: comments } = await supabase
       .from('comments')
       .select('id')
-      .in(
-        'post_id',
-        projects?.map((p) => p.id) || []
-      )
+      .in('post_id', postIds.length > 0 ? postIds : [''])
       .gte('created_at', startDate.toISOString())
 
     const totalEngagement = (totalLikes || 0) + (comments?.length || 0)

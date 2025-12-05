@@ -81,7 +81,7 @@ async function getProjectRewards(projectId: string): Promise<Reward[]> {
     title: reward.title,
     description: reward.description ?? null,
     amount: reward.amount,
-    limit: reward.limit ?? null,
+    limit: reward.limit_quantity ?? null,
     backers_count: reward.backers_count ?? 0,
   }))
 }
@@ -175,7 +175,7 @@ export default async function ProjectDetailPage({
                       reward={reward}
                       projectId={project.id}
                       projectStatus={project.status}
-                      user={user}
+                      user={user as any}
                     />
                   ))
                 )}
@@ -219,7 +219,7 @@ export default async function ProjectDetailPage({
                   projectId={project.id}
                   projectStatus={project.status}
                   goalAmount={Number(project.goal_amount)}
-                  user={user}
+                  user={user as any}
                 />
 
                 {project.status === 'funded' && (
@@ -252,7 +252,7 @@ export default async function ProjectDetailPage({
                   )}
                 </div>
                 {project.creator?.public_profile_slug && (
-                  <Link href={`/c/${project.creator.public_profile_slug}`}>
+                  <Link href={`/c/${project.creator.public_profile_slug}` as any}>
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador
                     </Button>

@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       .from('backings')
       .select('project_id, amount, projects(id, title, genre, creator_id)')
       .eq('user_id', user.id)
-      .eq('status', 'completed')
+      .eq('payment_status', 'completed')
       .order('created_at', { ascending: false })
       .limit(50)
 
@@ -85,10 +85,33 @@ export async function GET(request: NextRequest) {
 
     const { data: projects } = await supabase
       .from('projects')
-      .select('id, title, description, genre, creator_id, goal_amount, total_raised, deadline')
+      .select('id, title, description, category, creator_id, goal_amount, current_amount, deadline')
       .eq('status', 'active')
       .order('created_at', { ascending: false })
       .limit(30)
+
+    // Mapear proyectos al formato esperado
+    const projectsMapped = (projects || []).map((p: any) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description || '',
+      category: p.category || '',
+      creator_id: p.creator_id,
+      goal_amount: p.goal_amount,
+      current_amount: p.current_amount || 0,
+      deadline: p.deadline,
+    }))
+
+    // Mapear videos al formato esperado
+    const videosMapped = (videos || []).map((v: any) => ({
+      id: v.id,
+      title: v.title,
+      description: v.description || '',
+      genre: v.genre || '',
+      creator_id: v.uploader_id,
+      view_count: v.view_count || 0,
+      created_at: v.created_at || new Date().toISOString(),
+    }))
 
     // Generar recomendaciones
     const recommendations = await generateRecommendations(
@@ -99,8 +122,8 @@ export async function GET(request: NextRequest) {
         total_watch_time,
       },
       {
-        videos: videos || [],
-        projects: projects || [],
+        videos: videosMapped,
+        projects: projectsMapped,
       }
     )
 

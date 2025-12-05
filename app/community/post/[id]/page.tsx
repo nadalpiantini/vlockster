@@ -80,7 +80,7 @@ export default function PostDetailPage() {
         return
       }
 
-      setPost(postData)
+      setPost(postData as unknown as Post)
 
       // Cargar comentarios
       const { data: commentsData, error: commentsError } = await supabase
@@ -99,7 +99,7 @@ export default function PostDetailPage() {
         .order('created_at', { ascending: true })
 
       if (!commentsError && commentsData) {
-        setComments(commentsData)
+        setComments(commentsData as unknown as Comment[])
       } else if (commentsError) {
         logger.error('Error loading comments', commentsError, {
           postId: id,

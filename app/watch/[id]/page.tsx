@@ -131,11 +131,13 @@ export default async function WatchVideoPage({
               <CardHeader>
                 <CardTitle className="text-2xl">{video.title}</CardTitle>
                 <CardDescription>
-                  {new Date(video.created_at).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  {video.created_at
+                    ? new Date(video.created_at).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : 'Fecha no disponible'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -165,7 +167,7 @@ export default async function WatchVideoPage({
                 </div>
                 {video.uploader?.public_profile_slug && (
                   <Link
-                    href={`/c/${video.uploader.public_profile_slug}`}
+                    href={`/c/${video.uploader.public_profile_slug}` as any}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil

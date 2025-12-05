@@ -85,7 +85,7 @@ export default function CommunityDetailPage() {
         return
       }
 
-      setCommunity(communityData as Community)
+      setCommunity(communityData as unknown as Community)
 
       // Cargar posts
       const { data: postsData, error: postsError } = await supabase
@@ -95,7 +95,7 @@ export default function CommunityDetailPage() {
         .order('created_at', { ascending: false })
 
       if (!postsError && postsData) {
-        setPosts(postsData)
+        setPosts(postsData as unknown as Post[])
       } else if (postsError) {
         logger.error('Error loading posts', postsError, {
           communitySlug: slug,

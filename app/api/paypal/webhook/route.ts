@@ -61,11 +61,11 @@ async function processPaymentCompleted(resource: any, supabase: any) {
     resource.purchase_units?.[0]?.amount?.value || '0'
   )
 
-  // Buscar backing por order_id
+  // Buscar backing por payment_id (usando orderId como payment_id)
   const { data: backings } = await supabase
     .from('backings')
     .select('*')
-    .eq('order_id', orderId)
+    .eq('payment_id', orderId)
     .single()
 
   if (!backings) {
@@ -75,10 +75,10 @@ async function processPaymentCompleted(resource: any, supabase: any) {
   const backing = backings
   const projectId = backing.project_id
 
-  // Actualizar backing a completed
+  // Actualizar backing a completed (usando payment_status)
   const backingUpdate: Database['public']['Tables']['backings']['Update'] = {
-    status: 'completed',
-    completed_at: new Date().toISOString(),
+    payment_status: 'completed',
+    updated_at: new Date().toISOString(),
   }
   await supabase
     .from('backings')
@@ -101,14 +101,14 @@ async function processPaymentCompleted(resource: any, supabase: any) {
     .from('backings')
     .select('amount')
     .eq('project_id', projectId)
-    .eq('status', 'completed')
+    .eq('payment_status', 'completed')
 
   const newTotal =
-    (allBackings?.reduce((sum, b) => sum + (b.amount || 0), 0) || 0) + amount
+    (allBackings?.reduce((sum: number, b: { amount: number }) => sum + (b.amount || 0), 0) || 0) + amount
 
-  // Actualizar proyecto
+  // Actualizar proyecto (usando current_amount en lugar de total_raised)
   const projectUpdate: Database['public']['Tables']['projects']['Update'] = {
-    total_raised: newTotal,
+    current_amount: newTotal,
     updated_at: new Date().toISOString(),
   }
   await supabase
@@ -142,13 +142,13 @@ async function processPaymentCancelled(resource: any, supabase: any) {
   const orderId = resource.id
 
   const cancelUpdate: Database['public']['Tables']['backings']['Update'] = {
-    status: 'cancelled',
-    cancelled_at: new Date().toISOString(),
+    payment_status: 'cancelled',
+    updated_at: new Date().toISOString(),
   }
   await supabase
     .from('backings')
     .update(cancelUpdate)
-    .eq('order_id', orderId)
+    .eq('payment_id', orderId)
 
   return { status: 'cancelled' }
 }

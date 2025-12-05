@@ -59,11 +59,11 @@ export async function generateRecommendations(
     projects: Array<{
       id: string
       title: string
-      description: string
-      genre: string
+      description: string | null
+      category: string | null
       creator_id: string
       goal_amount: number
-      total_raised: number
+      current_amount: number | null
       deadline: string
     }>
   }
@@ -81,8 +81,8 @@ HISTORIAL DEL USUARIO:
 - Tiempo total de visualización: ${userHistory.total_watch_time} minutos
 
 CONTENIDO DISPONIBLE:
-Videos: ${JSON.stringify(availableContent.videos.slice(0, 20))}
-Proyectos: ${JSON.stringify(availableContent.projects.slice(0, 15))}
+Videos: ${JSON.stringify(availableContent.videos.slice(0, 20).map((v) => ({ ...v, genre: v.genre || 'unknown' })))}
+Proyectos: ${JSON.stringify(availableContent.projects.slice(0, 15).map((p) => ({ ...p, genre: p.category || 'unknown', total_raised: p.current_amount })))}
 
 INSTRUCCIONES:
 1. Analiza los patrones en el historial: géneros preferidos, creators seguidos, tipos de contenido

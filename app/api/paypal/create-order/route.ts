@@ -96,9 +96,9 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Verificar disponibilidad
+      // Verificar disponibilidad (usando limit_quantity en lugar de limit)
       const rewardTyped = reward as Database['public']['Tables']['rewards']['Row']
-      if (rewardTyped.limit && rewardTyped.backers_count && rewardTyped.backers_count >= rewardTyped.limit) {
+      if (rewardTyped.limit_quantity && rewardTyped.backers_count && rewardTyped.backers_count >= rewardTyped.limit_quantity) {
         return NextResponse.json(
           { error: 'Esta recompensa ya no está disponible' },
           { status: 400 }

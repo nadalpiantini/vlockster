@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { onCLS, onFID, onFCP, onLCP, onTTFB, onINP } from 'web-vitals'
+import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals'
 
 /**
  * Componente para medir y reportar Web Vitals
@@ -39,7 +39,6 @@ export function WebVitals() {
 
       // Medir Core Web Vitals
       onCLS(reportMetric) // Cumulative Layout Shift
-      onFID(reportMetric) // First Input Delay (deprecated, usar onINP)
       onFCP(reportMetric) // First Contentful Paint
       onLCP(reportMetric) // Largest Contentful Paint
       onTTFB(reportMetric) // Time to First Byte

@@ -15,8 +15,6 @@ import { Button } from '@/components/ui/button'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-import type { Database } from '@/types/database.types'
-
 async function getMyProjects(userId: string) {
   const supabase = await createClient()
 

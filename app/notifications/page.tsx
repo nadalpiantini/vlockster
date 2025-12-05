@@ -50,7 +50,7 @@ export default function NotificationsPage() {
         .limit(50)
 
       if (!error && data) {
-        setNotifications(data)
+        setNotifications(data as unknown as Notification[])
       } else if (error) {
         logger.error('Error loading notifications', error, {
           endpoint: '/notifications',
@@ -101,7 +101,6 @@ export default function NotificationsPage() {
       setNotifications(notifications.map((n) => ({ ...n, read: true })))
     } catch (err) {
       logger.error('Error marking all notifications as read', err, {
-        userId: user.id,
         endpoint: '/notifications',
       })
     }
@@ -199,7 +198,7 @@ export default function NotificationsPage() {
                     <p className="text-gray-300 mb-3">{notification.content}</p>
                   )}
                   {notification.link && (
-                    <Link href={notification.link || '#'}>
+                    <Link href={(notification.link || '#') as any}>
                       <Button variant="outline" size="sm">
                         Ver más
                       </Button>
