@@ -91,7 +91,8 @@ export async function GET(request: NextRequest) {
       .limit(30)
 
     // Mapear proyectos al formato esperado
-    const projectsMapped = (projects || []).map((p: any) => ({
+    type ProjectRow = Database['public']['Tables']['projects']['Row']
+    const projectsMapped = (projects || []).map((p: ProjectRow) => ({
       id: p.id,
       title: p.title,
       description: p.description || '',
@@ -103,7 +104,8 @@ export async function GET(request: NextRequest) {
     }))
 
     // Mapear videos al formato esperado
-    const videosMapped = (videos || []).map((v: any) => ({
+    type VideoRow = Database['public']['Tables']['videos']['Row']
+    const videosMapped = (videos || []).map((v: VideoRow) => ({
       id: v.id,
       title: v.title,
       description: v.description || '',

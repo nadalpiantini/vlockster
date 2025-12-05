@@ -132,7 +132,7 @@ export async function GET(_request: NextRequest) {
               id: video.id,
               title: video.title,
               views: metrics?.length || 0,
-              likes: metrics?.filter((m: any) => m.liked).length || 0,
+              likes: metrics?.filter((m: VideoMetric) => m.liked).length || 0,
             }
           })
           .sort((a, b) => b.views - a.views)

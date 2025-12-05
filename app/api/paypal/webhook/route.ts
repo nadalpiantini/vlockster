@@ -55,7 +55,10 @@ function verifyPayPalSignature(
   }
 }
 
-async function processPaymentCompleted(resource: any, supabase: any) {
+async function processPaymentCompleted(
+  resource: { id: string; purchase_units?: Array<{ amount?: { value?: string } }> },
+  supabase: Awaited<ReturnType<typeof createClient>>
+) {
   const orderId = resource.id
   const amount = parseFloat(
     resource.purchase_units?.[0]?.amount?.value || '0'
