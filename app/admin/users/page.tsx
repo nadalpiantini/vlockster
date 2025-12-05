@@ -10,9 +10,12 @@ import {
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { AdminUserActions } from '@/components/AdminUserActions'
+import { Pagination } from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+const USERS_PER_PAGE = 20
 
 type UserProfile = {
   id: string
@@ -22,22 +25,39 @@ type UserProfile = {
   created_at: string
 }
 
-async function getAllUsers(): Promise<UserProfile[]> {
+async function getAllUsers(page: number = 1) {
   const supabase = await createClient()
+  const from = (page - 1) * USERS_PER_PAGE
+  const to = from + USERS_PER_PAGE - 1
 
-  const { data: users, error } = await supabase
+  const { data: users, error, count } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .range(from, to)
 
-  if (error) return []
-  return (users || []) as UserProfile[]
+  if (error) {
+    return { users: [], total: 0, totalPages: 0, currentPage: page }
+  }
+  
+  return {
+    users: (users || []) as UserProfile[],
+    total: count || 0,
+    totalPages: Math.ceil((count || 0) / USERS_PER_PAGE),
+    currentPage: page,
+  }
 }
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
   await requireRole(['admin'])
 
-  const users = await getAllUsers()
+  const params = await searchParams
+  const page = parseInt(params.page || '1', 10)
+  const { users, total, totalPages, currentPage } = await getAllUsers(page)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
@@ -58,7 +78,7 @@ export default async function AdminUsersPage() {
           <CardHeader>
             <CardTitle>Usuarios Registrados</CardTitle>
             <CardDescription aria-live="polite">
-              Total: {users.length} usuarios
+              Total: {total} usuarios
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -67,45 +87,54 @@ export default async function AdminUsersPage() {
                 No hay usuarios registrados
               </p>
             ) : (
-              <div className="space-y-4" role="list" aria-label="Lista de usuarios">
-                {users.map((u) => (
-                  <div
-                    key={u.id}
-                    className="flex items-center justify-between p-4 border border-gray-700 rounded-lg"
-                    role="listitem"
-                    aria-label={`Usuario: ${u.name || u.email}, Rol: ${u.role}`}
-                  >
-                    <div>
-                      <p className="font-semibold" aria-label={`Nombre: ${u.name || u.email}`}>{u.name || u.email}</p>
-                      <p className="text-sm text-gray-300" aria-label={`Email: ${u.email}`}>{u.email}</p>
-                      <p className="text-xs text-gray-300 capitalize" aria-label={`Rol actual: ${u.role}`}>
-                        Rol: {u.role}
-                      </p>
+              <>
+                <div className="space-y-4" role="list" aria-label="Lista de usuarios">
+                  {users.map((u) => (
+                    <div
+                      key={u.id}
+                      className="flex items-center justify-between p-4 border border-gray-700 rounded-lg"
+                      role="listitem"
+                      aria-label={`Usuario: ${u.name || u.email}, Rol: ${u.role}`}
+                    >
+                      <div>
+                        <p className="font-semibold" aria-label={`Nombre: ${u.name || u.email}`}>{u.name || u.email}</p>
+                        <p className="text-sm text-gray-300" aria-label={`Email: ${u.email}`}>{u.email}</p>
+                        <p className="text-xs text-gray-300 capitalize" aria-label={`Rol actual: ${u.role}`}>
+                          Rol: {u.role}
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 items-end">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            u.role === 'admin'
+                              ? 'bg-red-900/50 text-red-300'
+                              : u.role === 'creator'
+                                ? 'bg-blue-900/50 text-blue-300'
+                                : u.role === 'moderator'
+                                  ? 'bg-yellow-900/50 text-yellow-300'
+                                  : 'bg-gray-700 text-gray-300'
+                          }`}
+                          role="status"
+                          aria-label={`Rol: ${u.role}`}
+                        >
+                          {u.role}
+                        </span>
+                        <AdminUserActions
+                          userId={u.id}
+                          currentRole={u.role}
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-2 items-end">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          u.role === 'admin'
-                            ? 'bg-red-900/50 text-red-300'
-                            : u.role === 'creator'
-                              ? 'bg-blue-900/50 text-blue-300'
-                              : u.role === 'moderator'
-                                ? 'bg-yellow-900/50 text-yellow-300'
-                                : 'bg-gray-700 text-gray-300'
-                        }`}
-                        role="status"
-                        aria-label={`Rol: ${u.role}`}
-                      >
-                        {u.role}
-                      </span>
-                      <AdminUserActions
-                        userId={u.id}
-                        currentRole={u.role}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    basePath="/admin/users"
+                  />
+                )}
+              </>
             )}
           </CardContent>
         </Card>

@@ -87,12 +87,13 @@ export default function CommunityDetailPage() {
 
       setCommunity(communityData as unknown as Community)
 
-      // Cargar posts
+      // Cargar posts (optimizado: agregar límite para paginación futura)
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('*')
         .eq('community_id', (communityData as CommunityRow).id)
         .order('created_at', { ascending: false })
+        .limit(50) // Límite para evitar cargar demasiados posts
 
       if (!postsError && postsData) {
         setPosts(postsData as unknown as Post[])

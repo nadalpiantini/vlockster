@@ -78,13 +78,15 @@ export async function GET(_request: NextRequest) {
     const totalRaised =
       (projects as Project[] | null)?.reduce((sum, p) => sum + Number(p.current_amount || 0), 0) || 0
 
-    // Obtener backings recibidos
+    // Obtener backings recibidos (optimizado: una sola query en lugar de N+1)
     const projectIds = (projects as Project[] | null)?.map((p) => p.id) || []
     const backingResult = projectIds.length > 0
       ? await supabase
           .from('backings')
           .select('amount, created_at')
           .in('project_id', projectIds)
+          .eq('payment_status', 'completed')
+          .order('created_at', { ascending: false })
       : { data: null, error: null }
     const backings = backingResult.data
 
