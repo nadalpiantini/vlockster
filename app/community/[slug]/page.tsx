@@ -211,7 +211,7 @@ export default function CommunityDetailPage() {
                 <form onSubmit={handleCreatePost} aria-label="Formulario de nuevo post">
                   <CardContent className="space-y-4">
                     {error && (
-                      <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
+                      <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="assertive" aria-atomic="true">
                         {error}
                       </div>
                     )}

@@ -132,7 +132,7 @@ export default function UploadPage() {
           <form onSubmit={handleSubmit} aria-label="Formulario de subida de video">
             <CardContent className="space-y-6">
               {error && (
-                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
+                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="assertive" aria-atomic="true">
                   {error}
                 </div>
               )}
