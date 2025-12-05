@@ -8,6 +8,8 @@
  * - Sugiere mejoras en recompensas y metas
  */
 
+import { logger } from '@/lib/utils/logger'
+
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || 'sk-d7872d14750148c0808e28fbd12d7014'
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
 
