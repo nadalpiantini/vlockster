@@ -112,22 +112,26 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-6xl">
+      <main id="main-content" className="container mx-auto max-w-6xl" role="main" aria-label={`Proyecto: ${project.title}`}>
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6" role="article" aria-labelledby="project-title">
             {/* Project Header */}
             <Card>
               <CardHeader>
                 <div className="flex justify-between items-start">
-                  <CardTitle className="text-3xl">{project.title}</CardTitle>
+                  <CardTitle id="project-title" className="text-3xl" aria-label={`Título del proyecto: ${project.title}`}>{project.title}</CardTitle>
                   {project.status === 'funded' && (
-                    <span className="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm">
+                    <span 
+                      className="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm"
+                      role="status"
+                      aria-label="Proyecto financiado exitosamente"
+                    >
                       ✓ Financiado
                     </span>
                   )}
                 </div>
-                <CardDescription>
+                <CardDescription aria-label={`Creador: ${project.creator?.name || 'Desconocido'}`}>
                   Por: {project.creator?.name || 'Desconocido'}
                 </CardDescription>
               </CardHeader>
@@ -184,33 +188,41 @@ export default async function ProjectDetailPage({
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <aside className="space-y-6" role="complementary" aria-label="Información de financiamiento">
             {/* Progress Card */}
             <Card>
               <CardContent className="pt-6 space-y-4">
-                <div>
-                  <p className="text-3xl font-bold text-blue-400">
+                <div role="group" aria-label="Monto recaudado">
+                  <p className="text-3xl font-bold text-blue-400" aria-label={`Monto recaudado: $${Number(project.current_amount).toLocaleString()}`}>
                     ${Number(project.current_amount).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-400" aria-label={`Meta: $${Number(project.goal_amount).toLocaleString()}`}>
                     de ${Number(project.goal_amount).toLocaleString()} objetivo
                   </p>
                 </div>
 
-                <div className="w-full bg-gray-700 rounded-full h-3">
+                <div 
+                  className="w-full bg-gray-700 rounded-full h-3" 
+                  role="progressbar" 
+                  aria-valuenow={progress} 
+                  aria-valuemin={0} 
+                  aria-valuemax={100}
+                  aria-label={`Progreso de financiamiento: ${progress.toFixed(0)}%`}
+                >
                   <div
                     className="bg-blue-600 h-3 rounded-full transition-all"
                     style={{ width: `${Math.min(progress, 100)}%` }}
+                    aria-hidden="true"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 text-center pt-2">
+                <div className="grid grid-cols-2 gap-4 text-center pt-2" role="group" aria-label="Estadísticas del proyecto">
                   <div>
-                    <p className="text-2xl font-bold">{progress.toFixed(0)}%</p>
+                    <p className="text-2xl font-bold" aria-label={`Porcentaje financiado: ${progress.toFixed(0)}%`}>{progress.toFixed(0)}%</p>
                     <p className="text-xs text-gray-400">financiado</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold">{Math.max(0, daysLeft)}</p>
+                    <p className="text-2xl font-bold" aria-label={`Días restantes: ${Math.max(0, daysLeft)}`}>{Math.max(0, daysLeft)}</p>
                     <p className="text-xs text-gray-400">días restantes</p>
                   </div>
                 </div>
@@ -223,7 +235,7 @@ export default async function ProjectDetailPage({
                 />
 
                 {project.status === 'funded' && (
-                  <div className="bg-green-900/20 border border-green-500/50 p-4 rounded-lg text-center">
+                  <div className="bg-green-900/20 border border-green-500/50 p-4 rounded-lg text-center" role="status" aria-label="Proyecto financiado exitosamente">
                     <p className="text-green-300 font-semibold">
                       ¡Proyecto Financiado!
                     </p>
@@ -242,17 +254,20 @@ export default async function ProjectDetailPage({
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="font-semibold text-lg">
+                  <p className="font-semibold text-lg" aria-label={`Creador: ${project.creator?.name || 'Desconocido'}`}>
                     {project.creator?.name || 'Desconocido'}
                   </p>
                   {project.creator?.bio && (
-                    <p className="text-sm text-gray-400 mt-2">
+                    <p className="text-sm text-gray-400 mt-2" aria-label={`Biografía: ${project.creator.bio}`}>
                       {project.creator.bio}
                     </p>
                   )}
                 </div>
                 {project.creator?.public_profile_slug && (
-                  <Link href={`/c/${project.creator.public_profile_slug}` as any}>
+                  <Link 
+                    href={`/c/${project.creator.public_profile_slug}` as any}
+                    aria-label={`Ver perfil de ${project.creator?.name || 'creador'}`}
+                  >
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador
                     </Button>
@@ -260,9 +275,9 @@ export default async function ProjectDetailPage({
                 )}
               </CardContent>
             </Card>
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

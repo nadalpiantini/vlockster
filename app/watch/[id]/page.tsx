@@ -128,11 +128,17 @@ export default async function WatchVideoPage({
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Video Info */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2" role="article" aria-labelledby="video-title">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">{video.title}</CardTitle>
-                <CardDescription>
+                <CardTitle id="video-title" className="text-2xl" aria-label={`Título del video: ${video.title}`}>{video.title}</CardTitle>
+                <CardDescription aria-label={`Fecha de publicación: ${video.created_at
+                    ? new Date(video.created_at).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : 'Fecha no disponible'}`}>
                   {video.created_at
                     ? new Date(video.created_at).toLocaleDateString('es-ES', {
                         year: 'numeric',
@@ -143,7 +149,7 @@ export default async function WatchVideoPage({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-300 whitespace-pre-wrap">
+                <p className="text-gray-300 whitespace-pre-wrap" aria-label={`Descripción: ${video.description || 'Sin descripción'}`}>
                   {video.description || 'Sin descripción'}
                 </p>
               </CardContent>
@@ -151,18 +157,18 @@ export default async function WatchVideoPage({
           </div>
 
           {/* Creator Info */}
-          <div>
+          <aside role="complementary" aria-label="Información del creador">
             <Card>
               <CardHeader>
                 <CardTitle>Creador</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="font-semibold text-lg">
+                  <p className="font-semibold text-lg" aria-label={`Creador: ${video.uploader?.name || 'Desconocido'}`}>
                     {video.uploader?.name || 'Desconocido'}
                   </p>
                   {video.uploader?.bio && (
-                    <p className="text-sm text-gray-400 mt-2">
+                    <p className="text-sm text-gray-400 mt-2" aria-label={`Biografía: ${video.uploader.bio}`}>
                       {video.uploader.bio}
                     </p>
                   )}
@@ -170,6 +176,7 @@ export default async function WatchVideoPage({
                 {video.uploader?.public_profile_slug && (
                   <Link
                     href={`/c/${video.uploader.public_profile_slug}` as any}
+                    aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil
@@ -178,9 +185,9 @@ export default async function WatchVideoPage({
                 )}
               </CardContent>
             </Card>
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

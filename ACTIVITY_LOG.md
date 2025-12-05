@@ -8,6 +8,24 @@
 
 ---
 
+## 📋 Plan de Mini Sprints - EN PROGRESO
+
+### 🚀 Mini Sprint 1.1: Regenerate Supabase Types (2025-12-05)
+- **Estado**: ✅ COMPLETADO
+- **Tarea**: Epic 1, Subtask 1.1 - Regenerate Supabase Types
+- **Acciones realizadas**:
+  - Ejecutado `pnpm supabase:types` con project ID `nqzhxukuvmdlpewqytpv`
+  - Verificado que todos los tipos están presentes (6468 líneas)
+  - Validado que las 11 tablas principales están presentes:
+    - ✅ profiles, videos, projects, communities, backings, rewards
+    - ✅ posts, comments, notifications, reports, creator_requests
+  - Verificado que no hay errores relacionados con tipos de Supabase
+- **Resultado**: Tipos ya estaban actualizados (último commit: Sprint 11)
+- **Desbloquea**: Tareas 1.2 y 1.3 (Eliminate 'as any' in API Routes y Frontend Pages)
+- **Commit**: No requerido (tipos ya actualizados)
+
+---
+
 ## 📋 Plan de Mini Sprints - COMPLETADO
 
 ### ✅ Sprint 0: Landing Page
@@ -199,5 +217,48 @@ Seleccionar siguiente mini sprint (Task #1, #3, #4, o #5)
 
 **Próximos Pasos**:
 Mini Sprint 2: Component Unit Tests - Admin Components
+
+---
+
+### 2025-12-05 - Mini Sprint 2: Epic 4 - Admin Components Unit Tests ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Agregar tests unitarios para componentes Admin
+
+**Tareas Realizadas**:
+1. ✅ Creado `tests/components/AdminUserActions.test.tsx` (8 tests)
+2. ✅ Creado `tests/components/AdminReportActions.test.tsx` (9 tests)
+3. ✅ Tests cubren:
+   - Renderizado de componentes
+   - Interacciones de usuario (clicks, estados)
+   - Llamadas a API
+   - Manejo de errores
+   - Estados de carga
+   - Accesibilidad (aria-labels, roles)
+4. ✅ Todos los tests pasan (17 nuevos tests)
+
+**Archivos Creados**:
+- `tests/components/AdminUserActions.test.tsx` - 8 tests completos
+- `tests/components/AdminReportActions.test.tsx` - 9 tests completos
+
+**Resultados**:
+- ✅ 17 nuevos tests unitarios
+- ✅ Cobertura de componentes Admin mejorada
+- ✅ Tests de accesibilidad incluidos
+- ✅ Todos los tests pasan (103 tests totales)
+
+**Git**:
+- ⏳ Pendiente: Commit Mini Sprint 2
+
+**Métricas**:
+- Tests nuevos: 17
+- Tests totales: 103
+- Componentes testeados: AdminUserActions, AdminReportActions
+
+**Próximos Pasos**:
+Mini Sprint 3: Component Unit Tests - Project Components
 
 ---
