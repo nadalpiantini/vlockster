@@ -85,7 +85,7 @@ export default async function WatchPage({
       <main id="main-content" className="container mx-auto" role="main" aria-label="Catálogo de videos">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
-          <p className="text-gray-400">
+          <p className="text-gray-300">
             Descubre contenido independiente de creadores de todo el mundo
           </p>
         </div>
@@ -93,7 +93,7 @@ export default async function WatchPage({
         {videos.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Aún no hay videos disponibles
               </p>
               <p className="text-sm text-gray-300">
@@ -119,7 +119,7 @@ export default async function WatchPage({
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-600" role="img" aria-label="Sin miniatura">
+                      <div className="w-full h-full flex items-center justify-center text-gray-400" role="img" aria-label="Sin miniatura">
                         <span className="text-6xl" aria-hidden="true">🎬</span>
                       </div>
                     )}
@@ -133,7 +133,7 @@ export default async function WatchPage({
                   </CardHeader>
 
                   <CardContent>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-gray-300">
                       Por: {video.uploader?.name || 'Desconocido'}
                     </p>
                   </CardContent>

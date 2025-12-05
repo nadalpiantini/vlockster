@@ -92,6 +92,7 @@ export function RecommendationsSection() {
               key={rec.id}
               href={rec.type === 'video' ? `/watch/${rec.id}` : `/projects/${rec.id}`}
               className="block"
+              aria-label={`${rec.type === 'video' ? 'Ver video' : 'Ver proyecto'}: ${rec.title} (${Math.round(rec.confidence_score * 100)}% match)`}
             >
               <Card className="hover:border-red-500/50 transition-colors cursor-pointer h-full">
                 <CardHeader className="pb-3">

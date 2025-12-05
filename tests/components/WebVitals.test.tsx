@@ -32,8 +32,8 @@ describe('WebVitals', () => {
   })
 
   it('no debe registrar métricas en desarrollo por defecto', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
+    vi.stubEnv('NODE_ENV', 'development')
+    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
 
     render(<WebVitals />)
 
@@ -43,12 +43,11 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).not.toHaveBeenCalled()
     expect(mockOnINP).not.toHaveBeenCalled()
 
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 
   it('debe registrar métricas en producción', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
 
     render(<WebVitals />)
 
@@ -58,13 +57,12 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
 
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 
   it('debe registrar métricas cuando NEXT_PUBLIC_ENABLE_WEB_VITALS está activado', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+    vi.stubEnv('NODE_ENV', 'development')
+    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
 
     render(<WebVitals />)
 
@@ -74,13 +72,11 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
 
-    process.env.NODE_ENV = originalEnv
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
+    vi.unstubAllEnvs()
   })
 
   it('debe enviar métricas a gtag cuando está disponible', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
@@ -106,12 +102,11 @@ describe('WebVitals', () => {
       metric_rating: 'good',
     })
 
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 
   it('debe redondear valores de métricas al enviar a gtag', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
@@ -135,13 +130,12 @@ describe('WebVitals', () => {
       metric_rating: 'needs-improvement',
     })
 
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 
   it('debe loggear métricas en desarrollo cuando está habilitado', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+    vi.stubEnv('NODE_ENV', 'development')
+    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
     
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
@@ -164,8 +158,7 @@ describe('WebVitals', () => {
     })
 
     consoleSpy.mockRestore()
-    process.env.NODE_ENV = originalEnv
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
+    vi.unstubAllEnvs()
   })
 
   it('no debe renderizar nada (componente sin UI)', () => {
@@ -175,8 +168,7 @@ describe('WebVitals', () => {
   })
 
   it('debe registrar todas las métricas Core Web Vitals', () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
 
     render(<WebVitals />)
 
@@ -187,6 +179,6 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalledTimes(1)
     expect(mockOnINP).toHaveBeenCalledTimes(1)
 
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
   })
 })

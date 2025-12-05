@@ -21,6 +21,7 @@ describe('ProjectRewardCard', () => {
     amount: '25.00',
     limit: 100,
     delivery_date: new Date(Date.now() + 86400000 * 30).toISOString(),
+    backers_count: 5,
   }
 
   it('debe renderizar el título y descripción de la recompensa', () => {

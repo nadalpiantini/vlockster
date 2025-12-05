@@ -197,7 +197,7 @@ export default async function ProjectDetailPage({
                   <p className="text-3xl font-bold text-blue-400" aria-label={`Monto recaudado: $${Number(project.current_amount).toLocaleString()}`}>
                     ${Number(project.current_amount).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-400" aria-label={`Meta: $${Number(project.goal_amount).toLocaleString()}`}>
+                  <p className="text-sm text-gray-300" aria-label={`Meta: $${Number(project.goal_amount).toLocaleString()}`}>
                     de ${Number(project.goal_amount).toLocaleString()} objetivo
                   </p>
                 </div>
@@ -220,11 +220,11 @@ export default async function ProjectDetailPage({
                 <div className="grid grid-cols-2 gap-4 text-center pt-2" role="group" aria-label="Estadísticas del proyecto">
                   <div>
                     <p className="text-2xl font-bold" aria-label={`Porcentaje financiado: ${progress.toFixed(0)}%`}>{progress.toFixed(0)}%</p>
-                    <p className="text-xs text-gray-400">financiado</p>
+                    <p className="text-xs text-gray-300">financiado</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold" aria-label={`Días restantes: ${Math.max(0, daysLeft)}`}>{Math.max(0, daysLeft)}</p>
-                    <p className="text-xs text-gray-400">días restantes</p>
+                    <p className="text-xs text-gray-300">días restantes</p>
                   </div>
                 </div>
 
@@ -259,7 +259,7 @@ export default async function ProjectDetailPage({
                     {project.creator?.name || 'Desconocido'}
                   </p>
                   {project.creator?.bio && (
-                    <p className="text-sm text-gray-400 mt-2" aria-label={`Biografía: ${project.creator.bio}`}>
+                    <p className="text-sm text-gray-300 mt-2" aria-label={`Biografía: ${project.creator.bio}`}>
                       {project.creator.bio}
                     </p>
                   )}

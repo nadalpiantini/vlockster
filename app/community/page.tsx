@@ -39,7 +39,7 @@ export default async function CommunityPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Comunidades</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Únete a discusiones sobre cine independiente
             </p>
           </div>

@@ -173,7 +173,7 @@ export default function UploadPage() {
                       <p className="text-green-400 font-semibold">
                         ✓ {file.name}
                       </p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-300">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
                       </p>
                     </>
@@ -183,7 +183,7 @@ export default function UploadPage() {
                       <p className="font-semibold">
                         Arrastra tu video aquí o haz clic para seleccionar
                       </p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-300">
                         Formatos soportados: MP4, MOV, AVI
                       </p>
                     </>

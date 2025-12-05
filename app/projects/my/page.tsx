@@ -39,7 +39,7 @@ export default async function MyProjectsPage() {
         <div className="container mx-auto max-w-6xl">
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Login deshabilitado temporalmente. Esta página requiere autenticación.
               </p>
               <Link href="/dashboard">
@@ -67,7 +67,7 @@ export default async function MyProjectsPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Mis Proyectos</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Gestiona tus campañas de crowdfunding
             </p>
           </div>
@@ -84,7 +84,7 @@ export default async function MyProjectsPage() {
         {projects.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Aún no has creado ningún proyecto
               </p>
               <Link href="/projects/create" aria-label="Crear mi primer proyecto de crowdfunding">

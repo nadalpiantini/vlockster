@@ -108,7 +108,7 @@ export default function LoginPage() {
             <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
               Sign In
             </CardTitle>
-            <CardDescription className="text-gray-400 text-base">
+            <CardDescription className="text-gray-300 text-base">
               Enter your email and password to access VLOCKSTER
             </CardDescription>
           </CardHeader>
@@ -168,7 +168,7 @@ export default function LoginPage() {
               >
                 {loading ? 'Signing in...' : 'Sign In'}
               </Button>
-              <p className="text-sm text-gray-400 text-center">
+              <p className="text-sm text-gray-300 text-center">
                 Don't have an account?{' '}
                 <Link href="/signup" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Crear cuenta nueva">
                   Sign up here

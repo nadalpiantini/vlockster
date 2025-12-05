@@ -127,7 +127,7 @@ export default function SignupPage() {
             <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
               Create Account
             </CardTitle>
-            <CardDescription className="text-gray-400 text-base">
+            <CardDescription className="text-gray-300 text-base">
               Join VLOCKSTER and discover the best independent cinema
             </CardDescription>
           </CardHeader>
@@ -228,7 +228,7 @@ export default function SignupPage() {
               >
                 {loading ? 'Creating account...' : 'Create Account'}
               </Button>
-              <p className="text-sm text-gray-400 text-center">
+              <p className="text-sm text-gray-300 text-center">
                 Already have an account?{' '}
                 <Link href="/login" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Iniciar sesión">
                   Sign in here

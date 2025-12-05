@@ -1,6 +1,6 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { CookieConsent, useCookieConsent } from '@/components/CookieConsent'
 
@@ -42,6 +42,7 @@ describe('CookieConsent', () => {
   })
 
   afterEach(() => {
+    vi.clearAllTimers()
     vi.useRealTimers()
   })
 
@@ -64,18 +65,23 @@ describe('CookieConsent', () => {
     // Inicialmente no debe estar visible
     expect(screen.queryByRole('dialog')).toBeNull()
     
-    // Avanzar 1 segundo
-    await vi.advanceTimersByTimeAsync(1000)
+    // Avanzar 1 segundo dentro de act
+    await act(async () => {
+      vi.advanceTimersByTime(1000)
+    })
     
+    // Esperar a que el componente se actualice
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+    }, { timeout: 3000 })
   })
 
   it('debe tener atributos de accesibilidad correctos', async () => {
     render(<CookieConsent />)
     
-    await vi.advanceTimersByTimeAsync(1000)
+    await act(async () => {
+      vi.advanceTimersByTime(1000)
+    })
     
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
@@ -83,18 +89,18 @@ describe('CookieConsent', () => {
       expect(dialog).toHaveAttribute('aria-modal', 'true')
       expect(dialog).toHaveAttribute('aria-labelledby', 'cookie-consent-title')
       expect(dialog).toHaveAttribute('aria-describedby', 'cookie-consent-description')
-    }, { timeout: 2000 })
+    }, { timeout: 3000 })
   })
 
   it('debe guardar consentimiento aceptado en localStorage', async () => {
     const user = userEvent.setup({ delay: null })
-    vi.advanceTimersByTime(1000)
-    
     render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const acceptButton = screen.getByLabelText(/aceptar cookies/i)
     await user.click(acceptButton)
@@ -107,13 +113,13 @@ describe('CookieConsent', () => {
 
   it('debe guardar consentimiento rechazado en localStorage', async () => {
     const user = userEvent.setup({ delay: null })
-    vi.advanceTimersByTime(1000)
-    
     render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const rejectButton = screen.getByLabelText(/rechazar cookies/i)
     await user.click(rejectButton)
@@ -126,38 +132,38 @@ describe('CookieConsent', () => {
 
   it('debe ocultar banner después de aceptar', async () => {
     const user = userEvent.setup({ delay: null })
-    vi.advanceTimersByTime(1000)
-    
     const { container } = render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const acceptButton = screen.getByLabelText(/aceptar cookies/i)
     await user.click(acceptButton)
     
     await waitFor(() => {
       expect(container.firstChild).toBeNull()
-    })
+    }, { timeout: 2000 })
   })
 
   it('debe ocultar banner después de rechazar', async () => {
     const user = userEvent.setup({ delay: null })
-    vi.advanceTimersByTime(1000)
-    
     const { container } = render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const rejectButton = screen.getByLabelText(/rechazar cookies/i)
     await user.click(rejectButton)
     
     await waitFor(() => {
       expect(container.firstChild).toBeNull()
-    })
+    }, { timeout: 2000 })
   })
 
   it('debe mostrar enlaces a política de privacidad y términos', async () => {

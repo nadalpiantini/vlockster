@@ -1,5 +1,5 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { AdminUserActions } from '@/components/AdminUserActions'
 
@@ -7,13 +7,6 @@ import { AdminUserActions } from '@/components/AdminUserActions'
 global.fetch = vi.fn()
 
 describe('AdminUserActions', () => {
-  const mockUser = {
-    id: 'user-123',
-    email: 'test@example.com',
-    name: 'Test User',
-    role: 'viewer' as const,
-  }
-
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(fetch).mockResolvedValue({
@@ -23,7 +16,7 @@ describe('AdminUserActions', () => {
   })
 
   it('debe renderizar los botones de roles', () => {
-    render(<AdminUserActions user={mockUser} />)
+    render(<AdminUserActions userId="user-123" currentRole="viewer" />)
     expect(screen.getByLabelText(/Cambiar rol a viewer/)).toBeDefined()
     expect(screen.getByLabelText(/Cambiar rol a creator/)).toBeDefined()
     expect(screen.getByLabelText(/Cambiar rol a moderator/)).toBeDefined()
@@ -31,20 +24,20 @@ describe('AdminUserActions', () => {
   })
 
   it('debe marcar el rol actual como pressed', () => {
-    render(<AdminUserActions user={mockUser} />)
+    render(<AdminUserActions userId="user-123" currentRole="viewer" />)
     const viewerButton = screen.getByLabelText(/Cambiar rol a viewer.*rol actual/)
     expect(viewerButton).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('debe tener role="group" y aria-label', () => {
-    const { container } = render(<AdminUserActions user={mockUser} />)
+    const { container } = render(<AdminUserActions userId="user-123" currentRole="viewer" />)
     const group = container.querySelector('[role="group"]')
     expect(group).toBeDefined()
     expect(group).toHaveAttribute('aria-label', 'Opciones de rol de usuario')
   })
 
   it('debe llamar a la API al cambiar rol', async () => {
-    render(<AdminUserActions user={mockUser} />)
+    render(<AdminUserActions userId="user-123" currentRole="viewer" />)
     const creatorButton = screen.getByLabelText(/Cambiar rol a creator/)
     
     fireEvent.click(creatorButton)

@@ -23,41 +23,59 @@ vi.mock('@/components/PayPalButton', () => ({
 }))
 
 describe('ProjectBackingCard', () => {
-  const mockProject = {
-    id: 'project-123',
-    title: 'Test Project',
-    goal_amount: 1000,
-    current_amount: 500,
+  const mockUser = {
+    id: 'user-123',
+    email: 'test@example.com',
+    name: 'Test User',
+    role: 'viewer' as const,
   }
 
-  const mockRewards = [
-    {
-      id: 'reward-1',
-      title: 'Reward 1',
-      description: 'Description 1',
-      amount: '25.00',
-      limit: 100,
-    },
-  ]
-
-  it('debe renderizar información del proyecto', () => {
-    render(<ProjectBackingCard project={mockProject} rewards={mockRewards} />)
-    expect(screen.getByText('Test Project')).toBeDefined()
-  })
-
-  it('debe mostrar el progreso del proyecto', () => {
-    render(<ProjectBackingCard project={mockProject} rewards={mockRewards} />)
-    expect(screen.getByText(/500/)).toBeDefined()
-    expect(screen.getByText(/1000/)).toBeDefined()
-  })
-
-  it('debe renderizar el botón de PayPal', () => {
-    render(<ProjectBackingCard project={mockProject} rewards={mockRewards} />)
+  it('debe renderizar el botón de PayPal cuando el proyecto está activo y hay usuario', () => {
+    render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="active"
+        goalAmount={1000}
+        user={mockUser}
+      />
+    )
     expect(screen.getByTestId('paypal-button')).toBeDefined()
   })
 
-  it('debe manejar proyectos sin recompensas', () => {
-    render(<ProjectBackingCard project={mockProject} rewards={[]} />)
-    expect(screen.getByText('Test Project')).toBeDefined()
+  it('debe renderizar placeholder cuando el proyecto está activo pero no hay usuario', () => {
+    render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="active"
+        goalAmount={1000}
+        user={null}
+      />
+    )
+    // PayPalButtonPlaceholder debería renderizarse
+    expect(screen.queryByTestId('paypal-button')).toBeNull()
+  })
+
+  it('no debe renderizar nada cuando el proyecto no está activo', () => {
+    const { container } = render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="funded"
+        goalAmount={1000}
+        user={mockUser}
+      />
+    )
+    expect(container.firstChild).toBeNull()
+  })
+
+  it('no debe renderizar nada cuando el proyecto está completado', () => {
+    const { container } = render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="completed"
+        goalAmount={1000}
+        user={mockUser}
+      />
+    )
+    expect(container.firstChild).toBeNull()
   })
 })
