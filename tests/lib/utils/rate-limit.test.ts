@@ -77,11 +77,35 @@ describe('checkRateLimit', () => {
     expect(result.success).toBe(true)
   })
 
+  it('debe retornar success cuando no hay limiter (producción)', async () => {
+    vi.stubEnv('NODE_ENV', 'production')
+
+    const result = await checkRateLimit('user-123', null)
+
+    expect(result.success).toBe(true)
+  })
+
   it('debe manejar errores de Redis gracefully', async () => {
     mockLimiter.limit.mockRejectedValue(new Error('Redis error'))
 
     // Should not throw, but the function should handle it
     await expect(checkRateLimit('user-123', mockLimiter as unknown as Ratelimit)).rejects.toThrow('Redis error')
+  })
+
+  it('debe retornar información completa cuando hay límite', async () => {
+    mockLimiter.limit.mockResolvedValue({
+      success: true,
+      limit: 10,
+      remaining: 5,
+      reset: Date.now() + 60000,
+    })
+
+    const result = await checkRateLimit('user-123', mockLimiter as unknown as Ratelimit)
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(10)
+    expect(result.remaining).toBe(5)
+    expect(result.reset).toBeGreaterThan(0)
   })
 })
 

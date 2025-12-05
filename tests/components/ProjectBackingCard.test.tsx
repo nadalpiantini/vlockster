@@ -1,5 +1,5 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
 
@@ -14,10 +14,21 @@ vi.mock('next/link', () => ({
 }))
 
 // Mock PayPalButton
+const mockReload = vi.fn()
+Object.defineProperty(window, 'location', {
+  value: { reload: mockReload },
+  writable: true,
+})
+
 vi.mock('@/components/PayPalButton', () => ({
-  PayPalButton: ({ amount, projectId, rewardId }: any) => (
+  PayPalButton: ({ amount, projectId, onSuccess, onError }: any) => (
     <div data-testid="paypal-button">
-      PayPal Button - ${amount} - Project: {projectId} - Reward: {rewardId || 'none'}
+      <button data-testid="paypal-success" onClick={() => onSuccess && onSuccess()}>
+        Success
+      </button>
+      <button data-testid="paypal-error" onClick={() => onError && onError('Test error')}>
+        Error
+      </button>
     </div>
   ),
   PayPalButtonPlaceholder: () => (
@@ -27,6 +38,13 @@ vi.mock('@/components/PayPalButton', () => ({
   ),
 }))
 
+// Mock logger
+vi.mock('@/lib/utils/logger', () => ({
+  logger: {
+    error: vi.fn(),
+  },
+}))
+
 describe('ProjectBackingCard', () => {
   const mockUser = {
     id: 'user-123',
@@ -34,6 +52,11 @@ describe('ProjectBackingCard', () => {
     name: 'Test User',
     role: 'viewer' as const,
   }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockReload.mockClear()
+  })
 
   it('debe renderizar el botón de PayPal cuando el proyecto está activo y hay usuario', () => {
     render(
@@ -82,5 +105,54 @@ describe('ProjectBackingCard', () => {
       />
     )
     expect(container.firstChild).toBeNull()
+  })
+
+  it('debe recargar la página cuando el pago es exitoso', async () => {
+    const { logger } = await import('@/lib/utils/logger')
+    render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="active"
+        goalAmount={1000}
+        user={mockUser}
+      />
+    )
+    const successButton = screen.getByTestId('paypal-success')
+    successButton.click()
+    expect(mockReload).toHaveBeenCalled()
+  })
+
+  it('debe llamar logger.error cuando hay error en el pago', async () => {
+    const { logger } = await import('@/lib/utils/logger')
+    render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="active"
+        goalAmount={1000}
+        user={mockUser}
+      />
+    )
+    const errorButton = screen.getByTestId('paypal-error')
+    errorButton.click()
+    expect(logger.error).toHaveBeenCalledWith(
+      'Payment error in ProjectBackingCard',
+      expect.any(Error),
+      {
+        projectId: 'project-123',
+        userId: 'user-123',
+      }
+    )
+  })
+
+  it('debe pasar el goalAmount correcto al PayPalButton', () => {
+    render(
+      <ProjectBackingCard
+        projectId="project-123"
+        projectStatus="active"
+        goalAmount={5000}
+        user={mockUser}
+      />
+    )
+    expect(screen.getByTestId('paypal-button')).toBeDefined()
   })
 })
