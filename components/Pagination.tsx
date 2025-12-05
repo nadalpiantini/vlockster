@@ -108,7 +108,7 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
         </Button>
       </Link>
 
-      <span className="text-sm text-gray-400 ml-4" aria-live="polite">
+      <span className="text-sm text-gray-300 ml-4" aria-live="polite">
         Página {currentPage} de {totalPages}
       </span>
     </nav>

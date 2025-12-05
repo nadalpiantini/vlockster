@@ -115,7 +115,7 @@ export function CookieConsent() {
               la plataforma y personalizar contenido. Al continuar navegando,
               aceptas nuestro uso de cookies.
             </p>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-300">
               Para más información, consulta nuestra{' '}
               <Link
                 href="/legal/privacy"

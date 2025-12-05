@@ -134,7 +134,7 @@ export default async function ProjectsPage({
                       {/* Progress Bar */}
                       <div role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de financiamiento: ${progress.toFixed(0)}%`}>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-400">Progreso</span>
+                          <span className="text-gray-300">Progreso</span>
                           <span className="font-semibold" aria-live="polite">
                             {progress.toFixed(0)}%
                           </span>

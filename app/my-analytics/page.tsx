@@ -98,7 +98,7 @@ export default function MyAnalyticsPage() {
             <CardTitle>Error</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-400 mb-4">
+            <p className="text-gray-300 mb-4">
               {error || 'No se pudieron cargar las estadísticas'}
             </p>
             <Link href="/dashboard" aria-label="Volver al dashboard principal">
@@ -117,7 +117,7 @@ export default function MyAnalyticsPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Analytics Dashboard</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Estadísticas de tu contenido y proyectos
             </p>
           </div>
@@ -137,7 +137,7 @@ export default function MyAnalyticsPage() {
               <p className="text-4xl font-bold text-blue-400">
                 {analytics.videos.total}
               </p>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-gray-300 mt-2">
                 +{analytics.videos.recent} este mes
               </p>
             </CardContent>
@@ -152,7 +152,7 @@ export default function MyAnalyticsPage() {
               <p className="text-4xl font-bold text-green-400">
                 {analytics.videos.totalViews.toLocaleString()}
               </p>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-gray-300 mt-2">
                 {analytics.videos.totalWatchTime.toLocaleString()} min vistos
               </p>
             </CardContent>
@@ -167,7 +167,7 @@ export default function MyAnalyticsPage() {
               <p className="text-4xl font-bold text-purple-400">
                 {analytics.projects.active}
               </p>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-gray-300 mt-2">
                 {analytics.projects.funded} financiados
               </p>
             </CardContent>
@@ -182,7 +182,7 @@ export default function MyAnalyticsPage() {
               <p className="text-4xl font-bold text-yellow-400">
                 ${Number(analytics.projects.totalRaised).toLocaleString()}
               </p>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-gray-300 mt-2">
                 +${Number(analytics.projects.recentRevenue).toLocaleString()} este
                 mes
               </p>
@@ -199,7 +199,7 @@ export default function MyAnalyticsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Completion Rate</span>
+                  <span className="text-gray-300">Completion Rate</span>
                   <span className="text-2xl font-bold">
                     {analytics.videos.completionRate}%
                   </span>
@@ -214,13 +214,13 @@ export default function MyAnalyticsPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="bg-gray-800/50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-400 mb-1">Total Likes</p>
+                    <p className="text-sm text-gray-300 mb-1">Total Likes</p>
                     <p className="text-2xl font-bold">
                       {analytics.videos.totalLikes}
                     </p>
                   </div>
                   <div className="bg-gray-800/50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-400 mb-1">Avg Watch Time</p>
+                    <p className="text-sm text-gray-300 mb-1">Avg Watch Time</p>
                     <p className="text-2xl font-bold">
                       {analytics.videos.totalViews > 0
                         ? Math.round(
@@ -242,7 +242,7 @@ export default function MyAnalyticsPage() {
               </CardHeader>
               <CardContent>
                 {analytics.topVideos.length === 0 ? (
-                  <p className="text-gray-400 text-center py-4">
+                  <p className="text-gray-300 text-center py-4">
                     Aún no has subido videos
                   </p>
                 ) : (
@@ -254,14 +254,14 @@ export default function MyAnalyticsPage() {
                         aria-label={`Ver video: ${video.title}`}
                       >
                         <div className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors">
-                          <span className="text-2xl font-bold text-gray-500">
+                          <span className="text-2xl font-bold text-gray-300">
                             #{index + 1}
                           </span>
                           <div className="flex-1 min-w-0">
                             <p className="font-semibold truncate">
                               {video.title}
                             </p>
-                            <p className="text-sm text-gray-400">
+                            <p className="text-sm text-gray-300">
                               {video.views} views • {video.likes} likes
                             </p>
                           </div>
@@ -283,13 +283,13 @@ export default function MyAnalyticsPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-800/50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-400 mb-1">Total Backers</p>
+                    <p className="text-sm text-gray-300 mb-1">Total Backers</p>
                     <p className="text-2xl font-bold">
                       {analytics.projects.totalBackers}
                     </p>
                   </div>
                   <div className="bg-gray-800/50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-400 mb-1">
+                    <p className="text-sm text-gray-300 mb-1">
                       Backings este mes
                     </p>
                     <p className="text-2xl font-bold">
@@ -298,7 +298,7 @@ export default function MyAnalyticsPage() {
                   </div>
                 </div>
                 <div className="bg-blue-900/20 border border-blue-500/50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-400 mb-2">
+                  <p className="text-sm text-gray-300 mb-2">
                     Tasa de Éxito
                   </p>
                   <p className="text-3xl font-bold text-blue-400">
@@ -322,7 +322,7 @@ export default function MyAnalyticsPage() {
               </CardHeader>
               <CardContent>
                 {analytics.topProjects.length === 0 ? (
-                  <p className="text-gray-400 text-center py-4">
+                  <p className="text-gray-300 text-center py-4">
                     Aún no has creado proyectos
                   </p>
                 ) : (
@@ -335,14 +335,14 @@ export default function MyAnalyticsPage() {
                       >
                         <div className="p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors">
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="text-2xl font-bold text-gray-500">
+                            <span className="text-2xl font-bold text-gray-300">
                               #{index + 1}
                             </span>
                             <p className="font-semibold flex-1 truncate">
                               {project.title}
                             </p>
                           </div>
-                          <div className="flex justify-between text-sm text-gray-400 mb-2">
+                          <div className="flex justify-between text-sm text-gray-300 mb-2">
                             <span>
                               ${project.raised.toLocaleString()} de $
                               {project.goal.toLocaleString()}

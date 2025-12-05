@@ -120,7 +120,7 @@ export default async function WatchVideoPage({
                 </div>
               ) : (
                 <div className="text-center" role="alert" aria-label="Video no disponible">
-                  <p className="text-gray-400">Video no disponible</p>
+                  <p className="text-gray-300">Video no disponible</p>
                 </div>
               )}
             </div>
@@ -169,7 +169,7 @@ export default async function WatchVideoPage({
                     {video.uploader?.name || 'Desconocido'}
                   </p>
                   {video.uploader?.bio && (
-                    <p className="text-sm text-gray-400 mt-2" aria-label={`Biografía: ${video.uploader.bio}`}>
+                    <p className="text-sm text-gray-300 mt-2" aria-label={`Biografía: ${video.uploader.bio}`}>
                       {video.uploader.bio}
                     </p>
                   )}

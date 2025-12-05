@@ -73,7 +73,7 @@ export function ProjectRewardCard({
           <p className="text-gray-300 text-sm mb-4">{reward.description}</p>
         )}
         {remaining !== null && (
-          <p className="text-xs text-gray-400 mb-3">
+          <p className="text-xs text-gray-300 mb-3">
             {remaining} disponibles de {reward.limit}
           </p>
         )}

@@ -263,7 +263,7 @@ export default function UploadPage() {
                   <option value="members">Solo Miembros</option>
                   <option value="backers">Solo Backers</option>
                 </select>
-                <p id="visibility-description" className="text-xs text-gray-400" role="status" aria-live="polite">
+                <p id="visibility-description" className="text-xs text-gray-300" role="status" aria-live="polite">
                   {visibility === 'public' && 'Visible para todos'}
                   {visibility === 'members' && 'Solo usuarios registrados'}
                   {visibility === 'backers' &&

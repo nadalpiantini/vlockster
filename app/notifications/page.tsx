@@ -130,7 +130,7 @@ export default function NotificationsPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Notificaciones</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               {unreadCount > 0
                 ? `Tienes ${unreadCount} notificación${unreadCount !== 1 ? 'es' : ''} sin leer`
                 : 'No tienes notificaciones sin leer'}
@@ -152,10 +152,10 @@ export default function NotificationsPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-4xl mb-4">🔔</p>
-              <p className="text-gray-400 mb-2">
+              <p className="text-gray-300 mb-2">
                 No tienes notificaciones aún
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-300">
                 Aquí aparecerán actualizaciones sobre tus proyectos y actividad
               </p>
             </CardContent>

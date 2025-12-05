@@ -1,21 +1,38 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { checkRateLimit } from '@/lib/utils/rate-limit'
+import { Ratelimit } from '@upstash/ratelimit'
 
 // Mock @upstash/redis
+const mockRedis = {
+  get: vi.fn(),
+  set: vi.fn(),
+  expire: vi.fn(),
+}
+
 vi.mock('@upstash/redis', () => ({
-  Redis: vi.fn().mockImplementation(() => ({
-    get: vi.fn(),
-    set: vi.fn(),
-    expire: vi.fn(),
+  Redis: vi.fn().mockImplementation(() => mockRedis),
+}))
+
+// Mock @upstash/ratelimit
+vi.mock('@upstash/ratelimit', () => ({
+  Ratelimit: vi.fn().mockImplementation(() => ({
+    limit: vi.fn(),
   })),
 }))
 
 describe('checkRateLimit', () => {
+  let mockLimiter: { limit: ReturnType<typeof vi.fn> }
+
   beforeEach(() => {
     vi.clearAllMocks()
     // Mock environment variables
     process.env.UPSTASH_REDIS_REST_URL = 'https://test.upstash.io'
     process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token'
+    
+    // Create mock limiter
+    mockLimiter = {
+      limit: vi.fn(),
+    }
   })
 
   afterEach(() => {
@@ -24,67 +41,58 @@ describe('checkRateLimit', () => {
   })
 
   it('debe permitir request cuando no hay límite alcanzado', async () => {
-    const { Redis } = await import('@upstash/redis')
-    const mockRedis = new Redis({} as any)
-    
-    vi.mocked(mockRedis.get).mockResolvedValue('0')
-    vi.mocked(mockRedis.set).mockResolvedValue('OK')
-    vi.mocked(mockRedis.expire).mockResolvedValue(1)
-
-    const result = await checkRateLimit('user-123', {
-      maxRequests: 10,
-      windowSeconds: 60,
+    mockLimiter.limit.mockResolvedValue({
+      success: true,
+      limit: 10,
+      remaining: 9,
+      reset: Date.now() + 60000,
     })
 
+    const result = await checkRateLimit('user-123', mockLimiter as unknown as Ratelimit)
+
     expect(result.success).toBe(true)
+    expect(mockLimiter.limit).toHaveBeenCalledWith('user-123')
   })
 
   it('debe rechazar request cuando se alcanza el límite', async () => {
-    const { Redis } = await import('@upstash/redis')
-    const mockRedis = new Redis({} as any)
-    
-    vi.mocked(mockRedis.get).mockResolvedValue('10') // Already at limit
-
-    const result = await checkRateLimit('user-123', {
-      maxRequests: 10,
-      windowSeconds: 60,
+    mockLimiter.limit.mockResolvedValue({
+      success: false,
+      limit: 10,
+      remaining: 0,
+      reset: Date.now() + 60000,
     })
+
+    const result = await checkRateLimit('user-123', mockLimiter as unknown as Ratelimit)
 
     expect(result.success).toBe(false)
     expect(result.reset).toBeGreaterThan(0)
+    expect(mockLimiter.limit).toHaveBeenCalledWith('user-123')
   })
 
-  it('debe incrementar el contador en cada request', async () => {
-    const { Redis } = await import('@upstash/redis')
-    const mockRedis = new Redis({} as any)
-    
-    vi.mocked(mockRedis.get).mockResolvedValue('5')
-    vi.mocked(mockRedis.set).mockResolvedValue('OK')
-    vi.mocked(mockRedis.expire).mockResolvedValue(1)
-
-    const result = await checkRateLimit('user-123', {
-      maxRequests: 10,
-      windowSeconds: 60,
+  it('debe retornar success cuando no hay limiter (desarrollo)', async () => {
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      writable: true,
+      configurable: true,
     })
 
+    const result = await checkRateLimit('user-123', null)
+
     expect(result.success).toBe(true)
-    expect(mockRedis.set).toHaveBeenCalled()
+
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe manejar errores de Redis gracefully', async () => {
-    const { Redis } = await import('@upstash/redis')
-    const mockRedis = new Redis({} as any)
-    
-    vi.mocked(mockRedis.get).mockRejectedValue(new Error('Redis error'))
+    mockLimiter.limit.mockRejectedValue(new Error('Redis error'))
 
-    // Should not throw, but return failure
-    const result = await checkRateLimit('user-123', {
-      maxRequests: 10,
-      windowSeconds: 60,
-    })
-
-    // In case of error, should default to allowing (fail open)
-    expect(result).toBeDefined()
+    // Should not throw, but the function should handle it
+    await expect(checkRateLimit('user-123', mockLimiter as unknown as Ratelimit)).rejects.toThrow('Redis error')
   })
 })
 

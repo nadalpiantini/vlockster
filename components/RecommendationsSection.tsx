@@ -63,7 +63,7 @@ export function RecommendationsSection() {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-gray-300" aria-label="Cargando recomendaciones" />
           </div>
         </CardContent>
       </Card>
@@ -102,17 +102,17 @@ export function RecommendationsSection() {
                     ) : (
                       <DollarSign className="w-5 h-5 text-green-400" aria-hidden="true" />
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-300">
                       {Math.round(rec.confidence_score * 100)}% match
                     </span>
                   </div>
                   <CardTitle className="text-lg line-clamp-2">{rec.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-400 line-clamp-2 mb-3">
+                  <p className="text-sm text-gray-300 line-clamp-2 mb-3">
                     {rec.description}
                   </p>
-                  <p className="text-xs text-gray-500 italic line-clamp-2">
+                  <p className="text-xs text-gray-300 italic line-clamp-2">
                     {rec.reason}
                   </p>
                 </CardContent>

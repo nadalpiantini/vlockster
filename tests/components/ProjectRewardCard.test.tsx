@@ -18,30 +18,29 @@ describe('ProjectRewardCard', () => {
     id: 'reward-123',
     title: 'Test Reward',
     description: 'This is a test reward description',
-    amount: '25.00',
+    amount: 25.00,
     limit: 100,
-    delivery_date: new Date(Date.now() + 86400000 * 30).toISOString(),
     backers_count: 5,
   }
 
   it('debe renderizar el título y descripción de la recompensa', () => {
-    render(<ProjectRewardCard reward={mockReward} />)
+    render(<ProjectRewardCard reward={mockReward} projectId="project-123" projectStatus="active" user={null} />)
     expect(screen.getByText('Test Reward')).toBeDefined()
     expect(screen.getByText('This is a test reward description')).toBeDefined()
   })
 
   it('debe mostrar el monto formateado', () => {
-    render(<ProjectRewardCard reward={mockReward} />)
+    render(<ProjectRewardCard reward={mockReward} projectId="project-123" projectStatus="active" user={null} />)
     expect(screen.getByText(/\$25/)).toBeDefined()
   })
 
   it('debe mostrar el límite si existe', () => {
-    render(<ProjectRewardCard reward={mockReward} />)
+    render(<ProjectRewardCard reward={mockReward} projectId="project-123" projectStatus="active" user={null} />)
     expect(screen.getByText(/100/)).toBeDefined()
   })
 
   it('debe tener aria-label accesible', () => {
-    render(<ProjectRewardCard reward={mockReward} />)
+    render(<ProjectRewardCard reward={mockReward} projectId="project-123" projectStatus="active" user={null} />)
     expect(screen.getByLabelText(/Recompensa: Test Reward/)).toBeDefined()
   })
 
@@ -49,8 +48,9 @@ describe('ProjectRewardCard', () => {
     const rewardWithoutLimit = {
       ...mockReward,
       limit: null,
+      backers_count: 0,
     }
-    render(<ProjectRewardCard reward={rewardWithoutLimit} />)
+    render(<ProjectRewardCard reward={rewardWithoutLimit} projectId="project-123" projectStatus="active" user={null} />)
     expect(screen.getByText('Test Reward')).toBeDefined()
   })
 })

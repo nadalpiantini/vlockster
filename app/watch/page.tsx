@@ -119,7 +119,7 @@ export default async function WatchPage({
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400" role="img" aria-label="Sin miniatura">
+                      <div className="w-full h-full flex items-center justify-center text-gray-300" role="img" aria-label="Sin miniatura">
                         <span className="text-6xl" aria-hidden="true">🎬</span>
                       </div>
                     )}

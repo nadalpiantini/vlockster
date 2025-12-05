@@ -32,7 +32,12 @@ describe('WebVitals', () => {
   })
 
   it('no debe registrar métricas en desarrollo por defecto', () => {
-    vi.stubEnv('NODE_ENV', 'development')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      writable: true,
+      configurable: true,
+    })
     delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
 
     render(<WebVitals />)
@@ -43,11 +48,20 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).not.toHaveBeenCalled()
     expect(mockOnINP).not.toHaveBeenCalled()
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe registrar métricas en producción', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+      configurable: true,
+    })
 
     render(<WebVitals />)
 
@@ -57,12 +71,21 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe registrar métricas cuando NEXT_PUBLIC_ENABLE_WEB_VITALS está activado', () => {
-    vi.stubEnv('NODE_ENV', 'development')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      writable: true,
+      configurable: true,
+    })
+    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
 
     render(<WebVitals />)
 
@@ -72,11 +95,21 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
+    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
   it('debe enviar métricas a gtag cuando está disponible', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+      configurable: true,
+    })
     
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
@@ -102,11 +135,20 @@ describe('WebVitals', () => {
       metric_rating: 'good',
     })
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe redondear valores de métricas al enviar a gtag', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+      configurable: true,
+    })
     
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
@@ -130,12 +172,21 @@ describe('WebVitals', () => {
       metric_rating: 'needs-improvement',
     })
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe loggear métricas en desarrollo cuando está habilitado', () => {
-    vi.stubEnv('NODE_ENV', 'development')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      writable: true,
+      configurable: true,
+    })
+    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
     
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
@@ -158,7 +209,12 @@ describe('WebVitals', () => {
     })
 
     consoleSpy.mockRestore()
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
+    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
   it('no debe renderizar nada (componente sin UI)', () => {
@@ -168,7 +224,12 @@ describe('WebVitals', () => {
   })
 
   it('debe registrar todas las métricas Core Web Vitals', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+    const originalEnv = process.env.NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+      configurable: true,
+    })
 
     render(<WebVitals />)
 
@@ -179,6 +240,10 @@ describe('WebVitals', () => {
     expect(mockOnTTFB).toHaveBeenCalledTimes(1)
     expect(mockOnINP).toHaveBeenCalledTimes(1)
 
-    vi.unstubAllEnvs()
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      writable: true,
+      configurable: true,
+    })
   })
 })

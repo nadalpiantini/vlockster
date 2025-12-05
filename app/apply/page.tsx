@@ -90,7 +90,7 @@ export default function ApplyPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Serás redirigido al dashboard en unos segundos...
             </p>
           </CardContent>
@@ -146,7 +146,7 @@ export default function ApplyPage() {
                   disabled={loading}
                   rows={8}
                 />
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-300">
                   Describe tu experiencia, estilo cinematográfico, y qué te hace
                   único como creador.
                 </p>
@@ -165,7 +165,7 @@ export default function ApplyPage() {
                   required
                   disabled={loading}
                 />
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-300">
                   Comparte un enlace a tu portfolio, Vimeo, YouTube, o sitio web
                   profesional.
                 </p>

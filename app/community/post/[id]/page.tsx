@@ -188,7 +188,7 @@ export default function PostDetailPage() {
             <p className="text-gray-300 whitespace-pre-wrap mb-4">
               {post.content}
             </p>
-            <div className="flex gap-4 text-sm text-gray-400">
+            <div className="flex gap-4 text-sm text-gray-300">
               <span>👍 {post.like_count || 0} likes</span>
               <span>💬 {post.comment_count || 0} comentarios</span>
             </div>

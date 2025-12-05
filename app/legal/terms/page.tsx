@@ -12,7 +12,7 @@ export default function TermsPage() {
       <div className="container mx-auto max-w-4xl">
         <main role="main">
           <h1 className="text-4xl font-bold mb-8">Términos de Uso</h1>
-          <p className="text-gray-400 mb-8">Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+          <p className="text-gray-300 mb-8">Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
 
           <section className="space-y-6 mb-12">
             <h2 className="text-2xl font-semibold">1. Aceptación de los Términos</h2>
