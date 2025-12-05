@@ -24,9 +24,20 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       role="navigation"
     >
       <Link
-        href={getPageUrl(currentPage - 1)}
+        href={currentPage === 1 ? '#' : getPageUrl(currentPage - 1)}
         aria-label="Página anterior"
         aria-disabled={currentPage === 1}
+        tabIndex={currentPage === 1 ? -1 : 0}
+        onClick={(e) => {
+          if (currentPage === 1) {
+            e.preventDefault()
+          }
+        }}
+        onKeyDown={(e) => {
+          if (currentPage === 1 && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault()
+          }
+        }}
       >
         <Button
           variant="outline"
@@ -71,9 +82,20 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       </div>
 
       <Link
-        href={getPageUrl(currentPage + 1)}
+        href={currentPage === totalPages ? '#' : getPageUrl(currentPage + 1)}
         aria-label="Página siguiente"
         aria-disabled={currentPage === totalPages}
+        tabIndex={currentPage === totalPages ? -1 : 0}
+        onClick={(e) => {
+          if (currentPage === totalPages) {
+            e.preventDefault()
+          }
+        }}
+        onKeyDown={(e) => {
+          if (currentPage === totalPages && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault()
+          }
+        }}
       >
         <Button
           variant="outline"

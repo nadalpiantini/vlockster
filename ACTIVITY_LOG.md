@@ -246,6 +246,48 @@ Mini Sprint 2: Keyboard Navigation básico (3.2)
 
 ---
 
+### 2025-12-05 - Mini Sprint: Epic 3 - Keyboard Navigation básico (3.2) ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 3: Accessibility (WCAG 2.1 AA)
+- Subtarea 3.2: Keyboard Navigation básico
+- Objetivo: Verificar tab order y focus indicators
+
+**Tareas Realizadas**:
+1. ✅ Mejorado skip-to-main link con mejor visibilidad y z-index
+2. ✅ Mejorados focus indicators en globals.css para todos los elementos interactivos
+3. ✅ Agregado soporte para role="button" y role="link" en focus indicators
+4. ✅ Mejorado Pagination con tabindex=-1 para Links deshabilitados
+5. ✅ Agregado aria-modal="true" al CookieConsent dialog
+6. ✅ Mejorado soporte de teclado en elementos con role="button"
+
+**Archivos Modificados**:
+- app/layout.tsx - Skip-to-main link mejorado
+- app/globals.css - Focus indicators mejorados
+- components/Pagination.tsx - Tabindex para Links deshabilitados
+- components/CookieConsent.tsx - aria-modal agregado
+
+**Resultados**:
+- ✅ Skip-to-main link funcional y visible
+- ✅ Focus indicators mejorados para todos los elementos interactivos
+- ✅ Links deshabilitados no accesibles por teclado (tabindex=-1)
+- ✅ Modales con aria-modal="true"
+- ✅ Soporte completo de teclado en elementos interactivos
+
+**Métricas**:
+- Tiempo real: ~30 minutos
+- Archivos modificados: 4
+- Mejoras de accesibilidad: 6
+- Bugs introducidos: 0
+- Linter errors: 0
+
+**Próximos Pasos**:
+Mini Sprint 3: Keyboard Navigation avanzado (forms, modals, dropdowns)
+
+---
+
 ### 2025-12-05 - Mini Sprint 1: Epic 4 - Fix Test Failures + Baseline Coverage ✅
 
 **Estado**: Completado

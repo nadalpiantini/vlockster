@@ -218,7 +218,7 @@ export default async function DashboardPage() {
               </Card>
             </>
           )}
-        </div>
+        </section>
 
         {/* Recent Activity */}
         <section aria-labelledby="recent-activity-heading">

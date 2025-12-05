@@ -288,7 +288,7 @@ export default function UploadPage() {
             </CardContent>
           </form>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }
