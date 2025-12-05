@@ -55,7 +55,7 @@ test.describe('User Journey - Todas las funcionalidades', () => {
     // Puede redirigir a login o mostrar error
   })
 
-  test('Probar todas las rutas públicas', async ({ page }) => { async ({ page }) => {
+  test('Probar todas las rutas públicas', async ({ page }) => {
     const publicRoutes = [
       { path: '/', expectedText: 'VLOCKSTER' },
       { path: '/login', expectedText: 'Iniciar Sesión' },
@@ -73,7 +73,6 @@ test.describe('User Journey - Todas las funcionalidades', () => {
         { timeout: 5000 }
       )
     }
-  })
   })
 
   test('Verificar que no hay links rotos en landing', async ({ page }) => {

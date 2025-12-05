@@ -56,14 +56,15 @@ export async function POST(request: NextRequest) {
     // Actualizar estado del reporte
     const status = action === 'resolve' ? 'resolved' : 'dismissed'
 
+    const updateData: Database['public']['Tables']['reports']['Update'] = {
+      status,
+      reviewed_by: user.id,
+      reviewed_at: new Date().toISOString(),
+      resolution_notes: notes || null,
+    }
     const { data: updatedReport, error: updateError } = await supabase
       .from('reports')
-      .update({
-        status,
-        reviewed_by: user.id,
-        reviewed_at: new Date().toISOString(),
-        resolution_notes: notes || null,
-      } as Database['public']['Tables']['reports']['Update'])
+      .update(updateData)
       .eq('id', reportId)
       .select()
       .single()

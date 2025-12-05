@@ -37,13 +37,14 @@ export async function POST(request: NextRequest) {
     const { requestId } = validationResult.data
 
     // Marcar la solicitud como rechazada
+    const updateData: Database['public']['Tables']['creator_requests']['Update'] = {
+      status: 'rejected',
+      reviewed_by: admin.id,
+      reviewed_at: new Date().toISOString(),
+    }
     const { error } = await supabase
       .from('creator_requests')
-      .update({
-        status: 'rejected',
-        reviewed_by: admin.id,
-        reviewed_at: new Date().toISOString(),
-      } as Database['public']['Tables']['creator_requests']['Update'])
+      .update(updateData)
       .eq('id', requestId)
 
     if (error) {

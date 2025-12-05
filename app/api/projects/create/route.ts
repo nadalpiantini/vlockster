@@ -65,18 +65,18 @@ export async function POST(request: NextRequest) {
     const sanitizedDescription = sanitizeContent(description, true) // Permitir HTML básico
 
     // Crear proyecto
-    type ProjectInsert = Database['public']['Tables']['projects']['Insert']
+    const insertData: Database['public']['Tables']['projects']['Insert'] = {
+      title: sanitizedTitle,
+      description: sanitizedDescription,
+      goal_amount,
+      deadline,
+      creator_id: user.id,
+      video_id: video_id || null,
+      status: 'active',
+    }
     const { data: project, error: projectError } = await supabase
       .from('projects')
-      .insert({
-        title: sanitizedTitle,
-        description: sanitizedDescription,
-        goal_amount,
-        deadline,
-        creator_id: user.id,
-        video_id: video_id || null,
-        status: 'active',
-      } as ProjectInsert)
+      .insert(insertData)
       .select()
       .single()
 

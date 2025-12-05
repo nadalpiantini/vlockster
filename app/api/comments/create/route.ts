@@ -4,6 +4,7 @@ import { commentCreateSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
 import { moderateComment } from '@/lib/ai/comment-moderator'
+import { logger } from '@/lib/utils/logger'
 import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
@@ -116,7 +117,11 @@ export async function POST(request: NextRequest) {
       }
     } catch (moderationError) {
       // Si falla la moderación, continuar pero marcar para revisión
-      console.error('Error en moderación automática:', moderationError)
+      logger.error('Error en moderación automática de comentario', moderationError, {
+        userId: user.id,
+        postId: body.postId,
+        endpoint: '/api/comments/create'
+      })
       moderationResult = {
         severity: 'moderate' as const,
         action: 'review' as const,

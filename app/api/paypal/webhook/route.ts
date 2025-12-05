@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
+import { logger } from '@/lib/utils/logger'
 import crypto from 'crypto'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -46,7 +48,9 @@ function verifyPayPalSignature(
       Buffer.from(expectedSig)
     )
   } catch (error) {
-    console.error('Error verifying PayPal signature:', error)
+    logger.error('Error verifying PayPal signature', error, {
+      endpoint: '/api/paypal/webhook',
+    })
     return false
   }
 }
@@ -72,12 +76,13 @@ async function processPaymentCompleted(resource: any, supabase: any) {
   const projectId = backing.project_id
 
   // Actualizar backing a completed
+  const backingUpdate: Database['public']['Tables']['backings']['Update'] = {
+    status: 'completed',
+    completed_at: new Date().toISOString(),
+  }
   await supabase
     .from('backings')
-    .update({
-      status: 'completed',
-      completed_at: new Date().toISOString(),
-    })
+    .update(backingUpdate)
     .eq('id', backing.id)
 
   // Obtener proyecto
@@ -102,22 +107,24 @@ async function processPaymentCompleted(resource: any, supabase: any) {
     (allBackings?.reduce((sum, b) => sum + (b.amount || 0), 0) || 0) + amount
 
   // Actualizar proyecto
+  const projectUpdate: Database['public']['Tables']['projects']['Update'] = {
+    total_raised: newTotal,
+    updated_at: new Date().toISOString(),
+  }
   await supabase
     .from('projects')
-    .update({
-      total_raised: newTotal,
-      updated_at: new Date().toISOString(),
-    })
+    .update(projectUpdate)
     .eq('id', projectId)
 
   // Verificar si alcanzó la meta
   if (newTotal >= project.goal_amount && project.status === 'active') {
+    const fundedUpdate: Database['public']['Tables']['projects']['Update'] = {
+      status: 'funded',
+      funded_at: new Date().toISOString(),
+    }
     await supabase
       .from('projects')
-      .update({
-        status: 'funded',
-        funded_at: new Date().toISOString(),
-      })
+      .update(fundedUpdate)
       .eq('id', projectId)
 
     // Notificar al creator (implementar después)
@@ -134,12 +141,13 @@ async function processPaymentCompleted(resource: any, supabase: any) {
 async function processPaymentCancelled(resource: any, supabase: any) {
   const orderId = resource.id
 
+  const cancelUpdate: Database['public']['Tables']['backings']['Update'] = {
+    status: 'cancelled',
+    cancelled_at: new Date().toISOString(),
+  }
   await supabase
     .from('backings')
-    .update({
-      status: 'cancelled',
-      cancelled_at: new Date().toISOString(),
-    })
+    .update(cancelUpdate)
     .eq('order_id', orderId)
 
   return { status: 'cancelled' }

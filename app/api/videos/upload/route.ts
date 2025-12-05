@@ -143,17 +143,17 @@ export async function POST(request: NextRequest) {
     const streamId = uploadResult.result.uid
 
     // Guardar metadata en Supabase
-    type VideoInsert = Database['public']['Tables']['videos']['Insert']
+    const insertData: Database['public']['Tables']['videos']['Insert'] = {
+      title: sanitizedTitle,
+      description: sanitizedDescription,
+      stream_id: streamId,
+      uploader_id: user.id,
+      visibility: validatedVisibility,
+      thumbnail_url: `https://customer-${cloudflareAccountId}.cloudflarestream.com/${streamId}/thumbnails/thumbnail.jpg`,
+    }
     const { data: video, error: dbError } = await supabase
       .from('videos')
-      .insert({
-        title: sanitizedTitle,
-        description: sanitizedDescription,
-        stream_id: streamId,
-        uploader_id: user.id,
-        visibility: validatedVisibility,
-        thumbnail_url: `https://customer-${cloudflareAccountId}.cloudflarestream.com/${streamId}/thumbnails/thumbnail.jpg`,
-      } as VideoInsert)
+      .insert(insertData)
       .select()
       .single()
 

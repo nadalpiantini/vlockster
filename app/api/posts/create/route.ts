@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server'
 import { postCreateSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
-import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -62,14 +61,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear post
+    const insertData: Database['public']['Tables']['posts']['Insert'] = {
+      community_id,
+      user_id: user.id,
+      title: sanitizedTitle,
+      content: sanitizedContent,
+    }
     const { data: post, error: postError } = await supabase
       .from('posts')
-      .insert({
-        community_id,
-        user_id: user.id,
-        title: sanitizedTitle,
-        content: sanitizedContent,
-      } as Database['public']['Tables']['posts']['Insert'])
+      .insert(insertData)
       .select('*')
       .single()
 

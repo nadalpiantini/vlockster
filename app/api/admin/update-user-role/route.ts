@@ -68,9 +68,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar rol
+    const updateData: Database['public']['Tables']['profiles']['Update'] = { role }
     const { data: updatedUser, error: updateError } = await supabase
       .from('profiles')
-      .update({ role } as Database['public']['Tables']['profiles']['Update'])
+      .update(updateData)
       .eq('id', userId)
       .select()
       .single()

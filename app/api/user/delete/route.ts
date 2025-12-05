@@ -33,17 +33,17 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Soft delete: Marcar perfil como eliminado
-    type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
+    const updateData: Database['public']['Tables']['profiles']['Update'] = {
+      email: `deleted_${user.id}@deleted.local`,
+      name: 'Usuario Eliminado',
+      bio: null,
+      avatar_url: null,
+      is_deleted: true,
+      deleted_at: new Date().toISOString(),
+    }
     const { error: profileError } = await supabase
       .from('profiles')
-      .update({
-        email: `deleted_${user.id}@deleted.local`,
-        name: 'Usuario Eliminado',
-        bio: null,
-        avatar_url: null,
-        is_deleted: true,
-        deleted_at: new Date().toISOString(),
-      } as ProfileUpdate)
+      .update(updateData)
       .eq('id', user.id)
 
     if (profileError) {
