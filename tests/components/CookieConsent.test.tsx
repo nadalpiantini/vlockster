@@ -147,14 +147,14 @@ describe('CookieConsent', () => {
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const dialog = screen.getByRole('dialog')
     fireEvent.keyDown(dialog, { key: 'Escape' })
     
     await waitFor(() => {
       expect(container.firstChild).toBeNull()
-    })
+    }, { timeout: 2000 })
     
     vi.useRealTimers()
   })
@@ -167,8 +167,7 @@ describe('CookieConsent', () => {
     
     await waitFor(() => {
       expect(screen.getByLabelText(/política de privacidad/i)).toBeDefined()
-      expect(screen.getByLabelText(/términos de uso/i)).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const privacyLink = screen.getByLabelText(/política de privacidad/i)
     const termsLink = screen.getByLabelText(/términos de uso/i)

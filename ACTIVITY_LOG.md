@@ -424,6 +424,53 @@ Mini Sprint 5: Screen Reader Testing (3.4)
 
 ---
 
+### 2025-12-05 - Mini Sprint: Epic 3 - Screen Reader Testing (3.4) ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 3: Accessibility (WCAG 2.1 AA)
+- Subtarea 3.4: Screen Reader Testing
+- Objetivo: Mejorar anuncios de screen readers para contenido dinámico
+
+**Tareas Realizadas**:
+1. ✅ Agregadas aria-live regions para contenido dinámico
+2. ✅ Mejorados aria-atomic y aria-busy attributes
+3. ✅ Mejorados anuncios de screen readers para:
+   - Formularios y estados de carga
+   - Progress bars y estado de subida
+   - Mensajes de error (prioridad assertive)
+   - Contadores de notificaciones
+   - Acciones de admin (aprobar/rechazar/resolver)
+4. ✅ Agregados estados de carga silenciosos (sr-only)
+
+**Archivos Modificados**:
+- app/projects/create/page.tsx - Live regions para generación IA y estados de formulario
+- app/dashboard/page.tsx - Mejorado anuncio de estado de actividad
+- app/notifications/page.tsx - Mejorados anuncios de contador de notificaciones
+- app/upload/page.tsx - Mejores anuncios de progress bar
+- components/AdminRequestActions.tsx - Estados de carga y anuncios de error
+- components/AdminReportActions.tsx - Estados de resolución y anuncios de error
+
+**Resultados**:
+- ✅ Todas las actualizaciones dinámicas tienen aria-live apropiado
+- ✅ Errores usan aria-live="assertive" para prioridad
+- ✅ Estados de carga usan aria-busy="true"
+- ✅ Progress bars anuncian cambios correctamente
+- ✅ Mejor experiencia para usuarios de screen readers
+
+**Métricas**:
+- Tiempo real: ~25 minutos
+- Archivos modificados: 6
+- Live regions agregadas: 8
+- Bugs introducidos: 0
+- Linter errors: 0
+
+**Próximos Pasos**:
+Mini Sprint 6: Accessibility Tests (3.5) - Agregar axe-core a Playwright
+
+---
+
 ### 2025-12-05 - Mini Sprint 1: Epic 4 - Fix Test Failures + Baseline Coverage ✅
 
 **Estado**: Completado

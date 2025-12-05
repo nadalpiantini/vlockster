@@ -126,8 +126,13 @@ export default function LoginPage() {
           >
             <CardContent className="space-y-4">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm" role="alert" aria-live="polite">
+                <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm" role="alert" aria-live="assertive" aria-atomic="true">
                   {error}
+                </div>
+              )}
+              {loading && (
+                <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+                  Iniciando sesión, por favor espera...
                 </div>
               )}
               <div className="space-y-2">

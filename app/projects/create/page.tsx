@@ -224,7 +224,7 @@ export default function CreateProjectPage() {
                   rows={6}
                 />
                 {generatingDescription && (
-                  <p className="text-xs text-gray-300">
+                  <p className="text-xs text-gray-300" role="status" aria-live="polite" aria-busy="true">
                     La IA está creando una descripción convincente para tu proyecto...
                   </p>
                 )}
