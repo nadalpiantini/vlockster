@@ -64,17 +64,19 @@ type Reward = {
   backers_count: number
 }
 
+type RewardRow = Database['public']['Tables']['rewards']['Row']
+
 async function getProjectRewards(projectId: string): Promise<Reward[]> {
   const supabase = await createClient()
 
-  const { data: rewards, error } = await (supabase
-    .from('rewards') as any)
+  const { data: rewards, error } = await supabase
+    .from('rewards')
     .select('*')
     .eq('project_id', projectId)
     .order('amount', { ascending: true })
 
   if (error) return []
-  return (rewards || []).map((reward: any) => ({
+  return (rewards || []).map((reward: RewardRow) => ({
     id: reward.id,
     title: reward.title,
     description: reward.description ?? null,
@@ -126,7 +128,7 @@ export default async function ProjectDetailPage({
                   )}
                 </div>
                 <CardDescription>
-                  Por: {(project.creator as any)?.name || 'Desconocido'}
+                  Por: {project.creator?.name || 'Desconocido'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -241,18 +243,16 @@ export default async function ProjectDetailPage({
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-semibold text-lg">
-                    {(project.creator as any)?.name || 'Desconocido'}
+                    {project.creator?.name || 'Desconocido'}
                   </p>
-                  {(project.creator as any)?.bio && (
+                  {project.creator?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
-                      {(project.creator as any).bio}
+                      {project.creator.bio}
                     </p>
                   )}
                 </div>
-                {(project.creator as any)?.public_profile_slug && (
-                  <Link
-                    href={`/c/${(project.creator as any).public_profile_slug}` as any}
-                  >
+                {project.creator?.public_profile_slug && (
+                  <Link href={`/c/${project.creator.public_profile_slug}`}>
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador
                     </Button>

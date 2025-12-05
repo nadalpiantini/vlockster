@@ -59,7 +59,7 @@ export function AdminUserActions({
       {error && (
         <p className="text-sm text-red-400">{error}</p>
       )}
-      <div className="flex gap-1 flex-wrap">
+      <div className="flex gap-1 flex-wrap" role="group" aria-label="Opciones de rol de usuario">
         {roles.map((role) => (
           <Button
             key={role}
@@ -68,6 +68,8 @@ export function AdminUserActions({
             onClick={() => updateRole(role)}
             disabled={updating || currentRole === role}
             className="text-xs"
+            aria-label={`Cambiar rol a ${role}${currentRole === role ? ' (rol actual)' : ''}`}
+            aria-pressed={currentRole === role}
           >
             {role === 'viewer' && '👤'}
             {role === 'creator' && '🎬'}

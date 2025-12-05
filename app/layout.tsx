@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { CookieConsent } from '@/components/CookieConsent'
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         </a>
         {children}
         <CookieConsent />
+        <Analytics />
       </body>
     </html>
   )

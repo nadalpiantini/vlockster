@@ -22,13 +22,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar que el usuario es creator o admin
+    type ProfileRow = Database['public']['Tables']['profiles']['Row']
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes(profile.role)) {
+    const profileTyped = profile as ProfileRow | null
+    if (!profileTyped || !['creator', 'admin'].includes(profileTyped.role)) {
       return NextResponse.json(
         { error: 'Solo los creators pueden crear proyectos' },
         { status: 403 }
@@ -62,6 +64,7 @@ export async function POST(request: NextRequest) {
     const sanitizedDescription = sanitizeContent(description, true) // Permitir HTML básico
 
     // Crear proyecto
+    type ProjectInsert = Database['public']['Tables']['projects']['Insert']
     const { data: project, error: projectError } = await supabase
       .from('projects')
       .insert({
@@ -72,7 +75,7 @@ export async function POST(request: NextRequest) {
         creator_id: user.id,
         video_id: video_id || null,
         status: 'active',
-      })
+      } as ProjectInsert)
       .select()
       .single()
 
@@ -81,8 +84,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear recompensas si existen
-    if (rewards && Array.isArray(rewards) && rewards.length > 0) {
-      const rewardsToInsert = rewards.map((reward) => ({
+    if (rewards && Array.isArray(rewards) && rewards.length > 0 && project) {
+      type RewardInsert = Database['public']['Tables']['rewards']['Insert']
+      const rewardsToInsert: RewardInsert[] = rewards.map((reward) => ({
         project_id: project.id,
         title: sanitizeContent(reward.title, false),
         description: sanitizeContent(reward.description, true),

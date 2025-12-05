@@ -64,32 +64,31 @@ export default async function WatchVideoPage({
     notFound()
   }
 
-  // TEMPORAL: Permitir acceso a todos los videos sin verificar permisos
   // Verificar permisos de acceso según visibilidad
-  // const canWatch =
-  //   (video as any).visibility === 'public' ||
-  //   (user && (video as any).visibility === 'members') ||
-  //   (user && (video as any).uploader_id === (user as any).id)
+  const canWatch =
+    video.visibility === 'public' ||
+    (user && video.visibility === 'members') ||
+    (user && video.uploader_id === user.id)
 
-  // if (!canWatch) {
-  //   return (
-  //     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
-  //       <Card className="max-w-md">
-  //         <CardHeader>
-  //           <CardTitle>Contenido Restringido</CardTitle>
-  //           <CardDescription>
-  //             Este video solo está disponible para miembros
-  //           </CardDescription>
-  //         </CardHeader>
-  //         <CardContent>
-  //           <Link href="/login">
-  //             <Button className="w-full">Iniciar Sesión</Button>
-  //           </Link>
-  //         </CardContent>
-  //       </Card>
-  //     </div>
-  //   )
-  // }
+  if (!canWatch) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>Contenido Restringido</CardTitle>
+            <CardDescription>
+              Este video solo está disponible para miembros
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/login">
+              <Button className="w-full">Iniciar Sesión</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-8 px-4">

@@ -66,7 +66,7 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/watch">
+              <Link href="/watch" aria-label="Ir al catálogo de videos">
                 <Button className="w-full">Ir al Catálogo</Button>
               </Link>
             </CardContent>
@@ -80,7 +80,7 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/projects">
+              <Link href="/projects" aria-label="Ver proyectos de crowdfunding">
                 <Button className="w-full">Ver Proyectos</Button>
               </Link>
             </CardContent>
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/community">
+              <Link href="/community" aria-label="Ir a comunidades">
                 <Button className="w-full">Ir a Comunidad</Button>
               </Link>
             </CardContent>
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/apply">
+                <Link href="/apply" aria-label="Solicitar acceso como creador">
                   <Button className="w-full" variant="outline">
                     Solicitar Acceso
                   </Button>
@@ -128,7 +128,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/upload">
+                  <Link href="/upload" aria-label="Subir nuevo video">
                     <Button className="w-full">Subir Contenido</Button>
                   </Link>
                 </CardContent>
@@ -142,7 +142,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/projects/create">
+                  <Link href="/projects/create" aria-label="Crear nuevo proyecto de crowdfunding">
                     <Button className="w-full">Nuevo Proyecto</Button>
                   </Link>
                 </CardContent>
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/projects/my">
+                  <Link href="/projects/my" aria-label="Ver mis proyectos de crowdfunding">
                     <Button className="w-full" variant="outline">
                       Ver Mis Proyectos
                     </Button>
@@ -176,7 +176,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/admin/requests">
+                  <Link href="/admin/requests" aria-label="Panel de administración - Solicitudes de creators">
                     <Button className="w-full" variant="destructive">
                       Panel Admin
                     </Button>
@@ -192,7 +192,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/admin/users">
+                  <Link href="/admin/users" aria-label="Gestionar usuarios y roles">
                     <Button className="w-full" variant="destructive">
                       Gestionar Usuarios
                     </Button>
@@ -208,7 +208,7 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/admin/reports">
+                  <Link href="/admin/reports" aria-label="Ver reportes de moderación">
                     <Button className="w-full" variant="destructive">
                       Ver Reportes
                     </Button>

@@ -4,6 +4,7 @@ import { videoUploadSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
 import { logger } from '@/lib/utils/logger'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -25,13 +26,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar que el usuario es creator o admin
+    type ProfileRow = Database['public']['Tables']['profiles']['Row']
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes(profile.role)) {
+    const profileTyped = profile as ProfileRow | null
+    if (!profileTyped || !['creator', 'admin'].includes(profileTyped.role)) {
       return NextResponse.json(
         { error: 'Solo los creators pueden subir videos' },
         { status: 403 }
@@ -140,6 +143,7 @@ export async function POST(request: NextRequest) {
     const streamId = uploadResult.result.uid
 
     // Guardar metadata en Supabase
+    type VideoInsert = Database['public']['Tables']['videos']['Insert']
     const { data: video, error: dbError } = await supabase
       .from('videos')
       .insert({
@@ -149,7 +153,7 @@ export async function POST(request: NextRequest) {
         uploader_id: user.id,
         visibility: validatedVisibility,
         thumbnail_url: `https://customer-${cloudflareAccountId}.cloudflarestream.com/${streamId}/thumbnails/thumbnail.jpg`,
-      })
+      } as VideoInsert)
       .select()
       .single()
 

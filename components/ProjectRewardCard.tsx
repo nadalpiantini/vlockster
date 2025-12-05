@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { logger } from '@/lib/utils/logger'
 
 interface Reward {
   id: string
@@ -93,10 +94,11 @@ export function ProjectRewardCard({
               window.location.reload()
             }}
             onError={(error) => {
-              // Error handling - usar logger en producción
-              if (process.env.NODE_ENV === 'development') {
-                console.error('PayPal error:', error)
-              }
+              logger.error('Payment error in ProjectRewardCard', new Error(error), {
+                projectId,
+                rewardId: reward.id,
+                userId: user.id,
+              })
             }}
           />
         ) : (

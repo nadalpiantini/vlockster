@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/utils/logger'
 
 interface PayPalButtonProps {
   projectId: string
@@ -75,7 +76,11 @@ export function PayPalButton({
               const data = await response.json()
               return data.orderId
             } catch (error) {
-              console.error('Create order error:', error)
+              logger.error('PayPal create order failed', error, {
+                projectId,
+                rewardId,
+                amount,
+              })
               if (onError) {
                 onError(
                   error instanceof Error ? error.message : 'Error desconocido'
@@ -112,7 +117,10 @@ export function PayPalButton({
 
               return captureData
             } catch (error) {
-              console.error('Capture error:', error)
+              logger.error('PayPal capture order failed', error, {
+                orderId: data.orderID,
+                projectId,
+              })
               if (onError) {
                 onError(
                   error instanceof Error ? error.message : 'Error desconocido'
@@ -124,7 +132,7 @@ export function PayPalButton({
             }
           }}
           onError={(err) => {
-            console.error('PayPal error:', err)
+            logger.error('PayPal SDK error', err, { projectId })
             if (onError) {
               onError('Error en el proceso de pago con PayPal')
             }

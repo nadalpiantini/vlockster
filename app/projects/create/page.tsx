@@ -31,6 +31,7 @@ export default function CreateProjectPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [generatingDescription, setGeneratingDescription] = useState(false)
   const router = useRouter()
 
   const addReward = () => {
@@ -54,6 +55,48 @@ export default function CreateProjectPage() {
 
   const removeReward = (id: string) => {
     setRewards(rewards.filter((reward) => reward.id !== id))
+  }
+
+  const handleGenerateDescription = async () => {
+    if (!title || !goalAmount || !deadline) {
+      setError('Por favor completa título, meta y deadline antes de generar la descripción')
+      return
+    }
+
+    setGeneratingDescription(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/projects/generate-description', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          genre: 'Drama', // Por ahora fijo, puedes agregar selector de género después
+          goal_amount: parseFloat(goalAmount),
+          deadline,
+          rewards: rewards.map((r) => ({
+            amount: r.amount,
+            title: r.title || '',
+            description: r.description,
+          })),
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error generando descripción')
+      }
+
+      const data = await response.json()
+      if (data.description) {
+        setDescription(data.description)
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error generando descripción')
+    } finally {
+      setGeneratingDescription(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -142,18 +185,44 @@ export default function CreateProjectPage() {
 
               {/* Descripción */}
               <div className="space-y-2">
-                <Label htmlFor="description">
-                  Descripción <span className="text-red-500">*</span>
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="description">
+                    Descripción <span className="text-red-500">*</span>
+                  </Label>
+                  <Button
+                    type="button"
+                    onClick={handleGenerateDescription}
+                    disabled={generatingDescription || creating || !title || !goalAmount || !deadline}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    {generatingDescription ? (
+                      <>
+                        <span className="animate-spin mr-2">⏳</span>
+                        Generando...
+                      </>
+                    ) : (
+                      <>
+                        ✨ Generar con IA
+                      </>
+                    )}
+                  </Button>
+                </div>
                 <Textarea
                   id="description"
-                  placeholder="Describe tu proyecto: sinopsis, equipo, plan de producción..."
+                  placeholder="Describe tu proyecto: sinopsis, equipo, plan de producción... O haz clic en 'Generar con IA' para crear una descripción automática"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
                   disabled={creating}
                   rows={6}
                 />
+                {generatingDescription && (
+                  <p className="text-xs text-gray-400">
+                    La IA está creando una descripción convincente para tu proyecto...
+                  </p>
+                )}
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">

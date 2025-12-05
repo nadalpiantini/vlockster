@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -32,6 +33,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Soft delete: Marcar perfil como eliminado
+    type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
     const { error: profileError } = await supabase
       .from('profiles')
       .update({
@@ -41,7 +43,7 @@ export async function DELETE(request: NextRequest) {
         avatar_url: null,
         is_deleted: true,
         deleted_at: new Date().toISOString(),
-      })
+      } as ProfileUpdate)
       .eq('id', user.id)
 
     if (profileError) {

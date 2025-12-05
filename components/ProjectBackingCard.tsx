@@ -1,6 +1,7 @@
 'use client'
 
 import { PayPalButton, PayPalButtonPlaceholder } from '@/components/PayPalButton'
+import { logger } from '@/lib/utils/logger'
 
 type User = {
   id: string
@@ -31,10 +32,10 @@ export function ProjectBackingCard({
           window.location.reload()
         }}
         onError={(error) => {
-          // Error handling - usar logger en producción
-          if (process.env.NODE_ENV === 'development') {
-            console.error('PayPal error:', error)
-          }
+          logger.error('Payment error in ProjectBackingCard', new Error(error), {
+            projectId,
+            userId: user.id,
+          })
         }}
       />
     )

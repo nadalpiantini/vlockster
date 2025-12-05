@@ -68,6 +68,23 @@ pnpm deploy:prod:bash # Bash deployment script
 
 **Current State**: Authentication is temporarily DISABLED via `DISABLE_AUTH = true` in `lib/utils/role-check.ts`. All protected routes return a mock guest user. To re-enable auth, set `DISABLE_AUTH = false`.
 
+**⚠️ Temporary Auth Bypass - Important Notes:**
+1. **Purpose**: Allows development and testing without Supabase auth setup
+2. **Impact**: All routes are accessible without authentication
+3. **Mock User**: Returns a guest user with `viewer` role
+4. **Location**: `lib/utils/role-check.ts` line 8
+5. **To Re-enable**:
+   ```typescript
+   const DISABLE_AUTH = false // Change to false in lib/utils/role-check.ts
+   ```
+6. **Before Production**: MUST set `DISABLE_AUTH = false` and test all protected routes
+
+**Files Affected by Auth Bypass:**
+- `app/dashboard/page.tsx` - Dashboard access
+- `app/apply/page.tsx` - Creator application
+- `app/projects/my/page.tsx` - Creator project management
+- `app/watch/[id]/page.tsx` - Video viewing permissions
+
 **Role System**:
 - `viewer`: Basic user (default)
 - `creator`: Can upload videos and create crowdfunding projects
