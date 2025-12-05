@@ -17,19 +17,30 @@ async function getCreatorRequests() {
 
   const { data: requests, error } = await supabase
     .from('creator_requests')
-    .select(
-      `
-      *,
-      profiles!creator_requests_user_id_fkey (
-        name,
-        email
-      )
-    `
-    )
+    .select('*')
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return (requests || []) as Array<{
+
+  // Fetch profiles separately to avoid relationship ambiguity
+  if (!requests || requests.length === 0) {
+    return []
+  }
+
+  const userIds = [...new Set(requests.map((r) => r.user_id))]
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, name, email')
+    .in('id', userIds)
+
+  const profileMap = new Map(
+    (profiles || []).map((p) => [p.id, { name: p.name, email: p.email }])
+  )
+
+  return requests.map((request) => ({
+    ...request,
+    profiles: profileMap.get(request.user_id) || null,
+  })) as Array<{
     id: string
     user_id: string
     pitch_title: string

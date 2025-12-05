@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     // Actualizar el rol del usuario a creator
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' } as Database['public']['Tables']['profiles']['Update'])
+      .update({ role: 'creator' })
       .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         status: 'approved',
         reviewed_by: admin.id,
         reviewed_at: new Date().toISOString(),
-      } as Database['public']['Tables']['creator_requests']['Update'])
+      })
       .eq('id', requestId)
 
     if (updateRequestError) {

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { CookieConsent } from '@/components/CookieConsent'
+import { WebVitals } from '@/components/WebVitals'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         {children}
         <CookieConsent />
         <Analytics />
+        <WebVitals />
       </body>
     </html>
   )
