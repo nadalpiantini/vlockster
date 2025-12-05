@@ -172,7 +172,12 @@ export default function CommunityDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
+      <main
+        id="main-content"
+        className="container mx-auto max-w-4xl"
+        role="main"
+        aria-label="Comunidad"
+      >
         {/* Header */}
         <Card className="mb-6">
           <CardHeader>
@@ -313,7 +318,7 @@ export default function CommunityDetailPage() {
             </CardContent>
           </Card>
         )}
-      </div>
+      </main>
     </div>
   )
 }
