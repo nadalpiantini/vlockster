@@ -51,10 +51,10 @@ export default async function CommunityPage() {
         {communities.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Aún no hay comunidades creadas
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-300">
                 Los creadores pronto lanzarán espacios de discusión
               </p>
             </CardContent>

@@ -46,7 +46,7 @@ export default async function DashboardPage() {
           <h1 className="text-3xl font-bold mb-2">
             Bienvenido, {userProfile.name || userProfile.email || 'Invitado'}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-300">
             Rol: <span className="capitalize">{userProfile.role || 'viewer'}</span>
             {!user && (
               <span className="ml-2 text-yellow-400 text-sm">

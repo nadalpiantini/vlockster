@@ -148,8 +148,11 @@ export default function SignupPage() {
                   onChange={(e) => setName(e.target.value)}
                   required
                   disabled={loading}
+                  aria-describedby="name-description"
+                  aria-invalid={false}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
+                <span id="name-description" className="sr-only">Ingresa tu nombre completo</span>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-white">Email</Label>
@@ -161,8 +164,11 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={loading}
+                  aria-describedby="email-description"
+                  aria-invalid={false}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
+                <span id="email-description" className="sr-only">Ingresa tu dirección de correo electrónico</span>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-white">Password</Label>
@@ -174,8 +180,11 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
+                  aria-describedby="password-description"
+                  aria-invalid={password.length > 0 && password.length < 8}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
+                <span id="password-description" className="sr-only">La contraseña debe tener al menos 8 caracteres</span>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
@@ -187,8 +196,11 @@ export default function SignupPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   disabled={loading}
+                  aria-describedby="confirmPassword-description"
+                  aria-invalid={confirmPassword.length > 0 && password !== confirmPassword}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
+                <span id="confirmPassword-description" className="sr-only">Confirma tu contraseña ingresándola nuevamente</span>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">

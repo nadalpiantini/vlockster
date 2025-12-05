@@ -89,7 +89,7 @@ export default function HomePage() {
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Streaming, crowdfunding, and community for independent filmmakers
           </p>
-          <p className="text-lg text-gray-400 mb-12 max-w-xl mx-auto">
+          <p className="text-lg text-gray-300 mb-12 max-w-xl mx-auto">
             Watch extraordinary stories. Fund creative projects. Join a vibrant community.
           </p>
 
@@ -118,7 +118,7 @@ export default function HomePage() {
             <div className="text-center p-8 rounded-lg bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-colors" role="article" aria-labelledby="streaming-heading">
               <Film className="w-16 h-16 mx-auto mb-4 text-red-500" aria-hidden="true" />
               <h3 id="streaming-heading" className="text-2xl font-semibold mb-4">Streaming</h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-300 mb-6">
                 Discover and watch independent films and series. Support creators by watching their content.
               </p>
               <Link href="/watch" aria-label="Explorar contenido de streaming">
@@ -131,7 +131,7 @@ export default function HomePage() {
             <div className="text-center p-8 rounded-lg bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-colors" role="article" aria-labelledby="crowdfunding-heading">
               <DollarSign className="w-16 h-16 mx-auto mb-4 text-red-500" aria-hidden="true" />
               <h3 id="crowdfunding-heading" className="text-2xl font-semibold mb-4">Crowdfunding</h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-300 mb-6">
                 Fund independent film projects. Get exclusive rewards and be part of the creative process.
               </p>
               <Link href="/projects" aria-label="Ver proyectos de crowdfunding">
@@ -144,7 +144,7 @@ export default function HomePage() {
             <div className="text-center p-8 rounded-lg bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-colors" role="article" aria-labelledby="community-heading">
               <Users className="w-16 h-16 mx-auto mb-4 text-red-500" aria-hidden="true" />
               <h3 id="community-heading" className="text-2xl font-semibold mb-4">Community</h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-300 mb-6">
                 Join discussions, share ideas, and connect with filmmakers and film enthusiasts.
               </p>
               <Link href="/community" aria-label="Unirse a la comunidad">
@@ -161,7 +161,7 @@ export default function HomePage() {
       <section className="py-20 px-4" aria-label="Llamado a la acción">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Join VLOCKSTER today and be part of the future of independent cinema
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -184,10 +184,10 @@ export default function HomePage() {
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
           <BrandHeader />
           <nav className="flex gap-6 mt-4 md:mt-0" role="navigation" aria-label="Enlaces legales">
-            <Link href="/legal/privacy" className="text-gray-400 hover:text-white transition-colors" aria-label="Política de privacidad">
+            <Link href="/legal/privacy" className="text-gray-300 hover:text-white transition-colors" aria-label="Política de privacidad">
               Privacy
             </Link>
-            <Link href="/legal/terms" className="text-gray-400 hover:text-white transition-colors" aria-label="Términos y condiciones">
+            <Link href="/legal/terms" className="text-gray-300 hover:text-white transition-colors" aria-label="Términos y condiciones">
               Terms
             </Link>
           </nav>

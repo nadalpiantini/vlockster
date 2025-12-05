@@ -84,10 +84,10 @@ export default async function ProjectsPage({
         {projects.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 No hay proyectos activos en este momento
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-300">
                 Los creadores pronto lanzarán nuevas campañas
               </p>
             </CardContent>
@@ -116,7 +116,11 @@ export default async function ProjectsPage({
                           {project.title}
                         </CardTitle>
                         {project.status === 'funded' && (
-                          <span className="bg-green-900/50 text-green-300 text-xs px-2 py-1 rounded-full">
+                          <span 
+                            className="bg-green-900/50 text-green-300 text-xs px-2 py-1 rounded-full"
+                            role="status"
+                            aria-label="Proyecto financiado exitosamente"
+                          >
                             Financiado
                           </span>
                         )}
@@ -128,25 +132,26 @@ export default async function ProjectsPage({
 
                     <CardContent className="space-y-4">
                       {/* Progress Bar */}
-                      <div>
+                      <div role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de financiamiento: ${progress.toFixed(0)}%`}>
                         <div className="flex justify-between text-sm mb-2">
                           <span className="text-gray-400">Progreso</span>
-                          <span className="font-semibold">
+                          <span className="font-semibold" aria-live="polite">
                             {progress.toFixed(0)}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-700 rounded-full h-2">
+                        <div className="w-full bg-gray-700 rounded-full h-2" role="presentation">
                           <div
                             className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${Math.min(progress, 100)}%` }}
+                            aria-hidden="true"
                           />
                         </div>
                       </div>
 
                       {/* Stats */}
-                      <div className="grid grid-cols-2 gap-4 text-center">
+                      <div className="grid grid-cols-2 gap-4 text-center" role="group" aria-label="Estadísticas del proyecto">
                         <div>
-                          <p className="text-2xl font-bold text-blue-400">
+                          <p className="text-2xl font-bold text-blue-400" aria-label={`Monto recaudado: $${Number(project.current_amount).toLocaleString()}`}>
                             ${Number(project.current_amount).toLocaleString()}
                           </p>
                           <p className="text-xs text-gray-400">
@@ -154,7 +159,7 @@ export default async function ProjectsPage({
                           </p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-blue-400">
+                          <p className="text-2xl font-bold text-blue-400" aria-label={`Días restantes: ${daysLeft}`}>
                             {daysLeft}
                           </p>
                           <p className="text-xs text-gray-400">días restantes</p>
