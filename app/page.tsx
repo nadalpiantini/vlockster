@@ -78,11 +78,10 @@ export default function HomePage() {
   ]
 
   return (
-    <div 
-      className="min-h-screen text-white relative overflow-hidden"
+    <div
+      className="min-h-screen text-vlockster-white relative overflow-hidden bg-vlockster-black"
       style={{
-        backgroundColor: '#000000',
-        backgroundImage: 'linear-gradient(to bottom, #0a0a0a 0%, #000000 50%, #0a0a0a 100%)'
+        backgroundImage: 'linear-gradient(to bottom, #0a0a0a 0%, #050505 50%, #0a0a0a 100%)'
       }}
     >
       {/* Header - Netflix Style */}
@@ -144,9 +143,9 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="max-w-3xl">
             {/* Badge - Netflix Style */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-red-600/95 backdrop-blur-sm mb-4 shadow-lg">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-              <span className="text-xs font-semibold text-white">Independent Cinema · Streaming · Crowdfunding</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-vlockster-red/95 backdrop-blur-sm mb-4 shadow-lg">
+              <span className="w-2 h-2 bg-vlockster-red-light rounded-full animate-pulse"></span>
+              <span className="text-xs font-semibold text-vlockster-white">Independent Cinema · Streaming · Crowdfunding</span>
             </div>
             
             {/* Main Title - Nextflix Style con sombra para legibilidad */}
@@ -208,8 +207,8 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="group relative rounded-lg overflow-hidden bg-gray-900 border border-gray-800 hover:border-gray-700 transition-colors">
               <div className="p-6">
-                <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-4">
-                  <Film className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 rounded-lg bg-vlockster-gray-dark flex items-center justify-center mb-4">
+                  <Film className="w-6 h-6 text-vlockster-red" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">
                   Streaming
@@ -222,8 +221,8 @@ export default function HomePage() {
             
             <div className="group relative rounded-lg overflow-hidden bg-gray-900 border border-gray-800 hover:border-gray-700 transition-colors">
               <div className="p-6">
-                <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-4">
-                  <DollarSign className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 rounded-lg bg-vlockster-gray-dark flex items-center justify-center mb-4">
+                  <DollarSign className="w-6 h-6 text-vlockster-red" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">
                   Crowdfunding
@@ -236,8 +235,8 @@ export default function HomePage() {
             
             <div className="group relative rounded-lg overflow-hidden bg-gray-900 border border-gray-800 hover:border-gray-700 transition-colors">
               <div className="p-6">
-                <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 rounded-lg bg-vlockster-gray-dark flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-vlockster-red" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">
                   Comunidad
@@ -369,9 +368,9 @@ export default function HomePage() {
                     <span className="text-white font-semibold">$125,000</span>
                     <span className="text-gray-400">of $500,000</span>
                   </div>
-                  <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-red-600 transition-all duration-500"
+                  <div className="w-full h-3 bg-vlockster-gray-dark rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-vlockster-green transition-all duration-500"
                       style={{ width: '25%' }}
                     ></div>
                   </div>
@@ -380,7 +379,7 @@ export default function HomePage() {
                 
                 <Link
                   href="/projects"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-vlockster-red text-vlockster-white rounded-md font-semibold hover:bg-vlockster-red-dark transition-colors"
                 >
                   Support Project
                   <ArrowRight className="w-4 h-4" />
@@ -404,9 +403,9 @@ export default function HomePage() {
                     <span className="text-white font-semibold">$75,000</span>
                     <span className="text-gray-400">of $300,000</span>
                   </div>
-                  <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-red-600 transition-all duration-500"
+                  <div className="w-full h-3 bg-vlockster-gray-dark rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-vlockster-green transition-all duration-500"
                       style={{ width: '25%' }}
                     ></div>
                   </div>
@@ -415,7 +414,7 @@ export default function HomePage() {
                 
                 <Link
                   href="/projects"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-vlockster-red text-vlockster-white rounded-md font-semibold hover:bg-vlockster-red-dark transition-colors"
                 >
                   Support Project
                   <ArrowRight className="w-4 h-4" />
@@ -486,8 +485,8 @@ export default function HomePage() {
           <div className="relative rounded-lg overflow-hidden bg-gray-900 border border-gray-800">
             <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-red-600/90 backdrop-blur-sm">
-                  <span className="text-xs font-semibold text-white">For Creators</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-vlockster-red/90 backdrop-blur-sm">
+                  <span className="text-xs font-semibold text-vlockster-white">For Creators</span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold text-white leading-tight">
                   Are you a filmmaker?
