@@ -112,7 +112,18 @@ export default function LoginPage() {
               Enter your email and password to access VLOCKSTER
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleLogin} aria-label="Formulario de inicio de sesión">
+          <form 
+            onSubmit={handleLogin} 
+            aria-label="Formulario de inicio de sesión"
+            onKeyDown={(e) => {
+              // Allow Escape to clear form or navigate away
+              if (e.key === 'Escape' && !loading) {
+                setEmail('')
+                setPassword('')
+                setError(null)
+              }
+            }}
+          >
             <CardContent className="space-y-4">
               {error && (
                 <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm" role="alert" aria-live="polite">
@@ -129,6 +140,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="email"
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
               </div>
@@ -142,6 +154,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="current-password"
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
                 />
               </div>

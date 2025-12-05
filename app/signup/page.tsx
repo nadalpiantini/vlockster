@@ -131,7 +131,20 @@ export default function SignupPage() {
               Join VLOCKSTER and discover the best independent cinema
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSignup} aria-label="Formulario de registro">
+          <form 
+            onSubmit={handleSignup} 
+            aria-label="Formulario de registro"
+            onKeyDown={(e) => {
+              // Allow Escape to clear form or navigate away
+              if (e.key === 'Escape' && !loading) {
+                setName('')
+                setEmail('')
+                setPassword('')
+                setConfirmPassword('')
+                setError(null)
+              }
+            }}
+          >
             <CardContent className="space-y-4">
               {error && (
                 <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm" role="alert" aria-live="polite">
@@ -164,6 +177,7 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="email"
                   aria-describedby="email-description"
                   aria-invalid={false}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
@@ -180,6 +194,7 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="new-password"
                   aria-describedby="password-description"
                   aria-invalid={password.length > 0 && password.length < 8}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
@@ -196,6 +211,7 @@ export default function SignupPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="new-password"
                   aria-describedby="confirmPassword-description"
                   aria-invalid={confirmPassword.length > 0 && password !== confirmPassword}
                   className="bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-[#E50914] focus:ring-[#E50914]"
