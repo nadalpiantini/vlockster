@@ -700,3 +700,35 @@ Mini Sprint 4: Component Unit Tests - UI Components
 Mini Sprint 6: API Integration Tests - Project & Payment endpoints
 
 ---
+
+
+### 2025-12-05 - Mini Sprint 6: Epic 4 - Project & Payment API Integration Tests Expansion ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Expandir tests de integración para endpoints de Project y Payment
+
+**Tareas Realizadas**:
+1. ✅ Expandido projects.create.spec.ts (6 → 18 tests)
+2. ✅ Expandido paypal.create-order.spec.ts (5 → 18 tests)
+3. ✅ Expandido paypal.capture-order.spec.ts (4 → 12 tests)
+4. ✅ Tests cubren: auth, validation, edge cases, HTTP methods
+
+**Resultados**:
+- ✅ 48 tests de integración Project/Payment API (expandidos de 15)
+- ✅ Cobertura mejorada de validación y edge cases
+- ✅ Tests de seguridad completos
+
+**Git**:
+- ✅ Commit Mini Sprint 6 realizado
+
+**Métricas**:
+- Tests expandidos: 33
+- Tests totales Project/Payment API: 48
+
+**Próximos Pasos**:
+Mini Sprint 7: API Integration Tests - Community & User endpoints
+
+---
