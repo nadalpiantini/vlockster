@@ -239,7 +239,7 @@ export default async function ProjectDetailPage({
                     <p className="text-green-300 font-semibold">
                       ¡Proyecto Financiado!
                     </p>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-gray-300 mt-1">
                       Este proyecto alcanzó su meta
                     </p>
                   </div>

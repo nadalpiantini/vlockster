@@ -110,8 +110,8 @@ export default async function WatchVideoPage({
                     />
                   ) : (
                     <div className="text-center p-8" role="alert" aria-label="Configuración de Cloudflare Stream requerida">
-                      <p className="text-gray-400 mb-2">Cloudflare Stream no configurado</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-gray-300 mb-2">Cloudflare Stream no configurado</p>
+                      <p className="text-sm text-gray-300">
                         Video ID: {video.stream_id}
                       </p>
                     </div>
@@ -178,7 +178,7 @@ export default async function WatchVideoPage({
                     href={`/c/${video.uploader.public_profile_slug}` as any}
                     aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
                   >
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full" variant="outline" aria-label={`Ver perfil de ${video.uploader.name || 'creador'}`}>
                       Ver Perfil
                     </Button>
                   </Link>

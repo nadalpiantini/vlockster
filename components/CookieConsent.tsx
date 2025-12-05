@@ -48,6 +48,7 @@ export function CookieConsent() {
     <div
       className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-50 p-4 shadow-lg"
       role="dialog"
+      aria-live="polite"
       aria-labelledby="cookie-consent-title"
       aria-describedby="cookie-consent-description"
     >

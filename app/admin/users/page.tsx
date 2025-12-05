@@ -41,7 +41,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-6xl">
+      <main id="main-content" className="container mx-auto max-w-6xl" role="main" aria-label="Panel de administración de usuarios">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Gestión de Usuarios</h1>
@@ -49,7 +49,7 @@ export default async function AdminUsersPage() {
               Administra usuarios y roles de la plataforma
             </p>
           </div>
-          <Link href="/dashboard">
+          <Link href="/dashboard" aria-label="Volver al dashboard">
             <Button variant="outline">Volver al Dashboard</Button>
           </Link>
         </div>
@@ -57,26 +57,28 @@ export default async function AdminUsersPage() {
         <Card>
           <CardHeader>
             <CardTitle>Usuarios Registrados</CardTitle>
-            <CardDescription>
+            <CardDescription aria-live="polite">
               Total: {users.length} usuarios
             </CardDescription>
           </CardHeader>
           <CardContent>
             {users.length === 0 ? (
-              <p className="text-gray-400 text-center py-8">
+              <p className="text-gray-400 text-center py-8" role="status" aria-label="No hay usuarios registrados">
                 No hay usuarios registrados
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4" role="list" aria-label="Lista de usuarios">
                 {users.map((u) => (
                   <div
                     key={u.id}
                     className="flex items-center justify-between p-4 border border-gray-700 rounded-lg"
+                    role="listitem"
+                    aria-label={`Usuario: ${u.name || u.email}, Rol: ${u.role}`}
                   >
                     <div>
-                      <p className="font-semibold">{u.name || u.email}</p>
-                      <p className="text-sm text-gray-400">{u.email}</p>
-                      <p className="text-xs text-gray-500 capitalize">
+                      <p className="font-semibold" aria-label={`Nombre: ${u.name || u.email}`}>{u.name || u.email}</p>
+                      <p className="text-sm text-gray-400" aria-label={`Email: ${u.email}`}>{u.email}</p>
+                      <p className="text-xs text-gray-500 capitalize" aria-label={`Rol actual: ${u.role}`}>
                         Rol: {u.role}
                       </p>
                     </div>
@@ -91,6 +93,8 @@ export default async function AdminUsersPage() {
                                 ? 'bg-yellow-900/50 text-yellow-300'
                                 : 'bg-gray-700 text-gray-300'
                         }`}
+                        role="status"
+                        aria-label={`Rol: ${u.role}`}
                       >
                         {u.role}
                       </span>
@@ -105,7 +109,7 @@ export default async function AdminUsersPage() {
             )}
           </CardContent>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

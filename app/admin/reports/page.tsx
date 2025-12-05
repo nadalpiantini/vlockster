@@ -44,7 +44,7 @@ export default async function AdminReportsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-6xl">
+      <main id="main-content" className="container mx-auto max-w-6xl" role="main" aria-label="Panel de administración de reportes">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Reportes de Contenido</h1>
@@ -52,7 +52,7 @@ export default async function AdminReportsPage() {
               Revisa y modera contenido reportado por usuarios
             </p>
           </div>
-          <Link href="/dashboard">
+          <Link href="/dashboard" aria-label="Volver al dashboard">
             <Button variant="outline">Volver al Dashboard</Button>
           </Link>
         </div>
@@ -60,46 +60,52 @@ export default async function AdminReportsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Reportes Pendientes</CardTitle>
-            <CardDescription>
+            <CardDescription aria-live="polite">
               {reports.length} reporte{reports.length !== 1 ? 's' : ''}{' '}
               pendiente{reports.length !== 1 ? 's' : ''}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {reports.length === 0 ? (
-              <p className="text-gray-400 text-center py-8">
+              <p className="text-gray-400 text-center py-8" role="status" aria-label="No hay reportes pendientes">
                 No hay reportes pendientes
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4" role="list" aria-label="Lista de reportes pendientes">
                 {reports.map((report) => (
                   <div
                     key={report.id}
                     className="p-4 border border-gray-700 rounded-lg"
+                    role="listitem"
+                    aria-label={`Reporte de ${report.content_type} reportado el ${new Date(report.created_at).toLocaleDateString('es-ES')}`}
                   >
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <p className="font-semibold">
+                        <p className="font-semibold" aria-label={`Tipo de contenido: ${report.content_type}`}>
                           Tipo: {report.content_type}
                         </p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-gray-400" aria-label={`Fecha de reporte: ${new Date(report.created_at).toLocaleDateString('es-ES')}`}>
                           Reportado el:{' '}
                           {new Date(report.created_at).toLocaleDateString(
                             'es-ES'
                           )}
                         </p>
                       </div>
-                      <span className="bg-yellow-900/50 text-yellow-300 text-xs px-2 py-1 rounded-full">
+                      <span 
+                        className="bg-yellow-900/50 text-yellow-300 text-xs px-2 py-1 rounded-full"
+                        role="status"
+                        aria-label="Estado: Pendiente"
+                      >
                         Pendiente
                       </span>
                     </div>
                     {report.reason && (
-                      <p className="text-gray-300 mt-2">
+                      <p className="text-gray-300 mt-2" aria-label={`Razón del reporte: ${report.reason}`}>
                         <strong>Razón:</strong> {report.reason}
                       </p>
                     )}
                     {report.description && (
-                      <p className="text-gray-400 mt-2 text-sm">
+                      <p className="text-gray-400 mt-2 text-sm" aria-label={`Descripción del reporte: ${report.description}`}>
                         {report.description}
                       </p>
                     )}
@@ -116,7 +122,7 @@ export default async function AdminReportsPage() {
             )}
           </CardContent>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

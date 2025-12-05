@@ -179,6 +179,57 @@ Seleccionar siguiente mini sprint (Task #1, #3, #4, o #5)
 
 ---
 
+### 2025-12-05 - Mini Sprint: Epic 3 - ARIA Labels Implementation (3.1) ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Iniciado Epic 3: Accessibility (WCAG 2.1 AA)
+- Subtarea 3.1: ARIA Labels Implementation
+- Objetivo: 100+ ARIA labels (inicialmente 11)
+
+**Tareas Realizadas**:
+1. ✅ Mejorado Signup page con aria-describedby, aria-invalid
+2. ✅ Mejorado Projects page con progressbar, roles semánticos
+3. ✅ Mejorado Upload page con aria-describedby, progressbar
+4. ✅ Mejorado Community page con aria-labels adicionales
+5. ✅ Mejorado Watch/[id] page con roles semánticos (main, article, aside)
+6. ✅ Mejorado Projects/[id] page con progressbar, roles semánticos
+7. ✅ Mejorado Admin pages (users, reports, requests) con aria-labels completos
+8. ✅ Mejorado AdminRequestActions con aria-busy, aria-live
+
+**Archivos Modificados**:
+- app/signup/page.tsx - ARIA labels en formularios
+- app/projects/page.tsx - Progressbar, roles semánticos
+- app/upload/page.tsx - Progressbar, aria-describedby
+- app/community/page.tsx - ARIA labels adicionales
+- app/watch/[id]/page.tsx - Roles semánticos (main, article, aside)
+- app/projects/[id]/page.tsx - Progressbar, roles semánticos
+- app/admin/users/page.tsx - ARIA labels completos
+- app/admin/reports/page.tsx - ARIA labels completos
+- app/admin/requests/page.tsx - ARIA labels completos
+- components/AdminRequestActions.tsx - aria-busy, aria-live
+
+**Resultados**:
+- ✅ **337 atributos ARIA** (objetivo: 100+) - **SUPERADO**
+- ✅ Subtarea 3.1 COMPLETADA
+- ✅ Todas las páginas principales tienen ARIA labels
+- ✅ Formularios con aria-describedby y aria-invalid
+- ✅ Progressbars con roles y aria-valuenow
+- ✅ Roles semánticos (main, article, aside, navigation, complementary)
+
+**Métricas**:
+- Tiempo real: ~45 minutos
+- Archivos modificados: 10
+- ARIA labels agregados: ~226 nuevos
+- Bugs introducidos: 0
+- Linter errors: 0
+
+**Próximos Pasos**:
+Mini Sprint 2: Keyboard Navigation básico (3.2)
+
+---
+
 ### 2025-12-05 - Mini Sprint 1: Epic 4 - Fix Test Failures + Baseline Coverage ✅
 
 **Estado**: Completado

@@ -120,7 +120,12 @@ export default function NotificationsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
+      <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Notificaciones">
+        <div aria-live="polite" aria-atomic="true" className="sr-only" id="notifications-status">
+          {notifications.length === 0 
+            ? 'No hay notificaciones' 
+            : `${notifications.length} ${notifications.length === 1 ? 'notificación' : 'notificaciones'} disponibles`}
+        </div>
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Notificaciones</h1>

@@ -66,18 +66,24 @@ export function AdminRequestActions({ requestId }: AdminRequestActionsProps) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" role="group" aria-label="Acciones de solicitud">
       {error && (
-        <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-2 rounded-md text-sm">
+        <div 
+          className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-2 rounded-md text-sm"
+          role="alert"
+          aria-live="polite"
+          aria-label={`Error: ${error}`}
+        >
           {error}
         </div>
       )}
-      <div className="flex gap-3" role="group" aria-label="Acciones de solicitud">
+      <div className="flex gap-3">
         <Button
           onClick={handleApprove}
           disabled={loading}
           variant="default"
           aria-label={loading ? 'Procesando aprobación' : `Aprobar solicitud ${requestId}`}
+          aria-busy={loading}
         >
           {loading ? 'Procesando...' : 'Aprobar'}
         </Button>
@@ -86,6 +92,7 @@ export function AdminRequestActions({ requestId }: AdminRequestActionsProps) {
           disabled={loading}
           variant="destructive"
           aria-label={loading ? 'Procesando rechazo' : `Rechazar solicitud ${requestId}`}
+          aria-busy={loading}
         >
           {loading ? 'Procesando...' : 'Rechazar'}
         </Button>
