@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ProjectRewardCard } from '@/components/ProjectRewardCard'
 import { ProjectBackingCard } from '@/components/ProjectBackingCard'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -22,31 +23,36 @@ type ProjectProfile = {
   bio: string | null
 } | null
 
+type ProjectRow = Database['public']['Tables']['projects']['Row']
+type ProfileRow = Database['public']['Tables']['profiles']['Row']
+
 async function getProject(id: string) {
   const supabase = await createClient()
 
-  const { data: project, error } = await (supabase
-    .from('projects') as any)
+  const { data: project, error } = await supabase
+    .from('projects')
     .select('*')
     .eq('id', id)
     .single()
 
   if (error || !project) return null
 
+  const projectTyped = project as ProjectRow
+
   // Fetch creator profile separately
-  if ((project as any).creator_id) {
-    const { data: profile } = await (supabase
-      .from('profiles') as any)
+  if (projectTyped.creator_id) {
+    const { data: profile } = await supabase
+      .from('profiles')
       .select('id, name, public_profile_slug, bio')
-      .eq('id', (project as any).creator_id)
+      .eq('id', projectTyped.creator_id)
       .single()
 
     if (profile) {
-      ;(project as any).creator = profile
+      ;(projectTyped as ProjectRow & { creator: ProjectProfile }).creator = profile as ProjectProfile
     }
   }
 
-  return project as typeof project & { creator: ProjectProfile }
+  return projectTyped as ProjectRow & { creator: ProjectProfile }
 }
 
 type Reward = {

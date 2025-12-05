@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Pagination } from '@/components/Pagination'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -34,8 +35,11 @@ async function getPublicVideos(page: number = 1): Promise<{
   const from = (page - 1) * VIDEOS_PER_PAGE
   const to = from + VIDEOS_PER_PAGE - 1
 
-  const { data: videos, error, count } = await (supabase
-    .from('videos') as any)
+  type VideoRow = Database['public']['Tables']['videos']['Row']
+  type Profile = Database['public']['Tables']['profiles']['Row']
+
+  const { data: videos, error, count } = await supabase
+    .from('videos')
     .select('*', { count: 'exact' })
     .eq('visibility', 'public')
     .order('created_at', { ascending: false })
@@ -43,16 +47,17 @@ async function getPublicVideos(page: number = 1): Promise<{
 
   // Fetch uploader profiles separately if needed
   if (videos && videos.length > 0) {
-    const uploaderIds = [...new Set((videos as any[]).map((v: any) => v.uploader_id))]
+    const videosTyped = videos as VideoRow[]
+    const uploaderIds = [...new Set(videosTyped.map((v) => v.uploader_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug')
       .in('id', uploaderIds)
 
     if (profiles) {
-      const profileMap = new Map(profiles.map((p: any) => [p.id, p]))
-      ;(videos as any[]).forEach((video: any) => {
-        video.uploader = profileMap.get(video.uploader_id) || null
+      const profileMap = new Map((profiles as Profile[]).map((p) => [p.id, p]))
+      videosTyped.forEach((video) => {
+        ;(video as VideoRow & { uploader: Profile | null }).uploader = profileMap.get(video.uploader_id) || null
       })
     }
   }
@@ -129,7 +134,7 @@ export default async function WatchPage({
 
                   <CardContent>
                     <p className="text-sm text-gray-400">
-                      Por: {(video.uploader as any)?.name || 'Desconocido'}
+                      Por: {video.uploader?.name || 'Desconocido'}
                     </p>
                   </CardContent>
                 </Card>

@@ -75,8 +75,8 @@ export default async function AdminRequestsPage() {
                   <CardHeader>
                     <CardTitle>{request.pitch_title}</CardTitle>
                     <CardDescription>
-                      Solicitante: {(request.profiles as any)?.name || 'N/A'} (
-                      {(request.profiles as any)?.email})
+                      Solicitante: {request.profiles?.name || 'N/A'} (
+                      {request.profiles?.email})
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -138,7 +138,7 @@ export default async function AdminRequestsPage() {
                       </span>
                     </CardTitle>
                     <CardDescription>
-                      Solicitante: {(request.profiles as any)?.name || 'N/A'}
+                      Solicitante: {request.profiles?.name || 'N/A'}
                     </CardDescription>
                   </CardHeader>
                 </Card>

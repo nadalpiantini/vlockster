@@ -10,34 +10,45 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-async function getVideo(id: string) {
+type VideoRow = Database['public']['Tables']['videos']['Row']
+type ProfileRow = Database['public']['Tables']['profiles']['Row']
+
+type VideoWithUploader = VideoRow & {
+  uploader?: ProfileRow | null
+}
+
+async function getVideo(id: string): Promise<VideoWithUploader | null> {
   const supabase = await createClient()
 
-  const { data: video, error } = await (supabase
-    .from('videos') as any)
+  const { data: video, error } = await supabase
+    .from('videos')
     .select('*')
     .eq('id', id)
     .single()
 
+  if (error || !video) return null
+
+  const videoTyped = video as VideoRow
+
   // Fetch uploader profile separately
-  if (video && (video as any).uploader_id) {
+  if (videoTyped.uploader_id) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug, bio')
-      .eq('id', (video as any).uploader_id)
+      .eq('id', videoTyped.uploader_id)
       .single()
 
     if (profile) {
-      ;(video as any).uploader = profile
+      ;(videoTyped as VideoWithUploader).uploader = profile as ProfileRow
     }
   }
 
-  if (error || !video) return null
-  return video as any
+  return videoTyped as VideoWithUploader
 }
 
 export default async function WatchVideoPage({
@@ -145,17 +156,17 @@ export default async function WatchVideoPage({
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-semibold text-lg">
-                    {(video.uploader as any)?.name || 'Desconocido'}
+                    {video.uploader?.name || 'Desconocido'}
                   </p>
-                  {(video.uploader as any)?.bio && (
+                  {video.uploader?.bio && (
                     <p className="text-sm text-gray-400 mt-2">
-                      {(video.uploader as any).bio}
+                      {video.uploader.bio}
                     </p>
                   )}
                 </div>
-                {(video.uploader as any)?.public_profile_slug && (
+                {video.uploader?.public_profile_slug && (
                   <Link
-                    href={`/c/${(video.uploader as any).public_profile_slug}` as any}
+                    href={`/c/${video.uploader.public_profile_slug}`}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil

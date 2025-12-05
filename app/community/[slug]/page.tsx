@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/utils/logger'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -14,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import type { Database } from '@/types/database.types'
 
 interface Community {
   id: string
@@ -71,8 +73,9 @@ export default function CommunityDetailPage() {
       setUser(currentUser)
 
       // Cargar comunidad
-      const { data: communityData, error: communityError } = await (supabase
-        .from('communities') as any)
+      type CommunityRow = Database['public']['Tables']['communities']['Row']
+      const { data: communityData, error: communityError } = await supabase
+        .from('communities')
         .select('*')
         .eq('slug', slug)
         .single()
@@ -85,17 +88,25 @@ export default function CommunityDetailPage() {
       setCommunity(communityData as Community)
 
       // Cargar posts
-      const { data: postsData, error: postsError } = await (supabase
-        .from('posts') as any)
+      const { data: postsData, error: postsError } = await supabase
+        .from('posts')
         .select('*')
-        .eq('community_id', (communityData as Community).id)
+        .eq('community_id', (communityData as CommunityRow).id)
         .order('created_at', { ascending: false })
 
       if (!postsError && postsData) {
         setPosts(postsData)
+      } else if (postsError) {
+        logger.error('Error loading posts', postsError, {
+          communitySlug: slug,
+          endpoint: '/community/[slug]',
+        })
       }
     } catch (err) {
-      console.error('Error loading data:', err)
+      logger.error('Error loading community data', err, {
+        communitySlug: slug,
+        endpoint: '/community/[slug]',
+      })
     } finally {
       setLoading(false)
     }
@@ -119,7 +130,7 @@ export default function CommunityDetailPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          community_id: (community as any).id,
+          community_id: community.id,
           title: newPostTitle,
           content: newPostContent,
         }),
@@ -168,7 +179,7 @@ export default function CommunityDetailPage() {
               <div>
                 <CardTitle className="text-2xl">{community.name}</CardTitle>
                 <CardDescription>
-                  Por: {(community as any).owner?.name || 'Desconocido'}
+                  Por: {community.profiles?.name || 'Desconocido'}
                 </CardDescription>
               </div>
               <Link href="/community">

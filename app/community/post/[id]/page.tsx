@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/utils/logger'
 import { Textarea } from '@/components/ui/textarea'
 import {
   Card,
@@ -99,9 +100,17 @@ export default function PostDetailPage() {
 
       if (!commentsError && commentsData) {
         setComments(commentsData)
+      } else if (commentsError) {
+        logger.error('Error loading comments', commentsError, {
+          postId: id,
+          endpoint: '/community/post/[id]',
+        })
       }
     } catch (err) {
-      console.error('Error loading data:', err)
+      logger.error('Error loading post data', err, {
+        postId: id,
+        endpoint: '/community/post/[id]',
+      })
     } finally {
       setLoading(false)
     }

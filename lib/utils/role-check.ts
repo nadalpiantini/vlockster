@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation'
 
 export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
 
-// TEMPORAL: Deshabilitar autenticación para acceso libre
-// Cambiar a false para reactivar autenticación
-const DISABLE_AUTH = true
+// Autenticación habilitada para producción
+// Cambiar a true solo para testing local sin usuarios
+const DISABLE_AUTH = false
 
 export async function getCurrentUser() {
   // TEMPORAL: Si auth está deshabilitado, retornar null sin verificar

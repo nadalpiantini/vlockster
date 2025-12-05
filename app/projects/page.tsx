@@ -9,37 +9,41 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/Pagination'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 const PROJECTS_PER_PAGE = 12
 
+type Project = Database['public']['Tables']['projects']['Row']
+type Profile = Database['public']['Tables']['profiles']['Row']
+
 async function getActiveProjects(page: number = 1) {
   const supabase = await createClient()
   const from = (page - 1) * PROJECTS_PER_PAGE
   const to = from + PROJECTS_PER_PAGE - 1
 
-  const { data: projects, error, count } = await (supabase
-    .from('projects') as any)
+  const { data: projects, error, count } = await supabase
+    .from('projects')
     .select('*', { count: 'exact' })
     .in('status', ['active', 'funded'])
     .order('created_at', { ascending: false })
     .range(from, to)
 
   // Fetch creator profiles separately if needed
-  const projectsArray = (projects || []) as any[]
+  const projectsArray = (projects || []) as Project[]
   if (projectsArray.length > 0) {
-    const creatorIds = [...new Set(projectsArray.map((p: any) => p.creator_id))]
+    const creatorIds = [...new Set(projectsArray.map((p) => p.creator_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, name, public_profile_slug')
       .in('id', creatorIds)
 
     if (profiles) {
-      const profileMap = new Map(profiles.map((p: any) => [p.id, p]))
-      projectsArray.forEach((project: any) => {
-        project.creator = profileMap.get(project.creator_id) || null
+      const profileMap = new Map((profiles as Profile[]).map((p) => [p.id, p]))
+      projectsArray.forEach((project) => {
+        ;(project as Project & { creator: Profile | null }).creator = profileMap.get(project.creator_id) || null
       })
     }
   }
@@ -91,7 +95,7 @@ export default async function ProjectsPage({
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((project: any) => {
+              {projects.map((project) => {
               const progress =
                 (Number(project.current_amount) /
                   Number(project.goal_amount)) *
@@ -158,7 +162,7 @@ export default async function ProjectsPage({
                       </div>
 
                       <p className="text-sm text-gray-400 text-center">
-                        Por: {(project.creator as any)?.name || 'Desconocido'}
+                        Por: {(project as Project & { creator: Profile | null }).creator?.name || 'Desconocido'}
                       </p>
                     </CardContent>
                   </Card>

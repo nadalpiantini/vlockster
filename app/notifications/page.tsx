@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/utils/logger'
 import {
   Card,
   CardContent,
@@ -12,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import type { Database } from '@/types/database.types'
 
 interface Notification {
   id: string
@@ -49,9 +51,15 @@ export default function NotificationsPage() {
 
       if (!error && data) {
         setNotifications(data)
+      } else if (error) {
+        logger.error('Error loading notifications', error, {
+          endpoint: '/notifications',
+        })
       }
     } catch (err) {
-      console.error('Error loading notifications:', err)
+      logger.error('Error loading notifications', err, {
+        endpoint: '/notifications',
+      })
     } finally {
       setLoading(false)
     }
@@ -63,13 +71,16 @@ export default function NotificationsPage() {
 
   async function markAsRead(id: string) {
     try {
-      await (supabase.from('notifications') as any).update({ read: true }).eq('id', id)
+      await supabase.from('notifications').update({ read: true } as Database['public']['Tables']['notifications']['Update']).eq('id', id)
 
       setNotifications(
         notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
       )
     } catch (err) {
-      console.error('Error marking notification as read:', err)
+      logger.error('Error marking notification as read', err, {
+        notificationId: id,
+        endpoint: '/notifications',
+      })
     }
   }
 
@@ -81,15 +92,18 @@ export default function NotificationsPage() {
 
       if (!user) return
 
-      await (supabase
-        .from('notifications') as any)
-        .update({ read: true })
+      await supabase
+        .from('notifications')
+        .update({ read: true } as Database['public']['Tables']['notifications']['Update'])
         .eq('user_id', user.id)
         .eq('read', false)
 
       setNotifications(notifications.map((n) => ({ ...n, read: true })))
     } catch (err) {
-      console.error('Error marking all as read:', err)
+      logger.error('Error marking all notifications as read', err, {
+        userId: user.id,
+        endpoint: '/notifications',
+      })
     }
   }
 
@@ -185,7 +199,7 @@ export default function NotificationsPage() {
                     <p className="text-gray-300 mb-3">{notification.content}</p>
                   )}
                   {notification.link && (
-                    <Link href={notification.link as any}>
+                    <Link href={notification.link || '#'}>
                       <Button variant="outline" size="sm">
                         Ver más
                       </Button>
