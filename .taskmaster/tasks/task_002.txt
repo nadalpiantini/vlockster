@@ -1,0 +1,74 @@
+# Task ID: 2
+# Title: Structured Logging System - Replace all console calls
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Replace all 10 instances of console.log/error with structured logging system to enable production-safe logging with error tracking
+# Details:
+**Problem**: 10 instances of console.log/error in production code expose sensitive information.
+
+**Approach**:
+1. Import logger from lib/utils/logger.ts in all API routes
+2. Replace console.error with logger.error (includes errorId)
+3. Replace console.log with logger.info or logger.debug
+4. Add context objects (userId, endpoint, action)
+
+**Files**: app/api/projects/create/route.ts:98, app/api/videos/upload/route.ts, app/api/paypal/*, app/api/analytics/route.ts
+
+# Test Strategy:
+Test API endpoints in both dev and production modes. Verify error logging includes errorId. Check no sensitive data is logged.
+
+# Subtasks:
+## 1. Buscar y documentar todas las instancias de console.log/error [pending]
+### Dependencies: None
+### Description: Ejecutar grep para localizar todas las instancias de console calls en API routes y documentar ubicaciones exactas
+### Details:
+Comando: `grep -rn "console\\.log\\|console\\.error" app/api/ --include="*.ts"`
+Documentar: archivo, línea, tipo (log/error), contexto
+
+## 2. Reemplazar console calls en app/api/projects/create/route.ts [pending]
+### Dependencies: None
+### Description: Importar logger y reemplazar console.error en línea 98 con logger.error incluyendo context objects
+### Details:
+1. Agregar import { logger } from '@/lib/utils/logger'
+2. Reemplazar console.error con logger.error
+3. Agregar context: userId, projectId, endpoint
+4. Test manual del endpoint
+
+## 3. Reemplazar console calls en app/api/videos/upload/route.ts [pending]
+### Dependencies: None
+### Description: Reemplazar todas las instancias de console.log/error con logger calls apropiados
+### Details:
+1. Import logger
+2. Reemplazar console.error → logger.error
+3. Reemplazar console.log → logger.info/debug según contexto
+4. Agregar context objects
+5. Test endpoint
+
+## 4. Reemplazar console calls en app/api/paypal/* routes [pending]
+### Dependencies: None
+### Description: Actualizar create-order, capture-order, y cualquier otra ruta de PayPal con logger
+### Details:
+Archivos: create-order/route.ts, capture-order/route.ts
+Para cada uno: import logger, reemplazar console calls, test manual
+
+## 5. Reemplazar console calls en app/api/analytics/route.ts y otras rutas restantes [pending]
+### Dependencies: None
+### Description: Completar reemplazo de console calls en cualquier ruta API restante
+### Details:
+1. Verificar analytics/route.ts
+2. Verificar cualquier otra ruta con console calls
+3. Reemplazar con logger
+4. Test endpoints afectados
+
+## 6. Validación final y verificación completa [pending]
+### Dependencies: None
+### Description: Ejecutar grep para verificar cero console calls, correr tests, validar logging en dev y producción
+### Details:
+1. grep -rn "console\\.log\\|console\\.error" app/api/ → debe retornar 0 resultados
+2. pnpm test:unit → debe pasar
+3. pnpm typecheck → debe pasar
+4. Test manual en dev mode (logs legibles)
+5. Verificar JSON output en producción
+6. Commit con mensaje descriptivo
+

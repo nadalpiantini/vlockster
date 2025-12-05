@@ -33,7 +33,7 @@ test.describe('User Journey - Todas las funcionalidades', () => {
       // Esperar redirección o error
       await page.waitForTimeout(2000)
     } catch (error) {
-      console.log('Signup puede requerir configuración de Supabase')
+      // Signup puede requerir configuración de Supabase - esto es esperado en tests
     }
 
     // 4. Probar rutas públicas sin autenticación
@@ -55,7 +55,7 @@ test.describe('User Journey - Todas las funcionalidades', () => {
     // Puede redirigir a login o mostrar error
   })
 
-  test('Probar todas las rutas públicas', async ({ page }) => {
+  test('Probar todas las rutas públicas', async ({ page }) => { async ({ page }) => {
     const publicRoutes = [
       { path: '/', expectedText: 'VLOCKSTER' },
       { path: '/login', expectedText: 'Iniciar Sesión' },
@@ -72,8 +72,8 @@ test.describe('User Journey - Todas las funcionalidades', () => {
         route.expectedText,
         { timeout: 5000 }
       )
-      console.log(`✅ ${route.path} carga correctamente`)
     }
+  })
   })
 
   test('Verificar que no hay links rotos en landing', async ({ page }) => {

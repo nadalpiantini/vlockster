@@ -68,7 +68,7 @@ export default async function ProjectsPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto">
+      <main id="main-content" className="container mx-auto" role="main">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
@@ -177,7 +177,7 @@ export default async function ProjectsPage({
             />
           </>
         )}
-      </div>
+      </main>
     </div>
   )
 }

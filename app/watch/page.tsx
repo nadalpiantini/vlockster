@@ -82,7 +82,7 @@ export default async function WatchPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto">
+      <main id="main-content" className="container mx-auto" role="main">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Catálogo de Videos</h1>
           <p className="text-gray-400">
@@ -148,7 +148,7 @@ export default async function WatchPage({
             />
           </>
         )}
-      </div>
+      </main>
     </div>
   )
 }

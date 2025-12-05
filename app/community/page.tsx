@@ -35,7 +35,7 @@ export default async function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
+      <main id="main-content" className="container mx-auto max-w-4xl" role="main">
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Comunidades</h1>

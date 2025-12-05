@@ -1,0 +1,20 @@
+# Task ID: 3
+# Title: Accessibility (WCAG 2.1 AA) - Complete Implementation
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Implement complete WCAG 2.1 AA compliance: ARIA labels, keyboard navigation, color contrast, screen reader support. Target: 100+ ARIA attributes (currently 11)
+# Details:
+**Problem**: Limited accessibility violates legal compliance requirements.
+
+**Approach**:
+1. Add aria-label to all buttons/icons without visible text
+2. Implement skip-to-main link, verify tab order, focus indicators
+3. Audit with axe DevTools, fix color contrast (4.5:1 normal, 3:1 large)
+4. Test with VoiceOver/NVDA, add live regions
+5. Add axe-core to Playwright tests
+
+**Priority Pages**: /, /dashboard, /watch, /projects, /community, /admin/*
+
+# Test Strategy:
+Run axe DevTools on all pages. Test keyboard navigation manually. Test with VoiceOver. Add automated a11y tests.

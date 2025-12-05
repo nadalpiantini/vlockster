@@ -1,0 +1,21 @@
+# Task ID: 4
+# Title: Test Coverage Expansion - Achieve 80%+ Coverage
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Expand test coverage from ~40% to 80%+ by adding unit tests for all components, integration tests for all API routes, and E2E tests for critical flows
+# Details:
+**Problem**: Current coverage ~40% (72 tests in 8 files).
+
+**Approach**:
+1. Add unit tests for 20+ untested components
+2. Expand API integration tests for all 13 routes
+3. Add E2E flow tests for critical journeys
+4. Set up coverage reporting and thresholds
+
+**Components**: AdminUserActions, AdminReportActions, PayPalButton, ProjectBackingCard, BrandHeader, CookieConsent, Pagination, +13 more
+
+**E2E Flows**: Video upload, project creation/backing, admin moderation, community interaction
+
+# Test Strategy:
+Write tests incrementally. Run coverage reports after each batch. Focus on critical paths first. Add CI coverage checks.

@@ -20,7 +20,7 @@ async function getCreatorRequests() {
     .select(
       `
       *,
-      profiles:user_id (
+      profiles!creator_requests_user_id_fkey (
         name,
         email
       )

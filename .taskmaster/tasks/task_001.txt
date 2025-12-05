@@ -1,0 +1,19 @@
+# Task ID: 1
+# Title: TypeScript Type Safety - Eliminate all `as any`
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Regenerate Supabase types and eliminate all 99 instances of `as any` across 22 files to achieve 100% type safety
+# Details:
+**Problem**: 99 instances of `as any` in 22 files compromise TypeScript's type safety.
+
+**Approach**:
+1. Regenerate Supabase types: `pnpm supabase:types`
+2. Update API routes (13 files) to use generated types
+3. Update frontend pages (9 files) to use generated types
+4. Run `pnpm typecheck` to verify zero type errors
+
+**Files**: app/api/videos/upload/route.ts, app/api/projects/create/route.ts, app/api/comments/create/route.ts, app/api/posts/create/route.ts, app/api/admin/* (4 files), app/api/paypal/* (3 files), app/api/analytics/route.ts, app/api/user/* (2 files), app/projects/my/page.tsx, app/admin/users/page.tsx, app/admin/reports/page.tsx, app/watch/page.tsx, app/projects/page.tsx, app/community/page.tsx, + 3 more
+
+# Test Strategy:
+Run full test suite after each batch of type fixes. Verify typecheck passes. Test affected pages manually.

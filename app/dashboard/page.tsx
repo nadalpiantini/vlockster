@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8">
+      <main id="main-content" className="container mx-auto px-4 py-8" role="main">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
@@ -233,7 +233,7 @@ export default async function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

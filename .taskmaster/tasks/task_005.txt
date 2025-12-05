@@ -1,0 +1,19 @@
+# Task ID: 5
+# Title: Performance and Observability - Web Vitals & Monitoring
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Implement Web Vitals tracking, optimize database queries with pagination, analyze bundle size, and set up performance monitoring
+# Details:
+**Problem**: No performance metrics, potential N+1 queries, no pagination, bundle size not analyzed.
+
+**Approach**:
+1. Install @vercel/analytics, track LCP/FID/CLS
+2. Add pagination to all lists (/watch, /projects, /community, /admin/*)
+3. Use @next/bundle-analyzer, implement code splitting
+4. Set up dashboards, alerts, performance budgets
+
+**Indexes to add**: idx_videos_uploader, idx_projects_creator, idx_backings_project, idx_posts_community_created
+
+# Test Strategy:
+Test pagination on all list views. Run bundle analyzer. Verify Web Vitals tracking. Load test paginated endpoints.
