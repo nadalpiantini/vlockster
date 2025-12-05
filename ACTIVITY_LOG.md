@@ -732,3 +732,35 @@ Mini Sprint 6: API Integration Tests - Project & Payment endpoints
 Mini Sprint 7: API Integration Tests - Community & User endpoints
 
 ---
+
+
+### 2025-12-05 - Mini Sprint 7: Epic 4 - Community & User API Integration Tests Expansion ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Expandir tests de integración para endpoints de Community y User
+
+**Tareas Realizadas**:
+1. ✅ Expandido comments.create.spec.ts (5 → 17 tests)
+2. ✅ Expandido posts.create.spec.ts (6 → 16 tests)
+3. ✅ Expandido user.spec.ts (3 → 19 tests)
+4. ✅ Tests cubren: auth, validation, GDPR, moderation, HTTP methods
+
+**Resultados**:
+- ✅ 52 tests de integración Community/User API (expandidos de 14)
+- ✅ Cobertura mejorada de validación y GDPR compliance
+- ✅ Tests de seguridad y moderación completos
+
+**Git**:
+- ✅ Commit Mini Sprint 7 realizado
+
+**Métricas**:
+- Tests expandidos: 38
+- Tests totales Community/User API: 52
+
+**Próximos Pasos**:
+Mini Sprint 8: E2E Flow Tests - Video Upload & Project Creation flows
+
+---
