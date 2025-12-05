@@ -220,8 +220,9 @@ CREATE INDEX IF NOT EXISTS idx_moderation_logs_user ON moderation_logs(user_id, 
 Agrega a tu `.env.local`:
 
 ```bash
-# DeepSeek API (ya configurada)
-DEEPSEEK_API_KEY=sk-d7872d14750148c0808e28fbd12d7014
+# DeepSeek API (REQUIRED for AI features)
+# Get your API key from: https://platform.deepseek.com/api_keys
+DEEPSEEK_API_KEY=your-deepseek-api-key-here
 
 # PayPal Webhook (configurar en PayPal Dashboard)
 PAYPAL_WEBHOOK_SECRET=tu-webhook-secret

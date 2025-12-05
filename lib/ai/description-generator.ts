@@ -10,8 +10,14 @@
 
 import { logger } from '@/lib/utils/logger'
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || 'sk-d7872d14750148c0808e28fbd12d7014'
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
+
+if (!DEEPSEEK_API_KEY) {
+  throw new Error(
+    'Missing DEEPSEEK_API_KEY environment variable. Please set it in your .env.local file.'
+  )
+}
 
 interface GenerateDescriptionParams {
   title: string
