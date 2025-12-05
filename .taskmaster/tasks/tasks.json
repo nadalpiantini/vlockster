@@ -309,7 +309,7 @@
         "description": "Replace all 10 instances of console.log/error with structured logging system to enable production-safe logging with error tracking",
         "details": "**Problem**: 10 instances of console.log/error in production code expose sensitive information.\n\n**Approach**:\n1. Import logger from lib/utils/logger.ts in all API routes\n2. Replace console.error with logger.error (includes errorId)\n3. Replace console.log with logger.info or logger.debug\n4. Add context objects (userId, endpoint, action)\n\n**Files**: app/api/projects/create/route.ts:98, app/api/videos/upload/route.ts, app/api/paypal/*, app/api/analytics/route.ts",
         "testStrategy": "Test API endpoints in both dev and production modes. Verify error logging includes errorId. Check no sensitive data is logged.",
-        "status": "in-progress",
+        "status": "done",
         "dependencies": [],
         "priority": "high",
         "subtasks": [
@@ -327,7 +327,7 @@
             "title": "Reemplazar console calls en app/api/projects/create/route.ts",
             "description": "Importar logger y reemplazar console.error en línea 98 con logger.error incluyendo context objects",
             "details": "1. Agregar import { logger } from '@/lib/utils/logger'\n2. Reemplazar console.error con logger.error\n3. Agregar context: userId, projectId, endpoint\n4. Test manual del endpoint",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 2
           },
@@ -336,7 +336,7 @@
             "title": "Reemplazar console calls en app/api/videos/upload/route.ts",
             "description": "Reemplazar todas las instancias de console.log/error con logger calls apropiados",
             "details": "1. Import logger\n2. Reemplazar console.error → logger.error\n3. Reemplazar console.log → logger.info/debug según contexto\n4. Agregar context objects\n5. Test endpoint",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 2
           },
@@ -345,7 +345,7 @@
             "title": "Reemplazar console calls en app/api/paypal/* routes",
             "description": "Actualizar create-order, capture-order, y cualquier otra ruta de PayPal con logger",
             "details": "Archivos: create-order/route.ts, capture-order/route.ts\nPara cada uno: import logger, reemplazar console calls, test manual",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 2
           },
@@ -354,7 +354,7 @@
             "title": "Reemplazar console calls en app/api/analytics/route.ts y otras rutas restantes",
             "description": "Completar reemplazo de console calls en cualquier ruta API restante",
             "details": "1. Verificar analytics/route.ts\n2. Verificar cualquier otra ruta con console calls\n3. Reemplazar con logger\n4. Test endpoints afectados",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 2
           },
@@ -363,7 +363,7 @@
             "title": "Validación final y verificación completa",
             "description": "Ejecutar grep para verificar cero console calls, correr tests, validar logging en dev y producción",
             "details": "1. grep -rn \"console\\\\.log\\\\|console\\\\.error\" app/api/ → debe retornar 0 resultados\n2. pnpm test:unit → debe pasar\n3. pnpm typecheck → debe pasar\n4. Test manual en dev mode (logs legibles)\n5. Verificar JSON output en producción\n6. Commit con mensaje descriptivo",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 2
           }
@@ -405,7 +405,7 @@
     ],
     "metadata": {
       "created": "2025-12-05T11:56:49.498Z",
-      "updated": "2025-12-05T12:02:59.315Z",
+      "updated": "2025-12-05T12:20:53.757Z",
       "description": "Tasks for master context"
     }
   }
