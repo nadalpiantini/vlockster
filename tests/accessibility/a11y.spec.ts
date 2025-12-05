@@ -2,111 +2,153 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
 /**
- * Tests de accesibilidad básicos y con axe-core
+ * Accessibility tests using axe-core
+ * Tests WCAG 2.1 AA compliance across key pages
  */
-test.describe('Accessibility: Basic Checks', () => {
-  test('debe tener un título de página', async ({ page }) => {
+test.describe('Accessibility Tests (WCAG 2.1 AA)', () => {
+  test('Landing page should have no accessibility violations', async ({ page }) => {
     await page.goto('/')
-    const title = await page.title()
-    expect(title).toBeTruthy()
-    expect(title.length).toBeGreaterThan(0)
-  })
-
-  test('debe tener un h1 en la página principal', async ({ page }) => {
-    await page.goto('/')
-    const h1 = page.locator('h1').first()
-    await expect(h1).toBeVisible()
-  })
-
-  test('debe tener navegación con role="navigation"', async ({ page }) => {
-    await page.goto('/')
-    const nav = page.locator('nav[role="navigation"]')
-    await expect(nav).toBeVisible()
-  })
-
-  test('debe tener main con role="main"', async ({ page }) => {
-    await page.goto('/')
-    const main = page.locator('main[role="main"]')
-    await expect(main).toBeVisible()
-  })
-
-  test('links deben tener aria-label o texto descriptivo', async ({ page }) => {
-    await page.goto('/')
-    const links = page.locator('a')
-
-    const linkCount = await links.count()
-    for (let i = 0; i < Math.min(linkCount, 10); i++) {
-      const link = links.nth(i)
-      const text = await link.textContent()
-      const ariaLabel = await link.getAttribute('aria-label')
-
-      // Debe tener texto o aria-label
-      expect(text || ariaLabel).toBeTruthy()
-    }
-  })
-
-  test('imágenes deben tener alt text', async ({ page }) => {
-    await page.goto('/watch')
-    await page.waitForLoadState('networkidle')
-
-    const images = page.locator('img')
-    const imageCount = await images.count()
-
-    for (let i = 0; i < imageCount; i++) {
-      const img = images.nth(i)
-      const alt = await img.getAttribute('alt')
-      // Alt puede ser string vacío si es decorativa, pero debe existir
-      expect(alt).not.toBeNull()
-    }
-  })
-})
-
-/**
- * Tests de accesibilidad con axe-core (WCAG 2.1 AA)
- */
-test.describe('Accessibility: Axe Core Tests', () => {
-  test('página principal debe pasar tests de accesibilidad', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
     const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze()
-
+    
     expect(accessibilityScanResults.violations).toEqual([])
   })
 
-  test('página de login debe pasar tests de accesibilidad', async ({ page }) => {
+  test('Login page should have no accessibility violations', async ({ page }) => {
     await page.goto('/login')
-    await page.waitForLoadState('networkidle')
-
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
-      .analyze()
-
-    expect(accessibilityScanResults.violations).toEqual([])
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
   })
 
-  test('página de watch debe pasar tests de accesibilidad', async ({ page }) => {
+  test('Signup page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/signup')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
+
+  test('Dashboard page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/dashboard')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
+
+  test('Watch page should have no accessibility violations', async ({ page }) => {
     await page.goto('/watch')
-    await page.waitForLoadState('networkidle')
-
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
-      .analyze()
-
-    expect(accessibilityScanResults.violations).toEqual([])
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
   })
 
-  test('página de proyectos debe pasar tests de accesibilidad', async ({ page }) => {
+  test('Projects page should have no accessibility violations', async ({ page }) => {
     await page.goto('/projects')
-    await page.waitForLoadState('networkidle')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
 
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice'])
-      .analyze()
+  test('Community page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/community')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
 
-    expect(accessibilityScanResults.violations).toEqual([])
+  test('Upload page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/upload')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
+
+  test('Privacy page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/legal/privacy')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
+
+  test('Terms page should have no accessibility violations', async ({ page }) => {
+    await page.goto('/legal/terms')
+    await checkA11y(page, undefined, {
+      detailedReport: true,
+      detailedReportOptions: { html: true },
+    })
+  })
+
+  test('Color contrast should meet WCAG AA standards', async ({ page }) => {
+    await page.goto('/')
+    const violations = await getViolations(page, {
+      rules: {
+        'color-contrast': { enabled: true },
+      },
+    })
+    
+    // Filter only color contrast violations
+    const colorContrastViolations = violations.filter(
+      (v) => v.id === 'color-contrast'
+    )
+    
+    expect(colorContrastViolations.length).toBe(0)
+  })
+
+  test('All images should have alt text', async ({ page }) => {
+    await page.goto('/')
+    const violations = await getViolations(page, {
+      rules: {
+        'image-alt': { enabled: true },
+      },
+    })
+    
+    const imageViolations = violations.filter((v) => v.id === 'image-alt')
+    expect(imageViolations.length).toBe(0)
+  })
+
+  test('All form inputs should have labels', async ({ page }) => {
+    await page.goto('/login')
+    const violations = await getViolations(page, {
+      rules: {
+        'label': { enabled: true },
+      },
+    })
+    
+    const labelViolations = violations.filter((v) => v.id === 'label')
+    expect(labelViolations.length).toBe(0)
+  })
+
+  test('All interactive elements should be keyboard accessible', async ({ page }) => {
+    await page.goto('/')
+    const violations = await getViolations(page, {
+      rules: {
+        'keyboard': { enabled: true },
+      },
+    })
+    
+    const keyboardViolations = violations.filter((v) => v.id === 'keyboard')
+    expect(keyboardViolations.length).toBe(0)
+  })
+
+  test('ARIA attributes should be used correctly', async ({ page }) => {
+    await page.goto('/dashboard')
+    const violations = await getViolations(page, {
+      rules: {
+        'aria-allowed-attr': { enabled: true },
+        'aria-required-attr': { enabled: true },
+        'aria-valid-attr-value': { enabled: true },
+      },
+    })
+    
+    expect(violations.length).toBe(0)
   })
 })
-

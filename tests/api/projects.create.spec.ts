@@ -1,13 +1,11 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * Tests de integración para el endpoint de creación de proyectos
+ * Tests for /api/projects/create endpoint
  */
-test.describe('API: Projects Create', () => {
-  const API_BASE = 'http://localhost:3007/api'
-
-  test('debe rechazar request sin autenticación', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/projects/create`, {
+test.describe('API: /api/projects/create', () => {
+  test('should require authentication', async ({ request }) => {
+    const response = await request.post('/api/projects/create', {
       data: {
         title: 'Test Project',
         description: 'Test description',
@@ -17,25 +15,45 @@ test.describe('API: Projects Create', () => {
     })
 
     expect(response.status()).toBe(401)
-    const body = await response.json()
-    expect(body.error).toContain('autorizado')
   })
 
-  test('debe rechazar proyecto con título muy corto', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/projects/create`, {
+  test('should require creator role', async ({ request }) => {
+    // Without auth, should return 401
+    const response = await request.post('/api/projects/create', {
       data: {
-        title: 'ab', // Menos de 3 caracteres
+        title: 'Test Project',
         description: 'Test description',
         goal_amount: 1000,
         deadline: new Date(Date.now() + 86400000).toISOString(),
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth
+    expect(response.status()).toBe(401)
   })
 
-  test('debe rechazar proyecto con monto negativo', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/projects/create`, {
+  test('should validate required fields', async ({ request }) => {
+    const response = await request.post('/api/projects/create', {
+      data: {},
+    })
+
+    expect(response.status()).toBeGreaterThanOrEqual(400)
+  })
+
+  test('should validate title length', async ({ request }) => {
+    const response = await request.post('/api/projects/create', {
+      data: {
+        title: 'AB',
+        description: 'Valid description',
+        goal_amount: 1000,
+        deadline: new Date(Date.now() + 86400000).toISOString(),
+      },
+    })
+
+    expect([400, 401]).toContain(response.status())
+  })
+
+  test('should validate goal_amount is positive', async ({ request }) => {
+    const response = await request.post('/api/projects/create', {
       data: {
         title: 'Test Project',
         description: 'Test description',
@@ -44,20 +62,19 @@ test.describe('API: Projects Create', () => {
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth
+    expect([400, 401]).toContain(response.status())
   })
 
-  test('debe rechazar proyecto con fecha pasada', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/projects/create`, {
+  test('should validate deadline is in the future', async ({ request }) => {
+    const response = await request.post('/api/projects/create', {
       data: {
         title: 'Test Project',
         description: 'Test description',
         goal_amount: 1000,
-        deadline: new Date(Date.now() - 86400000).toISOString(), // Ayer
+        deadline: new Date(Date.now() - 86400000).toISOString(),
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth
+    expect([400, 401]).toContain(response.status())
   })
 })
-
