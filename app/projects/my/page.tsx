@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser } from '@/lib/utils/role-check'
 import { createClient } from '@/lib/supabase/server'
+import type { Database } from '@/types/database.types'
 import {
   Card,
   CardContent,
@@ -14,17 +15,19 @@ import { Button } from '@/components/ui/button'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+import type { Database } from '@/types/database.types'
+
 async function getMyProjects(userId: string) {
   const supabase = await createClient()
 
-  const { data: projects, error } = await (supabase
-    .from('projects') as any)
+  const { data: projects, error } = await supabase
+    .from('projects')
     .select('*')
     .eq('creator_id', userId)
     .order('created_at', { ascending: false })
 
   if (error) return []
-  return (projects || []) as any[]
+  return (projects || []) as Database['public']['Tables']['projects']['Row'][]
 }
 
 export default async function MyProjectsPage() {
@@ -55,13 +58,14 @@ export default async function MyProjectsPage() {
     )
   }
 
-  const isCreator = ['creator', 'admin'].includes((user as any).role)
+  const userProfile = user as Database['public']['Tables']['profiles']['Row'] | null
+  const isCreator = userProfile && ['creator', 'admin'].includes(userProfile.role)
 
   if (!isCreator) {
     redirect('/dashboard')
   }
 
-  const projects = await getMyProjects((user as any).id)
+  const projects = await getMyProjects(userProfile!.id)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
