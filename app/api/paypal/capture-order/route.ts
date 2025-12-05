@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { paypalCaptureOrderSchema } from '@/lib/validations/schemas'
-import { handleValidationError } from '@/lib/utils/api-helpers'
+import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
+import { logger } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -70,7 +71,11 @@ export async function POST(request: NextRequest) {
     })
 
     if (!authResponse.ok) {
-      console.error('PayPal auth error')
+      const errorText = await authResponse.text().catch(() => 'Unknown error')
+      logger.error('PayPal auth error', new Error(errorText), {
+        userId: user.id,
+        endpoint: '/api/paypal/capture-order',
+      })
       return NextResponse.json(
         { error: 'Error al autenticar con PayPal' },
         { status: 500 }
@@ -94,7 +99,11 @@ export async function POST(request: NextRequest) {
 
     if (!captureResponse.ok) {
       const errorText = await captureResponse.text()
-      console.error('PayPal capture error:', errorText)
+      logger.error('PayPal capture error', new Error(errorText), {
+        userId: user.id,
+        orderId,
+        endpoint: '/api/paypal/capture-order',
+      })
       return NextResponse.json(
         { error: 'Error al capturar pago' },
         { status: 500 }
@@ -135,7 +144,12 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (backingError) {
-      console.error('Database error:', backingError)
+      logger.error('Database error creating backing', backingError, {
+        userId: user.id,
+        project_id: project_id,
+        orderId,
+        endpoint: '/api/paypal/capture-order',
+      })
       return NextResponse.json(
         { error: 'Error al registrar backing' },
         { status: 500 }
@@ -148,10 +162,8 @@ export async function POST(request: NextRequest) {
       capture: captureData,
     })
   } catch (error) {
-    console.error('Capture order error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Capture PayPal order', {
+      endpoint: '/api/paypal/capture-order',
+    })
   }
 }

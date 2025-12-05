@@ -68,9 +68,11 @@ export function AdminReportActions({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" role="group" aria-label="Acciones de reporte">
       {error && (
-        <p className="text-sm text-red-400">{error}</p>
+        <p className="text-sm text-red-400" role="alert" aria-live="polite">
+          {error}
+        </p>
       )}
       <div className="flex gap-2">
         <Button
@@ -78,6 +80,7 @@ export function AdminReportActions({
           variant="outline"
           onClick={() => router.push(getContentUrl() as any)}
           disabled={resolving}
+          aria-label={`Ver contenido reportado: ${contentType} ${contentId}`}
         >
           Ver Contenido
         </Button>
@@ -86,6 +89,7 @@ export function AdminReportActions({
           variant="default"
           onClick={() => resolveReport('resolve')}
           disabled={resolving}
+          aria-label={resolving ? 'Resolviendo reporte' : `Resolver reporte ${reportId}`}
         >
           {resolving ? 'Resolviendo...' : 'Resolver'}
         </Button>
@@ -94,6 +98,7 @@ export function AdminReportActions({
           variant="destructive"
           onClick={() => resolveReport('dismiss')}
           disabled={resolving}
+          aria-label={resolving ? 'Rechazando reporte' : `Rechazar reporte ${reportId}`}
         >
           {resolving ? 'Rechazando...' : 'Rechazar'}
         </Button>

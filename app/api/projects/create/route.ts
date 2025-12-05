@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { projectCreateSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
+import { logger } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -95,7 +96,11 @@ export async function POST(request: NextRequest) {
 
       if (rewardsError) {
         // Loggear pero no fallar - el proyecto ya está creado
-        console.error('Error creating rewards:', rewardsError)
+        logger.error('Error creating rewards', rewardsError, {
+          userId: user.id,
+          projectId: (project as any).id,
+          endpoint: '/api/projects/create',
+        })
       }
     }
 

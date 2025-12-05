@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { videoUploadSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError, sanitizeContent } from '@/lib/utils/api-helpers'
 import { checkRateLimit, contentRateLimit } from '@/lib/utils/rate-limit'
+import { logger } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -125,7 +126,10 @@ export async function POST(request: NextRequest) {
 
     if (!uploadResponse.ok) {
       const error = await uploadResponse.text()
-      console.error('Cloudflare upload error:', error)
+      logger.error('Cloudflare upload error', new Error(error), {
+        userId: user.id,
+        endpoint: '/api/videos/upload',
+      })
       return NextResponse.json(
         { error: 'Error al subir video a Cloudflare' },
         { status: 500 }

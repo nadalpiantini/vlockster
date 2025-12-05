@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { paypalCreateOrderSchema } from '@/lib/validations/schemas'
-import { handleValidationError } from '@/lib/utils/api-helpers'
+import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
+import { logger } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -133,7 +134,11 @@ export async function POST(request: NextRequest) {
     })
 
     if (!authResponse.ok) {
-      console.error('PayPal auth error:', await authResponse.text())
+      const errorText = await authResponse.text()
+      logger.error('PayPal auth error', new Error(errorText), {
+        userId: user.id,
+        endpoint: '/api/paypal/create-order',
+      })
       return NextResponse.json(
         { error: 'Error al autenticar con PayPal' },
         { status: 500 }
@@ -175,7 +180,11 @@ export async function POST(request: NextRequest) {
 
     if (!orderResponse.ok) {
       const errorText = await orderResponse.text()
-      console.error('PayPal order error:', errorText)
+      logger.error('PayPal order error', new Error(errorText), {
+        userId: user.id,
+        projectId: project_id,
+        endpoint: '/api/paypal/create-order',
+      })
       return NextResponse.json(
         { error: 'Error al crear orden de PayPal' },
         { status: 500 }
@@ -188,10 +197,8 @@ export async function POST(request: NextRequest) {
       orderId: orderData.id,
     })
   } catch (error) {
-    console.error('Create order error:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    return handleError(error, 'Create PayPal order', {
+      endpoint: '/api/paypal/create-order',
+    })
   }
 }

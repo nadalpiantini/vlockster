@@ -13,6 +13,7 @@ export default defineConfig({
       '.next',
       'test-results',
       'playwright-report',
+      'external', // Excluir archivos externos que causan errores
       'tests/**/*.spec.ts', // Excluir tests de Playwright
       'tests/landing.spec.ts',
       'tests/user-journey.spec.ts',
@@ -25,6 +26,7 @@ export default defineConfig({
         'node_modules/',
         'test-results/',
         'playwright-report/',
+        'external/', // Excluir archivos externos
         '**/*.config.{ts,js}',
         '**/*.d.ts',
         '**/types/**',

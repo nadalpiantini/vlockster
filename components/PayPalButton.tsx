@@ -42,7 +42,7 @@ export function PayPalButton({
         intent: 'capture',
       }}
     >
-      <div className="paypal-button-container">
+      <div className="paypal-button-container" role="group" aria-label="Pago con PayPal">
         <PayPalButtons
           disabled={loading}
           style={{
@@ -51,6 +51,7 @@ export function PayPalButton({
             shape: 'rect',
             label: 'pay',
           }}
+          aria-label={loading ? 'Procesando pago con PayPal' : `Pagar $${amount.toFixed(2)} USD con PayPal`}
           createOrder={async () => {
             setLoading(true)
             try {
@@ -143,7 +144,11 @@ export function PayPalButton({
 // Componente simplificado para mostrar cuando no hay usuario autenticado
 export function PayPalButtonPlaceholder() {
   return (
-    <Button disabled className="w-full">
+    <Button
+      disabled
+      className="w-full"
+      aria-label="Inicia sesión para apoyar este proyecto"
+    >
       Inicia sesión para apoyar este proyecto
     </Button>
   )

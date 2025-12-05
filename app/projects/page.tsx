@@ -8,18 +8,24 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Pagination } from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-async function getActiveProjects() {
-  const supabase = await createClient()
+const PROJECTS_PER_PAGE = 12
 
-  const { data: projects, error } = await (supabase
+async function getActiveProjects(page: number = 1) {
+  const supabase = await createClient()
+  const from = (page - 1) * PROJECTS_PER_PAGE
+  const to = from + PROJECTS_PER_PAGE - 1
+
+  const { data: projects, error, count } = await (supabase
     .from('projects') as any)
-    .select('*')
+    .select('*', { count: 'exact' })
     .in('status', ['active', 'funded'])
     .order('created_at', { ascending: false })
+    .range(from, to)
 
   // Fetch creator profiles separately if needed
   const projectsArray = (projects || []) as any[]
@@ -39,11 +45,22 @@ async function getActiveProjects() {
   }
 
   if (error) throw error
-  return projectsArray
+  return {
+    projects: projectsArray,
+    total: count || 0,
+    totalPages: Math.ceil((count || 0) / PROJECTS_PER_PAGE),
+    currentPage: page,
+  }
 }
 
-export default async function ProjectsPage() {
-  const projects = await getActiveProjects()
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const params = await searchParams
+  const page = parseInt(params.page || '1', 10)
+  const { projects, total, totalPages, currentPage } = await getActiveProjects(page)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
@@ -72,8 +89,9 @@ export default async function ProjectsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project: any) => {
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project: any) => {
               const progress =
                 (Number(project.current_amount) /
                   Number(project.goal_amount)) *
@@ -147,7 +165,13 @@ export default async function ProjectsPage() {
                 </Link>
               )
             })}
-          </div>
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/projects"
+            />
+          </>
         )}
       </div>
     </div>

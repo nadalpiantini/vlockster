@@ -72,11 +72,12 @@ export function AdminRequestActions({ requestId }: AdminRequestActionsProps) {
           {error}
         </div>
       )}
-      <div className="flex gap-3">
+      <div className="flex gap-3" role="group" aria-label="Acciones de solicitud">
         <Button
           onClick={handleApprove}
           disabled={loading}
           variant="default"
+          aria-label={loading ? 'Procesando aprobación' : `Aprobar solicitud ${requestId}`}
         >
           {loading ? 'Procesando...' : 'Aprobar'}
         </Button>
@@ -84,6 +85,7 @@ export function AdminRequestActions({ requestId }: AdminRequestActionsProps) {
           onClick={handleReject}
           disabled={loading}
           variant="destructive"
+          aria-label={loading ? 'Procesando rechazo' : `Rechazar solicitud ${requestId}`}
         >
           {loading ? 'Procesando...' : 'Rechazar'}
         </Button>

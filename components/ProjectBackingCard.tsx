@@ -31,7 +31,10 @@ export function ProjectBackingCard({
           window.location.reload()
         }}
         onError={(error) => {
-          console.error('PayPal error:', error)
+          // Error handling - usar logger en producción
+          if (process.env.NODE_ENV === 'development') {
+            console.error('PayPal error:', error)
+          }
         }}
       />
     )

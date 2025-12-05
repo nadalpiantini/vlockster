@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import { sanitizeText, sanitizeHtml } from './sanitize'
+import { logger } from './logger'
 
 /**
  * Maneja errores de validación Zod y retorna respuesta apropiada
@@ -10,6 +11,10 @@ export function handleValidationError(error: ZodError) {
     field: err.path.join('.'),
     message: err.message,
   }))
+
+  logger.warn('Validation error', {
+    errors: errors.map((e) => `${e.field}: ${e.message}`).join(', '),
+  })
 
   return NextResponse.json(
     {
@@ -23,16 +28,15 @@ export function handleValidationError(error: ZodError) {
 /**
  * Maneja errores genéricos de forma segura
  */
-export function handleError(error: unknown, context?: string) {
-  const errorId = `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-  // En desarrollo, loggear el error completo
-  if (process.env.NODE_ENV === 'development') {
-    console.error(`[${context || 'API'}] Error:`, error)
-  } else {
-    // En producción, solo loggear el ID
-    console.error(`[${context || 'API'}] Error ID: ${errorId}`)
-  }
+export function handleError(error: unknown, context?: string, additionalContext?: { userId?: string; endpoint?: string }) {
+  const errorId = logger.error(
+    `Error in ${context || 'API'}`,
+    error,
+    {
+      ...additionalContext,
+      endpoint: additionalContext?.endpoint || context,
+    }
+  )
 
   return NextResponse.json(
     {

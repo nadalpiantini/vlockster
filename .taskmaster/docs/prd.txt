@@ -1,0 +1,291 @@
+# VLOCKSTER Quality Improvements PRD
+
+## Project Overview
+
+VLOCKSTER is a production-ready platform combining streaming, crowdfunding, and community features. Following a comprehensive 360° audit (docs/AUDIT_REPORT_360.md), this PRD focuses on critical quality improvements to elevate the platform from "good" to "excellent".
+
+## Enhancement Type
+
+**Quality and Technical Debt Resolution** - Systematic improvement of code quality, accessibility, and observability based on audit findings.
+
+## Current State
+
+- ✅ Core functionality: 100% implemented and working
+- ✅ Security: Excellent (sanitization, validation, RLS, rate limiting)
+- ✅ Architecture: Solid Next.js 15 + Supabase foundation
+- ⚠️ TypeScript: 99 instances of `as any` compromising type safety
+- ⚠️ Logging: 10 console.log/error instances, needs structured logging
+- ⚠️ Accessibility: Only 11 ARIA attributes, needs WCAG 2.1 AA compliance
+- ⚠️ Tests: Good coverage in tested files, needs expansion to all components
+- ⚠️ Performance: Not measured, needs Web Vitals implementation
+
+## Goals
+
+1. **Type Safety Excellence**: Eliminate all `as any`, achieve 100% type safety
+2. **Production Logging**: Replace console calls with structured logging system
+3. **WCAG 2.1 AA Compliance**: Complete accessibility implementation
+4. **Test Coverage 80%+**: Expand tests to all components and API routes
+5. **Performance Baseline**: Implement Web Vitals and establish performance metrics
+
+## Impact Assessment
+
+**Severity**: Medium (affects code quality, legal compliance, observability)
+**Scope**: Project-wide improvements across 22+ files
+**User Impact**: Improved reliability, accessibility, better monitoring
+**Business Impact**: Legal compliance (WCAG), reduced runtime errors, better observability
+
+## Functional Requirements
+
+### Epic 1: TypeScript Type Safety (Priority 1)
+
+**Story 1.1**: Regenerate Supabase Types
+- Task: Run `pnpm supabase:types` to regenerate database types
+- Task: Verify generated types in `types/database.types.ts`
+- Task: Ensure all tables have correct type definitions
+
+**Story 1.2**: Eliminate `as any` in API Routes (13 files)
+- Task: Replace `as any` in `app/api/videos/upload/route.ts`
+- Task: Replace `as any` in `app/api/projects/create/route.ts`
+- Task: Replace `as any` in `app/api/comments/create/route.ts`
+- Task: Replace `as any` in `app/api/posts/create/route.ts`
+- Task: Replace `as any` in `app/api/admin/*` routes (4 files)
+- Task: Replace `as any` in `app/api/paypal/*` routes (3 files)
+- Task: Replace `as any` in `app/api/analytics/route.ts`
+- Task: Replace `as any` in `app/api/user/*` routes (2 files)
+
+**Story 1.3**: Eliminate `as any` in Frontend Pages (9 files)
+- Task: Fix types in `app/projects/my/page.tsx`
+- Task: Fix types in `app/admin/users/page.tsx`
+- Task: Fix types in `app/admin/reports/page.tsx`
+- Task: Fix types in `app/watch/page.tsx`
+- Task: Fix types in `app/projects/page.tsx`
+- Task: Fix types in `app/community/page.tsx`
+- Task: Fix types in remaining pages (3 files)
+
+**Story 1.4**: TypeScript Validation
+- Task: Run `pnpm typecheck` and verify zero `as any` errors
+- Task: Update tsconfig.json with stricter settings if needed
+- Task: Document TypeScript patterns in coding standards
+
+**Acceptance Criteria**:
+- ✅ Zero `as any` instances in entire codebase
+- ✅ `pnpm typecheck` passes without type errors (excluding external/)
+- ✅ Supabase types are up-to-date and complete
+
+### Epic 2: Structured Logging System (Priority 1)
+
+**Story 2.1**: Implement Logger in API Routes
+- Task: Replace console.error in `app/api/projects/create/route.ts:98`
+- Task: Replace console.log in `app/api/videos/upload/route.ts`
+- Task: Replace console calls in `app/api/paypal/*` routes
+- Task: Replace console calls in `app/api/analytics/route.ts`
+- Task: Replace console calls in remaining API routes
+
+**Story 2.2**: Logger Integration
+- Task: Import logger in all API route files
+- Task: Replace `console.error(...)` with `logger.error(...)`
+- Task: Replace `console.log(...)` with `logger.info(...)` or `logger.debug(...)`
+- Task: Add context objects to all logger calls (userId, endpoint, etc.)
+
+**Story 2.3**: Logger Validation
+- Task: Run `grep -r "console\\.log\|console\\.error" app/api/` and verify zero matches
+- Task: Test logger output in development mode
+- Task: Verify JSON output in production mode
+- Task: Document logging patterns in docs/
+
+**Acceptance Criteria**:
+- ✅ Zero console.log/error in API routes
+- ✅ All errors logged with errorId for traceability
+- ✅ Structured JSON logs in production
+- ✅ Context objects include userId, endpoint, timestamp
+
+### Epic 3: Accessibility (WCAG 2.1 AA) (Priority 1)
+
+**Story 3.1**: ARIA Labels Implementation
+- Task: Add aria-label to all buttons without visible text
+- Task: Add aria-label to all icon-only interactive elements
+- Task: Add role attributes to semantic sections (navigation, main, complementary)
+- Task: Verify aria-label coverage: target 100+ instances (currently 11)
+
+**Story 3.2**: Keyboard Navigation
+- Task: Implement skip-to-main-content link
+- Task: Verify tab order in all pages
+- Task: Test keyboard navigation in forms
+- Task: Test keyboard navigation in modals and dropdowns
+- Task: Implement focus indicators for all interactive elements
+
+**Story 3.3**: Color Contrast Audit
+- Task: Run axe DevTools on all pages
+- Task: Fix color contrast issues (WCAG AA: 4.5:1 for normal text, 3:1 for large text)
+- Task: Update Tailwind theme if needed for compliant colors
+- Task: Document color palette with contrast ratios
+
+**Story 3.4**: Screen Reader Testing
+- Task: Test with VoiceOver (macOS) on key flows
+- Task: Test with NVDA (Windows) if available
+- Task: Fix screen reader announcements for dynamic content
+- Task: Add live regions for notifications and updates
+
+**Story 3.5**: Accessibility Tests
+- Task: Add axe-core to Playwright tests
+- Task: Create a11y tests for all pages
+- Task: Set up automated a11y checks in CI
+- Task: Document accessibility patterns
+
+**Acceptance Criteria**:
+- ✅ 100+ aria-label instances across the application
+- ✅ Complete keyboard navigation in all flows
+- ✅ WCAG AA color contrast compliance
+- ✅ Screen reader compatible
+- ✅ Automated a11y tests in place
+
+### Epic 4: Test Coverage Expansion (Priority 2)
+
+**Story 4.1**: Component Unit Tests
+- Task: Add tests for `components/AdminUserActions.tsx`
+- Task: Add tests for `components/AdminReportActions.tsx`
+- Task: Add tests for `components/PayPalButton.tsx`
+- Task: Add tests for `components/ProjectBackingCard.tsx`
+- Task: Add tests for remaining components (20+ components)
+
+**Story 4.2**: API Integration Tests
+- Task: Add comprehensive tests for `/api/videos/upload`
+- Task: Add comprehensive tests for `/api/projects/create`
+- Task: Add tests for error scenarios in all endpoints
+- Task: Add tests for rate limiting in all endpoints
+- Task: Add tests for authorization in protected endpoints
+
+**Story 4.3**: E2E Flow Tests
+- Task: Add E2E test for complete video upload flow
+- Task: Add E2E test for complete project creation flow
+- Task: Add E2E test for complete backing flow
+- Task: Add E2E test for admin moderation flow
+- Task: Add E2E test for community interaction flow
+
+**Story 4.4**: Test Coverage Metrics
+- Task: Run `pnpm test:coverage` and establish baseline
+- Task: Set up coverage thresholds (target: 80%)
+- Task: Add coverage reports to CI
+- Task: Document testing strategy
+
+**Acceptance Criteria**:
+- ✅ 80%+ code coverage across the project
+- ✅ All components have unit tests
+- ✅ All API routes have integration tests
+- ✅ E2E tests for all critical flows
+- ✅ Coverage reporting in CI
+
+### Epic 5: Performance and Observability (Priority 2)
+
+**Story 5.1**: Web Vitals Implementation
+- Task: Install @vercel/analytics
+- Task: Configure Web Vitals tracking
+- Task: Add performance monitoring to key pages
+- Task: Set up LCP, FID, CLS tracking
+
+**Story 5.2**: Query Optimization
+- Task: Audit database queries for N+1 issues
+- Task: Add pagination to all list views
+- Task: Implement query caching for frequent queries
+- Task: Add database indexes where needed (see audit recommendations)
+
+**Story 5.3**: Bundle Optimization
+- Task: Set up @next/bundle-analyzer
+- Task: Analyze bundle size and identify large dependencies
+- Task: Implement code splitting for large pages
+- Task: Lazy load components where appropriate
+
+**Story 5.4**: Performance Monitoring
+- Task: Set up performance dashboards
+- Task: Configure alerts for performance regressions
+- Task: Document performance baselines
+- Task: Create performance budget
+
+**Acceptance Criteria**:
+- ✅ Web Vitals tracked and monitored
+- ✅ All list views have pagination
+- ✅ Query performance optimized
+- ✅ Bundle size analyzed and optimized
+- ✅ Performance monitoring in place
+
+## Technical Constraints
+
+- **TypeScript**: Must maintain strict typing, no degradation
+- **Accessibility**: Must meet WCAG 2.1 AA minimum (legal requirement)
+- **Performance**: Must maintain or improve current performance
+- **Testing**: Must not break existing functionality
+- **Logging**: Must be production-safe (no sensitive data exposure)
+
+## Non-Functional Requirements
+
+- **Code Quality**: All changes must pass linting and type checking
+- **Documentation**: Update relevant docs for each change
+- **Testing**: New code must have tests
+- **Review**: Each story requires validation before marking complete
+- **Incremental**: Changes must be committed incrementally (mini sprints)
+
+## Success Metrics
+
+- **Type Safety**: 0 `as any` instances (down from 99)
+- **Logging**: 0 console.log/error in production code (down from 10)
+- **Accessibility**: 100+ ARIA attributes (up from 11), WCAG AA compliance
+- **Test Coverage**: 80%+ (up from ~40%)
+- **Performance**: Web Vitals baseline established and tracked
+
+## Timeline
+
+- **Epic 1 (TypeScript)**: 2-3 days, 5-7 mini sprints
+- **Epic 2 (Logging)**: 1 day, 2-3 mini sprints
+- **Epic 3 (Accessibility)**: 3-4 days, 6-8 mini sprints
+- **Epic 4 (Tests)**: 3-4 days, 6-8 mini sprints
+- **Epic 5 (Performance)**: 2-3 days, 4-6 mini sprints
+
+**Total Estimated**: 11-15 days, 23-32 mini sprints
+
+## Dependencies
+
+- ✅ Structured logger already implemented (lib/utils/logger.ts)
+- ✅ Test framework configured (Vitest + Playwright)
+- ✅ Audit report complete with specific findings
+- ⚠️ Supabase types may need regeneration
+- ⚠️ axe-core needs to be added for a11y testing
+
+## Risks and Mitigation
+
+**Risk**: Type changes may break existing functionality
+**Mitigation**: Run full test suite after each mini sprint
+
+**Risk**: Accessibility changes may affect visual design
+**Mitigation**: Consult UI/UX guidelines, maintain design consistency
+
+**Risk**: Performance optimization may introduce complexity
+**Mitigation**: Start with measurements, optimize only proven bottlenecks
+
+**Risk**: Test writing may slow down progress
+**Mitigation**: Write tests incrementally, focus on critical paths first
+
+## Out of Scope
+
+- ❌ New features or functionality
+- ❌ Major architectural changes
+- ❌ Database schema changes
+- ❌ UI/UX redesign (beyond accessibility fixes)
+- ❌ Third-party integrations
+
+## Validation and Acceptance
+
+Each epic must pass:
+- ✅ Automated tests (unit, integration, E2E)
+- ✅ TypeScript type checking
+- ✅ Linting
+- ✅ Accessibility audit (for Epic 3)
+- ✅ Performance baseline (for Epic 5)
+- ✅ Manual testing of affected areas
+- ✅ Git commit with validation summary
+
+## References
+
+- Audit Report: `docs/AUDIT_REPORT_360.md`
+- Architecture: `docs/architecture.md`
+- UI/UX Guidelines: `docs/UI_UX_GUIDELINES.md`
+- Error Handling: `docs/ERROR_HANDLING.md`

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { BrandHeader } from '@/components/BrandHeader'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -32,6 +33,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+      {/* Navigation Header */}
+      <nav className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <BrandHeader />
+        </div>
+      </nav>
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

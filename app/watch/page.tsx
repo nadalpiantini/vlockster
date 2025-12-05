@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Pagination } from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -21,15 +22,24 @@ type Video = {
   uploader?: { name: string | null; public_profile_slug: string | null } | null
 }
 
-async function getPublicVideos(): Promise<Video[]> {
-  const supabase = await createClient()
+const VIDEOS_PER_PAGE = 16
 
-  const { data: videos, error } = await (supabase
+async function getPublicVideos(page: number = 1): Promise<{
+  videos: Video[]
+  total: number
+  totalPages: number
+  currentPage: number
+}> {
+  const supabase = await createClient()
+  const from = (page - 1) * VIDEOS_PER_PAGE
+  const to = from + VIDEOS_PER_PAGE - 1
+
+  const { data: videos, error, count } = await (supabase
     .from('videos') as any)
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('visibility', 'public')
     .order('created_at', { ascending: false })
-    .limit(20)
+    .range(from, to)
 
   // Fetch uploader profiles separately if needed
   if (videos && videos.length > 0) {
@@ -48,11 +58,22 @@ async function getPublicVideos(): Promise<Video[]> {
   }
 
   if (error) throw error
-  return (videos || []) as Video[]
+  return {
+    videos: (videos || []) as Video[],
+    total: count || 0,
+    totalPages: Math.ceil((count || 0) / VIDEOS_PER_PAGE),
+    currentPage: page,
+  }
 }
 
-export default async function WatchPage() {
-  const videos = await getPublicVideos()
+export default async function WatchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const params = await searchParams
+  const page = parseInt(params.page || '1', 10)
+  const { videos, total, totalPages, currentPage } = await getPublicVideos(page)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
@@ -76,8 +97,9 @@ export default async function WatchPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {videos.map((video: Video) => (
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {videos.map((video: Video) => (
               <Link key={video.id} href={`/watch/${video.id}`}>
                 <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full">
                   {/* Thumbnail */}
@@ -111,9 +133,15 @@ export default async function WatchPage() {
                     </p>
                   </CardContent>
                 </Card>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/watch"
+            />
+          </>
         )}
       </div>
     </div>

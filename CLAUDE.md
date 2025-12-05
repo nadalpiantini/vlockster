@@ -188,3 +188,7 @@ Documentation in `.bmad-core/user-guide.md` and `docs/` directory.
 4. **Port 3007**: Development server runs on 3007, not standard 3000
 5. **Test File Naming**: `.test.ts` for Vitest, `.spec.ts` for Playwright
 6. **Type Generation**: Run `pnpm supabase:types` after any database schema changes
+
+## Task Master AI Instructions
+**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.taskmaster/CLAUDE.md

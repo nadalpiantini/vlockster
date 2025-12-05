@@ -44,7 +44,10 @@ export function ProjectRewardCard({
   const remaining = reward.limit ? reward.limit - reward.backers_count : null
 
   return (
-    <Card className={`${!isAvailable ? 'opacity-50' : ''}`}>
+    <Card
+      className={`${!isAvailable ? 'opacity-50' : ''}`}
+      aria-label={`Recompensa: ${reward.title} por $${Number(reward.amount).toLocaleString()} USD`}
+    >
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -54,7 +57,11 @@ export function ProjectRewardCard({
             </CardDescription>
           </div>
           {!isAvailable && (
-            <span className="bg-red-900/50 text-red-300 text-xs px-2 py-1 rounded-full">
+            <span
+              className="bg-red-900/50 text-red-300 text-xs px-2 py-1 rounded-full"
+              role="status"
+              aria-label="Recompensa agotada"
+            >
               Agotado
             </span>
           )}
@@ -70,7 +77,11 @@ export function ProjectRewardCard({
           </p>
         )}
         {!isAvailable || projectStatus !== 'active' ? (
-          <Button className="w-full" disabled>
+          <Button
+            className="w-full"
+            disabled
+            aria-label={!isAvailable ? `Recompensa ${reward.title} agotada` : 'Campaña cerrada'}
+          >
             {!isAvailable ? 'Agotado' : 'Campaña cerrada'}
           </Button>
         ) : user ? (
@@ -82,7 +93,10 @@ export function ProjectRewardCard({
               window.location.reload()
             }}
             onError={(error) => {
-              console.error('PayPal error:', error)
+              // Error handling - usar logger en producción
+              if (process.env.NODE_ENV === 'development') {
+                console.error('PayPal error:', error)
+              }
             }}
           />
         ) : (

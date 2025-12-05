@@ -85,7 +85,7 @@ export default function SignupPage() {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative w-10 h-10">
                 <Image
-                  src="/vlockster_logo.png"
+                  src="/items/vlockster_logo.jpeg"
                   alt="VLOCKSTER Logo"
                   fill
                   className="object-contain group-hover:scale-110 transition-transform duration-300"
