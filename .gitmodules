@@ -1,3 +1,6 @@
 [submodule "external/fastapi"]
 	path = external/fastapi
 	url = https://github.com/nadalpiantini/fastapi
+[submodule "external/langchain"]
+	path = external/langchain
+	url = https://github.com/nadalpiantini/langchain
