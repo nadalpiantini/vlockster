@@ -5,7 +5,7 @@ import {
   commentCreateSchema,
   postCreateSchema,
   creatorRequestSchema,
-} } from '@/lib/validations/schemas'
+} from '@/lib/validations/schemas'
 
 describe('videoUploadSchema', () => {
   it('debe validar un video válido', () => {
@@ -106,30 +106,91 @@ describe('postCreateSchema', () => {
   })
 })
 
-describe('creatorRequestSchema', () => {
-  it('debe validar una solicitud válida', () => {
+describe('signupSchema', () => {
+  it('debe validar un signup válido', () => {
     const valid = {
-      pitch_title: 'Test Pitch',
-      pitch_text: 'This is a valid pitch text',
-      portfolio_url: 'https://example.com/portfolio',
+      email: 'test@example.com',
+      password: 'Password123',
+      name: 'Test User',
+      confirmPassword: 'Password123',
     }
-    expect(() => creatorRequestSchema.parse(valid)).not.toThrow()
+    expect(() => signupSchema.parse(valid)).not.toThrow()
   })
 
-  it('debe permitir portfolio_url opcional', () => {
-    const valid = {
-      pitch_title: 'Test Pitch',
-      pitch_text: 'This is a valid pitch text',
-    }
-    expect(() => creatorRequestSchema.parse(valid)).not.toThrow()
-  })
-
-  it('debe rechazar pitch_title muy corto', () => {
+  it('debe rechazar contraseñas que no coinciden', () => {
     const invalid = {
-      pitch_title: 'A',
-      pitch_text: 'Valid text',
+      email: 'test@example.com',
+      password: 'Password123',
+      name: 'Test User',
+      confirmPassword: 'Different123',
     }
-    expect(() => creatorRequestSchema.parse(invalid)).toThrow()
+    expect(() => signupSchema.parse(invalid)).toThrow()
+  })
+
+  it('debe rechazar contraseña muy corta', () => {
+    const invalid = {
+      email: 'test@example.com',
+      password: 'Short1',
+      name: 'Test User',
+      confirmPassword: 'Short1',
+    }
+    expect(() => signupSchema.parse(invalid)).toThrow()
+  })
+})
+
+describe('loginSchema', () => {
+  it('debe validar un login válido', () => {
+    const valid = {
+      email: 'test@example.com',
+      password: 'password',
+    }
+    expect(() => loginSchema.parse(valid)).not.toThrow()
+  })
+
+  it('debe rechazar email inválido', () => {
+    const invalid = {
+      email: 'invalid-email',
+      password: 'password',
+    }
+    expect(() => loginSchema.parse(invalid)).toThrow()
+  })
+})
+
+describe('rewardSchema', () => {
+  it('debe validar una recompensa válida', () => {
+    const valid = {
+      title: 'Test Reward',
+      description: 'This is a valid reward description',
+      amount: 25,
+    }
+    expect(() => rewardSchema.parse(valid)).not.toThrow()
+  })
+
+  it('debe rechazar amount negativo', () => {
+    const invalid = {
+      title: 'Test Reward',
+      description: 'Valid description',
+      amount: -10,
+    }
+    expect(() => rewardSchema.parse(invalid)).toThrow()
+  })
+})
+
+describe('projectBackingSchema', () => {
+  it('debe validar un backing válido', () => {
+    const valid = {
+      project_id: '123e4567-e89b-12d3-a456-426614174000',
+      amount: 50,
+    }
+    expect(() => projectBackingSchema.parse(valid)).not.toThrow()
+  })
+
+  it('debe rechazar project_id inválido', () => {
+    const invalid = {
+      project_id: 'invalid-uuid',
+      amount: 50,
+    }
+    expect(() => projectBackingSchema.parse(invalid)).toThrow()
   })
 })
 

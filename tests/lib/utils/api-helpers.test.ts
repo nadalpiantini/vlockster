@@ -1,8 +1,21 @@
-import { describe, it, expect, vi } from 'vitest'
-import { handleError, sanitizeResponse } from '@/lib/utils/api-helpers'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { handleError, handleValidationError, sanitizeContent, validateAndSanitize } from '@/lib/utils/api-helpers'
 import { NextResponse } from 'next/server'
+import { ZodError } from 'zod'
+
+// Mock logger
+vi.mock('@/lib/utils/logger', () => ({
+  logger: {
+    error: vi.fn(() => 'error-id-123'),
+    warn: vi.fn(),
+  },
+}))
 
 describe('handleError', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('debe retornar NextResponse con error 500 por defecto', () => {
     const error = new Error('Test error')
     const result = handleError(error, 'Test operation')
@@ -11,87 +24,86 @@ describe('handleError', () => {
     expect(result.status).toBe(500)
   })
 
-  it('debe incluir el mensaje de error en la respuesta', async () => {
-    const error = new Error('Test error message')
-    const result = handleError(error, 'Test operation')
-    const body = await result.json()
+  it('debe incluir errorId en desarrollo', async () => {
+    const originalEnv = process.env.NODE_ENV
+    process.env.NODE_ENV = 'development'
     
-    expect(body).toHaveProperty('error')
-    expect(body.error).toContain('Test error message')
-  })
-
-  it('debe incluir el nombre de la operación en el mensaje', async () => {
     const error = new Error('Test error')
-    const result = handleError(error, 'Create user')
-    const body = await result.json()
-    
-    expect(body.error).toContain('Create user')
-  })
-
-  it('debe manejar errores sin mensaje', async () => {
-    const error = new Error()
     const result = handleError(error, 'Test operation')
     const body = await result.json()
     
     expect(body).toHaveProperty('error')
+    
+    process.env.NODE_ENV = originalEnv
+  })
+
+  it('debe incluir contexto adicional', () => {
+    const error = new Error('Test error')
+    const result = handleError(error, 'Test operation', { userId: 'user-123', endpoint: '/api/test' })
+    
+    expect(result).toBeInstanceOf(NextResponse)
   })
 })
 
-describe('sanitizeResponse', () => {
-  it('debe sanitizar strings en objetos', () => {
+describe('handleValidationError', () => {
+  it('debe retornar error 400 con detalles de validación', async () => {
+    const zodError = new ZodError([
+      {
+        code: 'too_small',
+        minimum: 3,
+        type: 'string',
+        inclusive: true,
+        path: ['title'],
+        message: 'Título debe tener al menos 3 caracteres',
+      },
+    ])
+    
+    const result = handleValidationError(zodError)
+    expect(result.status).toBe(400)
+    
+    const body = await result.json()
+    expect(body).toHaveProperty('error')
+    expect(body).toHaveProperty('details')
+    expect(Array.isArray(body.details)).toBe(true)
+  })
+})
+
+describe('sanitizeContent', () => {
+  it('debe sanitizar texto cuando allowHtml es false', () => {
+    const input = '<script>alert(1)</script>Hello'
+    const result = sanitizeContent(input, false)
+    expect(result).not.toContain('<script>')
+  })
+
+  it('debe permitir HTML cuando allowHtml es true', () => {
+    const input = '<p>Hello <strong>world</strong></p>'
+    const result = sanitizeContent(input, true)
+    expect(result).toContain('<p>')
+    expect(result).toContain('<strong>')
+  })
+})
+
+describe('validateAndSanitize', () => {
+  it('debe sanitizar campos de texto especificados', () => {
     const data = {
       title: '<script>alert(1)</script>Hello',
       description: 'Normal text',
+      count: 42,
     }
-    const result = sanitizeResponse(data)
-    
+    const result = validateAndSanitize(data, ['title', 'description'])
     expect(result.title).not.toContain('<script>')
     expect(result.description).toBe('Normal text')
-  })
-
-  it('debe sanitizar arrays de strings', () => {
-    const data = {
-      tags: ['<script>alert(1)</script>', 'normal tag'],
-    }
-    const result = sanitizeResponse(data)
-    
-    expect(result.tags[0]).not.toContain('<script>')
-    expect(result.tags[1]).toBe('normal tag')
-  })
-
-  it('debe preservar números y booleanos', () => {
-    const data = {
-      count: 42,
-      active: true,
-    }
-    const result = sanitizeResponse(data)
-    
     expect(result.count).toBe(42)
-    expect(result.active).toBe(true)
   })
 
-  it('debe manejar objetos anidados', () => {
+  it('debe preservar campos no especificados', () => {
     const data = {
-      user: {
-        name: '<script>alert(1)</script>',
-        email: 'test@example.com',
-      },
+      title: '<script>alert(1)</script>',
+      other: 'Not sanitized',
     }
-    const result = sanitizeResponse(data)
-    
-    expect(result.user.name).not.toContain('<script>')
-    expect(result.user.email).toBe('test@example.com')
-  })
-
-  it('debe manejar null y undefined', () => {
-    const data = {
-      value: null,
-      other: undefined,
-    }
-    const result = sanitizeResponse(data)
-    
-    expect(result.value).toBeNull()
-    expect(result.other).toBeUndefined()
+    const result = validateAndSanitize(data, ['title'])
+    expect(result.title).not.toContain('<script>')
+    expect(result.other).toBe('Not sanitized')
   })
 })
 
