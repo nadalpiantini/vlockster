@@ -112,7 +112,7 @@ export default function MyAnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-7xl">
+      <main id="main-content" className="container mx-auto max-w-7xl" role="main" aria-label="Analíticas de creador">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
           <div>

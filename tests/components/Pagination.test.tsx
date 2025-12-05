@@ -48,7 +48,8 @@ describe('Pagination', () => {
   it('debe tener aria-current en la página actual', () => {
     render(<Pagination currentPage={3} totalPages={5} basePath="/test" />)
     const currentPageButton = screen.getByLabelText('Página 3, página actual')
-    expect(currentPageButton).toHaveAttribute('aria-current', 'page')
+    const currentPageLink = currentPageButton.closest('a')
+    expect(currentPageLink).toHaveAttribute('aria-current', 'page')
   })
 
   it('debe tener aria-live para el contador de páginas', () => {

@@ -20,6 +20,11 @@ vi.mock('@/components/PayPalButton', () => ({
       PayPal Button - ${amount} - Project: {projectId} - Reward: {rewardId || 'none'}
     </div>
   ),
+  PayPalButtonPlaceholder: () => (
+    <div data-testid="paypal-placeholder">
+      Inicia sesión para apoyar este proyecto
+    </div>
+  ),
 }))
 
 describe('ProjectBackingCard', () => {

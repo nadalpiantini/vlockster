@@ -5,6 +5,11 @@ import { PayPalButton, PayPalButtonPlaceholder } from '@/components/PayPalButton
 
 // Mock @paypal/react-paypal-js
 vi.mock('@paypal/react-paypal-js', () => ({
+  PayPalScriptProvider: ({ children, ...props }: any) => (
+    <div data-testid="paypal-script-provider" {...props}>
+      {children}
+    </div>
+  ),
   PayPalButtons: ({ onApprove, onError, ...props }: any) => (
     <div data-testid="paypal-buttons" {...props}>
       PayPal Buttons Mock
@@ -26,11 +31,13 @@ describe('PayPalButton', () => {
   })
 
   it('debe renderizar el botón de PayPal', () => {
+    process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
     render(<PayPalButton {...mockProps} />)
     expect(screen.getByTestId('paypal-buttons')).toBeDefined()
   })
 
   it('debe tener role="group" y aria-label', () => {
+    process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
     const { container } = render(<PayPalButton {...mockProps} />)
     const group = container.querySelector('[role="group"]')
     expect(group).toBeDefined()
@@ -38,12 +45,14 @@ describe('PayPalButton', () => {
   })
 
   it('debe mostrar el monto correcto', () => {
+    process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
     const { container } = render(<PayPalButton {...mockProps} amount={100} />)
     const group = container.querySelector('[role="group"]')
     expect(group).toHaveAttribute('aria-label', expect.stringContaining('100'))
   })
 
   it('debe manejar rewardId opcional', () => {
+    process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
     render(<PayPalButton {...mockProps} rewardId="reward-123" />)
     expect(screen.getByTestId('paypal-buttons')).toBeDefined()
   })

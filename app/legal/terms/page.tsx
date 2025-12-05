@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
       <div className="container mx-auto max-w-4xl">
-        <main role="main">
+        <main id="main-content" role="main" aria-label="Términos de uso">
           <h1 className="text-4xl font-bold mb-8">Términos de Uso</h1>
           <p className="text-gray-300 mb-8">Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
 
