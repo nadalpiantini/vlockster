@@ -69,13 +69,13 @@ export default async function CommunityPage() {
               >
                 <Card className="hover:border-blue-500 transition-colors cursor-pointer" role="listitem">
                   <CardHeader>
-                    <CardTitle>{community.name}</CardTitle>
+                    <CardTitle aria-label={`Comunidad: ${community.name}`}>{community.name}</CardTitle>
                     <CardDescription>
-                      Comunidad pública
+                      <span role="status" aria-label="Comunidad pública">Comunidad pública</span>
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-300">
+                    <p className="text-gray-300" aria-label={`Descripción: ${community.description || 'Sin descripción'}`}>
                       {community.description || 'Sin descripción'}
                     </p>
                   </CardContent>

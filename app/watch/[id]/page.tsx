@@ -72,7 +72,7 @@ export default async function WatchVideoPage({
 
   if (!canWatch) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
+      <main id="main-content" className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4" role="main" aria-label="Video restringido">
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>Contenido Restringido</CardTitle>
@@ -92,11 +92,11 @@ export default async function WatchVideoPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-8 px-4">
-      <div className="container mx-auto max-w-6xl">
+      <main id="main-content" className="container mx-auto max-w-6xl" role="main" aria-label={`Reproductor de video: ${video.title}`}>
         {/* Video Player */}
         <Card className="mb-6">
           <CardContent className="p-0">
-            <div className="aspect-video bg-gray-950 flex items-center justify-center">
+            <div className="aspect-video bg-gray-950 flex items-center justify-center" role="region" aria-label="Reproductor de video">
               {video.stream_id ? (
                 <div className="w-full h-full">
                   {process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
@@ -105,9 +105,11 @@ export default async function WatchVideoPage({
                       className="w-full h-full"
                       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
                       allowFullScreen
+                      title={`Reproductor de video: ${video.title}`}
+                      aria-label={`Reproductor de video: ${video.title}`}
                     />
                   ) : (
-                    <div className="text-center p-8">
+                    <div className="text-center p-8" role="alert" aria-label="Configuración de Cloudflare Stream requerida">
                       <p className="text-gray-400 mb-2">Cloudflare Stream no configurado</p>
                       <p className="text-sm text-gray-500">
                         Video ID: {video.stream_id}
@@ -116,7 +118,7 @@ export default async function WatchVideoPage({
                   )}
                 </div>
               ) : (
-                <div className="text-center">
+                <div className="text-center" role="alert" aria-label="Video no disponible">
                   <p className="text-gray-400">Video no disponible</p>
                 </div>
               )}
