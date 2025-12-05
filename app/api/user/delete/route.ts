@@ -32,8 +32,8 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Soft delete: Marcar perfil como eliminado
-    const { error: profileError } = await (supabase
-      .from('profiles') as any)
+    const { error: profileError } = await supabase
+      .from('profiles')
       .update({
         email: `deleted_${user.id}@deleted.local`,
         name: 'Usuario Eliminado',

@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
     const sanitizedContent = sanitizeContent(content, true) // Permitir HTML básico en posts
 
     // Verificar que la comunidad existe
-    const { data: community, error: communityError } = await (supabase
-      .from('communities') as any)
+    const { data: community, error: communityError } = await supabase
+      .from('communities')
       .select('id')
       .eq('id', community_id)
       .single()
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear post
-    const { data: post, error: postError } = await (supabase
-      .from('posts') as any)
+    const { data: post, error: postError } = await supabase
+      .from('posts')
       .insert({
         community_id,
         user_id: user.id,

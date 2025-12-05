@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes((profile as any).role)) {
+    if (!profile || !['creator', 'admin'].includes(profile.role)) {
       return NextResponse.json(
         { error: 'Solo los creators pueden crear proyectos' },
         { status: 403 }
@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
     const sanitizedDescription = sanitizeContent(description, true) // Permitir HTML básico
 
     // Crear proyecto
-    const { data: project, error: projectError } = await (supabase
-      .from('projects') as any)
+    const { data: project, error: projectError } = await supabase
+      .from('projects')
       .insert({
         title: sanitizedTitle,
         description: sanitizedDescription,
@@ -83,22 +83,22 @@ export async function POST(request: NextRequest) {
     // Crear recompensas si existen
     if (rewards && Array.isArray(rewards) && rewards.length > 0) {
       const rewardsToInsert = rewards.map((reward) => ({
-        project_id: (project as any).id,
+        project_id: project.id,
         title: sanitizeContent(reward.title, false),
         description: sanitizeContent(reward.description, true),
         amount: reward.amount,
         limit: reward.limit || null,
       }))
 
-      const { error: rewardsError } = await (supabase
-        .from('rewards') as any)
+      const { error: rewardsError } = await supabase
+        .from('rewards')
         .insert(rewardsToInsert)
 
       if (rewardsError) {
         // Loggear pero no fallar - el proyecto ya está creado
         logger.error('Error creating rewards', rewardsError, {
           userId: user.id,
-          projectId: (project as any).id,
+          projectId: project.id,
           endpoint: '/api/projects/create',
         })
       }

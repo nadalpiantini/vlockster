@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
     const { requestId } = validationResult.data
 
     // Obtener la solicitud
-    const { data: creatorRequest, error: fetchError } = await (supabase
-      .from('creator_requests') as any)
+    const { data: creatorRequest, error: fetchError } = await supabase
+      .from('creator_requests')
       .select('user_id')
       .eq('id', requestId)
       .single()
@@ -50,23 +50,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
-    const { error: updateRoleError } = await (supabase
-      .from('profiles') as any)
+    const { error: updateRoleError } = await supabase
+      .from('profiles')
       .update({ role: 'creator' })
-      .eq('id', (creatorRequest as any).user_id)
+      .eq('id', creatorRequest.user_id)
 
     if (updateRoleError) {
       return handleError(updateRoleError, 'Approve request - update role')
     }
 
     // Marcar la solicitud como aprobada
-    const { error: updateRequestError } = await (supabase
-      .from('creator_requests') as any)
+    const { error: updateRequestError } = await supabase
+      .from('creator_requests')
       .update({
         status: 'approved',
         reviewed_by: admin.id,
         reviewed_at: new Date().toISOString(),
-      } as any)
+      })
       .eq('id', requestId)
 
     if (updateRequestError) {

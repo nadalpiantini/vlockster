@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['creator', 'admin'].includes((profile as any).role)) {
+    if (!profile || !['creator', 'admin'].includes(profile.role)) {
       return NextResponse.json(
         { error: 'Solo los creators pueden subir videos' },
         { status: 403 }
@@ -140,8 +140,8 @@ export async function POST(request: NextRequest) {
     const streamId = uploadResult.result.uid
 
     // Guardar metadata en Supabase
-    const { data: video, error: dbError } = await (supabase
-      .from('videos') as any)
+    const { data: video, error: dbError } = await supabase
+      .from('videos')
       .insert({
         title: sanitizedTitle,
         description: sanitizedDescription,

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
 import { z } from 'zod'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || (profile as any).role !== 'admin') {
+    if (!profile || (profile as Database['public']['Tables']['profiles']['Row']).role !== 'admin') {
       return NextResponse.json(
         { error: 'Solo los administradores pueden cambiar roles' },
         { status: 403 }
@@ -53,12 +54,12 @@ export async function POST(request: NextRequest) {
 
     // No permitir cambiar el rol del último admin
     if (role !== 'admin') {
-      const { data: admins } = await (supabase
-        .from('profiles') as any)
+      const { data: admins } = await supabase
+        .from('profiles')
         .select('id')
         .eq('role', 'admin')
 
-      if (admins && admins.length === 1 && (admins[0] as any).id === userId) {
+      if (admins && admins.length === 1 && (admins[0] as Database['public']['Tables']['profiles']['Row']).id === userId) {
         return NextResponse.json(
           { error: 'No se puede quitar el rol de admin al último administrador' },
           { status: 400 }
@@ -67,9 +68,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar rol
-    const { data: updatedUser, error: updateError } = await (supabase
-      .from('profiles') as any)
-      .update({ role })
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('profiles')
+      .update({ role } as Database['public']['Tables']['profiles']['Update'])
       .eq('id', userId)
       .select()
       .single()

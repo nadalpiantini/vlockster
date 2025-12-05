@@ -53,8 +53,8 @@ export async function POST(request: NextRequest) {
     const sanitizedContent = sanitizeContent(content, false)
 
     // Verificar que el post existe
-    const { data: post, error: postError } = await (supabase
-      .from('posts') as any)
+    const { data: post, error: postError } = await supabase
+      .from('posts')
       .select('id')
       .eq('id', post_id)
       .single()
@@ -68,8 +68,8 @@ export async function POST(request: NextRequest) {
 
     // Si hay parent_comment_id, verificar que el comentario padre existe
     if (parentCommentId) {
-      const { data: parentComment, error: parentError } = await (supabase
-        .from('comments') as any)
+      const { data: parentComment, error: parentError } = await supabase
+        .from('comments')
         .select('id')
         .eq('id', parentCommentId)
         .single()
@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear comentario
-    const { data: comment, error: commentError } = await (supabase
-      .from('comments') as any)
+    const { data: comment, error: commentError } = await supabase
+      .from('comments')
       .insert({
         post_id,
         user_id: user.id,

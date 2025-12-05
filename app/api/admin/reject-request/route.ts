@@ -4,6 +4,7 @@ import { requireRole } from '@/lib/utils/role-check'
 import { adminRejectRequestSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -36,13 +37,13 @@ export async function POST(request: NextRequest) {
     const { requestId } = validationResult.data
 
     // Marcar la solicitud como rechazada
-    const { error } = await (supabase
-      .from('creator_requests') as any)
+    const { error } = await supabase
+      .from('creator_requests')
       .update({
         status: 'rejected',
-        reviewed_by: (admin as any).id,
+        reviewed_by: admin.id,
         reviewed_at: new Date().toISOString(),
-      })
+      } as Database['public']['Tables']['creator_requests']['Update'])
       .eq('id', requestId)
 
     if (error) {

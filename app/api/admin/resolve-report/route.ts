@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
 import { z } from 'zod'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || !['admin', 'moderator'].includes((profile as any).role)) {
+    if (!profile || !['admin', 'moderator'].includes((profile as Database['public']['Tables']['profiles']['Row']).role)) {
       return NextResponse.json(
         { error: 'Solo administradores y moderadores pueden resolver reportes' },
         { status: 403 }
@@ -55,14 +56,14 @@ export async function POST(request: NextRequest) {
     // Actualizar estado del reporte
     const status = action === 'resolve' ? 'resolved' : 'dismissed'
 
-    const { data: updatedReport, error: updateError } = await (supabase
-      .from('reports') as any)
+    const { data: updatedReport, error: updateError } = await supabase
+      .from('reports')
       .update({
         status,
         reviewed_by: user.id,
         reviewed_at: new Date().toISOString(),
         resolution_notes: notes || null,
-      })
+      } as Database['public']['Tables']['reports']['Update'])
       .eq('id', reportId)
       .select()
       .single()
