@@ -46,9 +46,9 @@ describe('PayPalButton', () => {
 
   it('debe mostrar el monto correcto', () => {
     process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'test-client-id'
-    const { container } = render(<PayPalButton {...mockProps} amount={100} />)
-    const group = container.querySelector('[role="group"]')
-    expect(group).toHaveAttribute('aria-label', expect.stringContaining('100'))
+    render(<PayPalButton {...mockProps} amount={100} />)
+    const buttons = screen.getByTestId('paypal-buttons')
+    expect(buttons).toHaveAttribute('aria-label', expect.stringContaining('100'))
   })
 
   it('debe manejar rewardId opcional', () => {
