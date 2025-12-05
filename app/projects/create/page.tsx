@@ -196,6 +196,7 @@ export default function CreateProjectPage() {
                     variant="outline"
                     size="sm"
                     className="text-xs"
+                    aria-label={generatingDescription ? 'Generando descripción con IA...' : 'Generar descripción del proyecto con inteligencia artificial'}
                   >
                     {generatingDescription ? (
                       <>
