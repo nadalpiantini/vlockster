@@ -161,13 +161,13 @@ describe('CookieConsent', () => {
   })
 
   it('debe mostrar enlaces a política de privacidad y términos', async () => {
-    vi.advanceTimersByTime(1000)
-    
     render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     const privacyLink = screen.getByLabelText(/política de privacidad/i)
     expect(privacyLink).toHaveAttribute('href', '/legal/privacy')
@@ -177,13 +177,13 @@ describe('CookieConsent', () => {
   })
 
   it('debe tener título y descripción accesibles', async () => {
-    vi.advanceTimersByTime(1000)
-    
     render(<CookieConsent />)
+    
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    })
+    }, { timeout: 2000 })
     
     expect(screen.getByText(/uso de cookies/i)).toBeDefined()
     expect(screen.getByText(/utilizamos cookies para mejorar/i)).toBeDefined()

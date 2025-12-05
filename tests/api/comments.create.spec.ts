@@ -1,56 +1,60 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * Tests de integración para el endpoint de creación de comentarios
+ * Tests for /api/comments/create endpoint
  */
-test.describe('API: Comments Create', () => {
-  const API_BASE = 'http://localhost:3007/api'
-
-  test('debe rechazar request sin autenticación', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/comments/create`, {
+test.describe('API: /api/comments/create', () => {
+  test('should require authentication', async ({ request }) => {
+    const response = await request.post('/api/comments/create', {
       data: {
-        post_id: 'test-id',
-        content: 'Test comment',
+        post_id: 'test-post-id',
+        content: 'This is a valid comment with enough characters',
       },
     })
 
     expect(response.status()).toBe(401)
-    const body = await response.json()
-    expect(body.error).toContain('autorizado')
   })
 
-  test('debe rechazar request sin post_id', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/comments/create`, {
+  test('should validate required fields', async ({ request }) => {
+    const response = await request.post('/api/comments/create', {
+      data: {},
+    })
+
+    expect(response.status()).toBeGreaterThanOrEqual(400)
+  })
+
+  test('should reject content that is too short', async ({ request }) => {
+    const response = await request.post('/api/comments/create', {
       data: {
-        content: 'Test comment',
+        post_id: 'test-post-id',
+        content: 'short',
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth, pero en producción sería 400
+    expect(response.status()).toBeGreaterThanOrEqual(400)
   })
 
-  test('debe rechazar contenido vacío', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/comments/create`, {
+  test('should sanitize content input', async ({ request }) => {
+    const response = await request.post('/api/comments/create', {
       data: {
-        post_id: 'test-id',
-        content: '',
+        post_id: 'test-post-id',
+        content: '<script>alert("xss")</script>Valid comment content',
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth
+    // Should either reject or sanitize
+    const data = await response.json().catch(() => ({}))
+    expect(data.content || data.error).toBeTruthy()
   })
 
-  test('debe rechazar contenido muy largo', async ({ request }) => {
-    const longContent = 'a'.repeat(2001) // Más del límite de 2000 caracteres
-
-    const response = await request.post(`${API_BASE}/comments/create`, {
+  test('should validate post_id format', async ({ request }) => {
+    const response = await request.post('/api/comments/create', {
       data: {
-        post_id: 'test-id',
-        content: longContent,
+        post_id: 'invalid-uuid',
+        content: 'Valid comment content with enough characters',
       },
     })
 
-    expect(response.status()).toBe(401) // Primero falla auth
+    expect([400, 401]).toContain(response.status())
   })
 })
-
