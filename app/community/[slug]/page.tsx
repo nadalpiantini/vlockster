@@ -289,7 +289,7 @@ export default function CommunityDetailPage() {
                     <p className="text-gray-300 whitespace-pre-wrap mb-4 line-clamp-3">
                       {post.content}
                     </p>
-                  <div className="flex gap-4 text-sm text-gray-400">
+                  <div className="flex gap-4 text-sm text-gray-300">
                     <span>👍 {post.like_count || 0} likes</span>
                     <span>💬 {post.comment_count || 0} comentarios</span>
                   </div>
@@ -304,7 +304,7 @@ export default function CommunityDetailPage() {
         {!user && (
           <Card className="mt-6">
             <CardContent className="py-6 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Inicia sesión para participar en la comunidad
               </p>
               <Link href="/login">

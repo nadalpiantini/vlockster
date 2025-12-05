@@ -8,23 +8,53 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AdminRequestActions } from '@/components/AdminRequestActions'
+import { Pagination } from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-async function getCreatorRequests() {
+const REQUESTS_PER_PAGE = 10
+
+type RequestWithProfile = {
+  id: string
+  user_id: string
+  pitch_title: string
+  pitch_text: string
+  portfolio_url: string | null
+  status: string
+  created_at: string
+  reviewed_by: string | null
+  reviewed_at: string | null
+  rejection_reason: string | null
+  profiles: { name: string; email: string } | null
+}
+
+async function getCreatorRequests(page: number = 1, status: 'pending' | 'reviewed' = 'pending') {
   const supabase = await createClient()
+  const from = (page - 1) * REQUESTS_PER_PAGE
+  const to = from + REQUESTS_PER_PAGE - 1
 
-  const { data: requests, error } = await supabase
+  let query = supabase
     .from('creator_requests')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .range(from, to)
 
-  if (error) throw error
+  if (status === 'pending') {
+    query = query.eq('status', 'pending')
+  } else {
+    query = query.neq('status', 'pending')
+  }
+
+  const { data: requests, error, count } = await query
+
+  if (error) {
+    return { requests: [], total: 0, totalPages: 0, currentPage: page }
+  }
 
   // Fetch profiles separately to avoid relationship ambiguity
   if (!requests || requests.length === 0) {
-    return []
+    return { requests: [], total: count || 0, totalPages: 0, currentPage: page }
   }
 
   const userIds = [...new Set(requests.map((r) => r.user_id))]
@@ -37,31 +67,32 @@ async function getCreatorRequests() {
     (profiles || []).map((p) => [p.id, { name: p.name, email: p.email }])
   )
 
-  return requests.map((request) => ({
+  const requestsWithProfiles = requests.map((request) => ({
     ...request,
     profiles: profileMap.get(request.user_id) || null,
-  })) as Array<{
-    id: string
-    user_id: string
-    pitch_title: string
-    pitch_text: string
-    portfolio_url: string | null
-    status: string
-    created_at: string
-    reviewed_by: string | null
-    reviewed_at: string | null
-    rejection_reason: string | null
-    profiles: { name: string; email: string } | null
-  }>
+  })) as RequestWithProfile[]
+
+  return {
+    requests: requestsWithProfiles,
+    total: count || 0,
+    totalPages: Math.ceil((count || 0) / REQUESTS_PER_PAGE),
+    currentPage: page,
+  }
 }
 
-
-export default async function AdminRequestsPage() {
+export default async function AdminRequestsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; status?: string }>
+}) {
   await requireRole(['admin'])
-  const requests = await getCreatorRequests()
-
-  const pendingRequests = requests.filter((r) => r.status === 'pending')
-  const reviewedRequests = requests.filter((r) => r.status !== 'pending')
+  
+  const params = await searchParams
+  const page = parseInt(params.page || '1', 10)
+  const status = (params.status as 'pending' | 'reviewed') || 'pending'
+  
+  const { requests: pendingRequests, total: pendingTotal, totalPages: pendingTotalPages, currentPage: pendingCurrentPage } = await getCreatorRequests(1, 'pending')
+  const { requests: reviewedRequests, total: reviewedTotal, totalPages: reviewedTotalPages, currentPage: reviewedCurrentPage } = await getCreatorRequests(1, 'reviewed')
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
@@ -71,7 +102,7 @@ export default async function AdminRequestsPage() {
         {/* Solicitudes Pendientes */}
         <section className="mb-8" aria-labelledby="pending-heading">
           <h2 id="pending-heading" className="text-2xl font-semibold mb-4" aria-live="polite">
-            Pendientes ({pendingRequests.length})
+            Pendientes ({pendingTotal})
           </h2>
           {pendingRequests.length === 0 ? (
             <Card>
@@ -80,8 +111,9 @@ export default async function AdminRequestsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-4" role="list" aria-label="Lista de solicitudes pendientes">
-              {pendingRequests.map((request) => (
+            <>
+              <div className="space-y-4" role="list" aria-label="Lista de solicitudes pendientes">
+                {pendingRequests.map((request) => (
                 <Card key={request.id} role="listitem" aria-label={`Solicitud: ${request.pitch_title} de ${request.profiles?.name || 'N/A'}`}>
                   <CardHeader>
                     <CardTitle aria-label={`Título del pitch: ${request.pitch_title}`}>{request.pitch_title}</CardTitle>
@@ -115,14 +147,22 @@ export default async function AdminRequestsPage() {
                   </CardContent>
                 </Card>
               ))}
-            </div>
+              </div>
+              {pendingTotalPages > 1 && (
+                <Pagination
+                  currentPage={pendingCurrentPage}
+                  totalPages={pendingTotalPages}
+                  basePath="/admin/requests?status=pending"
+                />
+              )}
+            </>
           )}
         </section>
 
         {/* Solicitudes Revisadas */}
         <section aria-labelledby="reviewed-heading">
           <h2 id="reviewed-heading" className="text-2xl font-semibold mb-4" aria-live="polite">
-            Historial ({reviewedRequests.length})
+            Historial ({reviewedTotal})
           </h2>
           {reviewedRequests.length === 0 ? (
             <Card>
@@ -131,8 +171,9 @@ export default async function AdminRequestsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-4" role="list" aria-label="Lista de solicitudes revisadas">
-              {reviewedRequests.map((request) => (
+            <>
+              <div className="space-y-4" role="list" aria-label="Lista de solicitudes revisadas">
+                {reviewedRequests.map((request) => (
                 <Card key={request.id} role="listitem" aria-label={`Solicitud ${request.status === 'approved' ? 'aprobada' : 'rechazada'}: ${request.pitch_title}`}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
