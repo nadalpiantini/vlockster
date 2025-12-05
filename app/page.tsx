@@ -8,20 +8,21 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="relative w-full max-w-md px-8">
-        <Image
-          src="/items/vlockster_logo.png"
-          alt="VLOCKSTER Logo"
-          width={800}
-          height={800}
-          className="w-full h-auto object-contain"
-          style={{
-            filter: 'invert(1) brightness(1.1)',
-            imageRendering: 'auto',
-          }}
-          priority
-        />
+        <div className="relative w-full aspect-square max-w-md">
+          <Image
+            src="/items/vlockster_logo.jpeg"
+            alt="VLOCKSTER Logo"
+            fill
+            className="object-contain"
+            style={{
+              filter: 'brightness(0) invert(1)',
+            }}
+            priority
+            fetchPriority="high"
+          />
+        </div>
       </div>
     </div>
   )

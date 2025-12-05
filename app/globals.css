@@ -64,8 +64,10 @@
     border-color: hsl(var(--border));
   }
   body {
-    background-color: hsl(var(--background));
+    background-color: #111827;
     color: hsl(var(--foreground));
+    margin: 0;
+    padding: 0;
   }
 }
 

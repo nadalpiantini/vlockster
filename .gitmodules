@@ -1,0 +1,3 @@
+[submodule "external/fastapi"]
+	path = external/fastapi
+	url = https://github.com/nadalpiantini/fastapi

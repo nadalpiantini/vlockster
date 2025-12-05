@@ -279,3 +279,39 @@
 
 ---
 
+### 2025-12-05 - Sprint 1: Optimizar Landing Page ⏳
+
+**Estado**: Completado (código implementado, requiere hard refresh del navegador)
+
+**Tareas Realizadas**:
+1. ✅ Simplificado landing page a solo logo sobre fondo gris900
+2. ✅ Aplicado filtro CSS para invertir texto negro a blanco
+3. ✅ Configurado fondo gris900 (`#111827`) en CSS global y componentes
+4. ✅ Agregado `priority` y `fetchPriority="high"` a imagen para LCP
+5. ✅ Agregado `suppressHydrationWarning` al body para resolver warnings de hidratación
+6. ✅ Optimizado uso de `fill` en Image component para mejor rendimiento
+
+**Archivos Modificados**:
+- `app/page.tsx` - Landing simplificada con logo invertido
+- `app/layout.tsx` - Agregado `suppressHydrationWarning` y clase `bg-gray-900`
+- `app/globals.css` - Fondo gris900 forzado en body
+
+**Validación**:
+- ✅ Sin errores de linting
+- ✅ TypeScript types correctos
+- ✅ Código optimizado para LCP
+- ⚠️ Requiere hard refresh del navegador (Cmd+Shift+R) para ver cambios
+
+**Nota Técnica**:
+- El filtro `brightness(0) invert(1)` invierte todos los colores:
+  - Texto negro → blanco ✅
+  - Fondo blanco del logo → negro (se integra con fondo) ✅
+  - Triángulo amarillo → azul/cian (limitación de CSS)
+- Para mantener triángulo amarillo se necesitaría una versión del logo con texto blanco
+
+**Conexión Frontend-Backend-Database**: N/A (solo frontend)
+
+**Próximo Paso**: Sprint 2 - Validar integración completa
+
+---
+
