@@ -162,8 +162,13 @@ export default function CreateProjectPage() {
           <form onSubmit={handleSubmit} aria-label="Formulario de creación de proyecto">
             <CardContent className="space-y-6">
               {error && (
-                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="polite">
+                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="assertive" aria-atomic="true">
                   {error}
+                </div>
+              )}
+              {creating && (
+                <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+                  Creando proyecto, por favor espera...
                 </div>
               )}
 
@@ -196,7 +201,6 @@ export default function CreateProjectPage() {
                     variant="outline"
                     size="sm"
                     className="text-xs"
-                    aria-label={generatingDescription ? 'Generando descripción con IA...' : 'Generar descripción del proyecto con inteligencia artificial'}
                   >
                     {generatingDescription ? (
                       <>

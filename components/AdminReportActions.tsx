@@ -71,9 +71,14 @@ export function AdminReportActions({
   return (
     <div className="flex flex-col gap-2" role="group" aria-label="Acciones de reporte">
       {error && (
-        <p className="text-sm text-red-400" role="alert" aria-live="polite">
+        <p className="text-sm text-red-400" role="alert" aria-live="assertive" aria-atomic="true">
           {error}
         </p>
+      )}
+      {resolving && (
+        <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+          Resolviendo reporte...
+        </div>
       )}
       <div className="flex gap-2">
         <Button

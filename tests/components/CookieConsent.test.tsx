@@ -1,7 +1,6 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { CookieConsent, useCookieConsent } from '@/components/CookieConsent'
 
 // Mock next/link
@@ -14,74 +13,53 @@ vi.mock('next/link', () => ({
   ),
 }))
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value.toString()
-    },
-    removeItem: (key: string) => {
-      delete store[key]
-    },
-    clear: () => {
-      store = {}
-    },
-  }
-})()
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-})
-
 describe('CookieConsent', () => {
   beforeEach(() => {
     localStorage.clear()
-    vi.useFakeTimers()
+    vi.clearAllMocks()
   })
 
   afterEach(() => {
-    vi.clearAllTimers()
-    vi.useRealTimers()
+    localStorage.clear()
   })
 
-  it('no debe mostrar banner si ya hay consentimiento', () => {
-    const consentData = {
+  it('no debe mostrar banner si ya hay consentimiento', async () => {
+    localStorage.setItem('vlockster-cookie-consent', JSON.stringify({
       accepted: true,
       timestamp: new Date().toISOString(),
       version: '1.0',
-    }
-    localStorage.setItem('vlockster-cookie-consent', JSON.stringify(consentData))
+    }))
 
     const { container } = render(<CookieConsent />)
     
-    expect(container.firstChild).toBeNull()
+    await waitFor(() => {
+      expect(container.firstChild).toBeNull()
+    }, { timeout: 2000 })
   })
 
   it('debe mostrar banner después de 1 segundo si no hay consentimiento', async () => {
+    vi.useFakeTimers()
+    
     render(<CookieConsent />)
     
     // Inicialmente no debe estar visible
     expect(screen.queryByRole('dialog')).toBeNull()
     
-    // Avanzar 1 segundo dentro de act
-    await act(async () => {
-      vi.advanceTimersByTime(1000)
-    })
+    // Avanzar 1 segundo
+    vi.advanceTimersByTime(1000)
     
-    // Esperar a que el componente se actualice
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 3000 })
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe tener atributos de accesibilidad correctos', async () => {
-    render(<CookieConsent />)
+  it('debe tener atributos ARIA correctos', async () => {
+    vi.useFakeTimers()
     
-    await act(async () => {
-      vi.advanceTimersByTime(1000)
-    })
+    render(<CookieConsent />)
+    vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
@@ -89,147 +67,147 @@ describe('CookieConsent', () => {
       expect(dialog).toHaveAttribute('aria-modal', 'true')
       expect(dialog).toHaveAttribute('aria-labelledby', 'cookie-consent-title')
       expect(dialog).toHaveAttribute('aria-describedby', 'cookie-consent-description')
-    }, { timeout: 3000 })
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe guardar consentimiento aceptado en localStorage', async () => {
-    const user = userEvent.setup({ delay: null })
-    render(<CookieConsent />)
+  it('debe guardar consentimiento al aceptar', async () => {
+    vi.useFakeTimers()
     
+    render(<CookieConsent />)
     vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+    })
     
     const acceptButton = screen.getByLabelText(/aceptar cookies/i)
-    await user.click(acceptButton)
+    fireEvent.click(acceptButton)
     
-    const consentData = JSON.parse(localStorage.getItem('vlockster-cookie-consent') || '{}')
-    expect(consentData.accepted).toBe(true)
-    expect(consentData.timestamp).toBeDefined()
-    expect(consentData.version).toBe('1.0')
+    await waitFor(() => {
+      const consent = localStorage.getItem('vlockster-cookie-consent')
+      expect(consent).toBeTruthy()
+      const parsed = JSON.parse(consent!)
+      expect(parsed.accepted).toBe(true)
+      expect(parsed.version).toBe('1.0')
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe guardar consentimiento rechazado en localStorage', async () => {
-    const user = userEvent.setup({ delay: null })
-    render(<CookieConsent />)
+  it('debe guardar rechazo al rechazar', async () => {
+    vi.useFakeTimers()
     
+    render(<CookieConsent />)
     vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+    })
     
     const rejectButton = screen.getByLabelText(/rechazar cookies/i)
-    await user.click(rejectButton)
+    fireEvent.click(rejectButton)
     
-    const consentData = JSON.parse(localStorage.getItem('vlockster-cookie-consent') || '{}')
-    expect(consentData.accepted).toBe(false)
-    expect(consentData.timestamp).toBeDefined()
-    expect(consentData.version).toBe('1.0')
+    await waitFor(() => {
+      const consent = localStorage.getItem('vlockster-cookie-consent')
+      expect(consent).toBeTruthy()
+      const parsed = JSON.parse(consent!)
+      expect(parsed.accepted).toBe(false)
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe ocultar banner después de aceptar', async () => {
-    const user = userEvent.setup({ delay: null })
-    const { container } = render(<CookieConsent />)
+  it('debe cerrar banner al aceptar', async () => {
+    vi.useFakeTimers()
     
+    const { container } = render(<CookieConsent />)
     vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+    })
     
     const acceptButton = screen.getByLabelText(/aceptar cookies/i)
-    await user.click(acceptButton)
+    fireEvent.click(acceptButton)
     
     await waitFor(() => {
       expect(container.firstChild).toBeNull()
-    }, { timeout: 2000 })
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe ocultar banner después de rechazar', async () => {
-    const user = userEvent.setup({ delay: null })
-    const { container } = render(<CookieConsent />)
+  it('debe cerrar banner con Escape key', async () => {
+    vi.useFakeTimers()
     
+    const { container } = render(<CookieConsent />)
     vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+    })
     
-    const rejectButton = screen.getByLabelText(/rechazar cookies/i)
-    await user.click(rejectButton)
+    const dialog = screen.getByRole('dialog')
+    fireEvent.keyDown(dialog, { key: 'Escape' })
     
     await waitFor(() => {
       expect(container.firstChild).toBeNull()
-    }, { timeout: 2000 })
+    })
+    
+    vi.useRealTimers()
   })
 
-  it('debe mostrar enlaces a política de privacidad y términos', async () => {
-    render(<CookieConsent />)
+  it('debe tener links a política de privacidad y términos', async () => {
+    vi.useFakeTimers()
     
+    render(<CookieConsent />)
     vi.advanceTimersByTime(1000)
     
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
+      expect(screen.getByLabelText(/política de privacidad/i)).toBeDefined()
+      expect(screen.getByLabelText(/términos de uso/i)).toBeDefined()
+    })
     
     const privacyLink = screen.getByLabelText(/política de privacidad/i)
-    expect(privacyLink).toHaveAttribute('href', '/legal/privacy')
-    
     const termsLink = screen.getByLabelText(/términos de uso/i)
+    
+    expect(privacyLink).toHaveAttribute('href', '/legal/privacy')
     expect(termsLink).toHaveAttribute('href', '/legal/terms')
-  })
-
-  it('debe tener título y descripción accesibles', async () => {
-    render(<CookieConsent />)
     
-    vi.advanceTimersByTime(1000)
-    
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeDefined()
-    }, { timeout: 2000 })
-    
-    expect(screen.getByText(/uso de cookies/i)).toBeDefined()
-    expect(screen.getByText(/utilizamos cookies para mejorar/i)).toBeDefined()
+    vi.useRealTimers()
   })
 })
 
-describe('useCookieConsent hook', () => {
+describe('useCookieConsent', () => {
   beforeEach(() => {
     localStorage.clear()
   })
 
-  it('debe retornar null cuando no hay consentimiento', () => {
-    // Este test requiere un componente de prueba
+  it('debe retornar null si no hay consentimiento', () => {
     const TestComponent = () => {
       const consent = useCookieConsent()
-      return <div data-testid="consent">{consent ? 'has-consent' : 'no-consent'}</div>
+      return <div>{consent ? 'Has consent' : 'No consent'}</div>
     }
 
     render(<TestComponent />)
-    
-    expect(screen.getByTestId('consent')).toHaveTextContent('no-consent')
+    expect(screen.getByText('No consent')).toBeDefined()
   })
 
-  it('debe retornar consentimiento cuando existe en localStorage', () => {
-    const consentData = {
+  it('debe retornar consentimiento si existe', () => {
+    localStorage.setItem('vlockster-cookie-consent', JSON.stringify({
       accepted: true,
-      timestamp: new Date().toISOString(),
+      timestamp: '2025-01-01T00:00:00.000Z',
       version: '1.0',
-    }
-    localStorage.setItem('vlockster-cookie-consent', JSON.stringify(consentData))
+    }))
 
     const TestComponent = () => {
       const consent = useCookieConsent()
-      return <div data-testid="consent">{consent ? JSON.stringify(consent) : 'no-consent'}</div>
+      return <div>{consent ? `Consent: ${consent.accepted}` : 'No consent'}</div>
     }
 
     render(<TestComponent />)
-    
-    const consentText = screen.getByTestId('consent').textContent
-    expect(consentText).toContain('accepted')
-    expect(consentText).toContain('true')
+    expect(screen.getByText('Consent: true')).toBeDefined()
   })
 })

@@ -130,7 +130,7 @@ export default function NotificationsPage() {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Notificaciones</h1>
-            <p className="text-gray-300">
+            <p className="text-gray-300" role="status" aria-live="polite" aria-atomic="true">
               {unreadCount > 0
                 ? `Tienes ${unreadCount} notificación${unreadCount !== 1 ? 'es' : ''} sin leer`
                 : 'No tienes notificaciones sin leer'}

@@ -71,10 +71,16 @@ export function AdminRequestActions({ requestId }: AdminRequestActionsProps) {
         <div 
           className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-2 rounded-md text-sm"
           role="alert"
-          aria-live="polite"
+          aria-live="assertive"
+          aria-atomic="true"
           aria-label={`Error: ${error}`}
         >
           {error}
+        </div>
+      )}
+      {loading && (
+        <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+          Procesando solicitud...
         </div>
       )}
       <div className="flex gap-3">

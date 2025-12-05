@@ -193,10 +193,10 @@ export default function UploadPage() {
 
               {/* Progress Bar */}
               {uploading && (
-                <div className="space-y-2" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de subida: ${progress}%`}>
+                <div className="space-y-2" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de subida: ${progress}%`} aria-busy="true">
                   <div className="flex justify-between text-sm">
                     <span>Subiendo...</span>
-                    <span aria-live="polite">{progress}%</span>
+                    <span role="status" aria-live="polite" aria-atomic="true">{progress}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2" role="presentation">
                     <div

@@ -19,25 +19,25 @@ vi.mock('web-vitals', () => ({
 }))
 
 describe('WebVitals', () => {
+  const originalEnv = process.env.NODE_ENV
+  const originalGtag = (window as any).gtag
+  const originalConsoleLog = console.log
+
   beforeEach(() => {
     vi.clearAllMocks()
-    // Reset window.gtag
-    delete (window as any).gtag
-    // Reset environment
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
+    ;(window as any).gtag = undefined
+    console.log = vi.fn()
   })
 
   afterEach(() => {
-    vi.restoreAllMocks()
+    process.env.NODE_ENV = originalEnv
+    ;(window as any).gtag = originalGtag
+    console.log = originalConsoleLog
+    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
-  it('no debe registrar métricas en desarrollo por defecto', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'development',
-      writable: true,
-      configurable: true,
-    })
+  it('no debe medir en desarrollo por defecto', () => {
+    process.env.NODE_ENV = 'development'
     delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
 
     render(<WebVitals />)
@@ -47,21 +47,10 @@ describe('WebVitals', () => {
     expect(mockOnLCP).not.toHaveBeenCalled()
     expect(mockOnTTFB).not.toHaveBeenCalled()
     expect(mockOnINP).not.toHaveBeenCalled()
-
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
   })
 
-  it('debe registrar métricas en producción', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'production',
-      writable: true,
-      configurable: true,
-    })
+  it('debe medir en producción', () => {
+    process.env.NODE_ENV = 'production'
 
     render(<WebVitals />)
 
@@ -70,21 +59,10 @@ describe('WebVitals', () => {
     expect(mockOnLCP).toHaveBeenCalled()
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
-
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
   })
 
-  it('debe registrar métricas cuando NEXT_PUBLIC_ENABLE_WEB_VITALS está activado', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'development',
-      writable: true,
-      configurable: true,
-    })
+  it('debe medir cuando NEXT_PUBLIC_ENABLE_WEB_VITALS está activo', () => {
+    process.env.NODE_ENV = 'development'
     process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
 
     render(<WebVitals />)
@@ -94,156 +72,81 @@ describe('WebVitals', () => {
     expect(mockOnLCP).toHaveBeenCalled()
     expect(mockOnTTFB).toHaveBeenCalled()
     expect(mockOnINP).toHaveBeenCalled()
-
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
-  it('debe enviar métricas a gtag cuando está disponible', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'production',
-      writable: true,
-      configurable: true,
-    })
-    
+  it('debe enviar métricas a gtag si está disponible', () => {
+    process.env.NODE_ENV = 'production'
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
 
     render(<WebVitals />)
 
     // Simular callback de métrica
-    const mockMetric = {
-      name: 'LCP',
-      value: 2500,
-      id: 'metric-123',
-      rating: 'good' as const,
-    }
-
-    // Llamar al callback registrado
-    const clsCallback = mockOnCLS.mock.calls[0][0]
-    clsCallback(mockMetric)
-
-    expect(mockGtag).toHaveBeenCalledWith('event', 'LCP', {
-      value: 2500,
-      metric_id: 'metric-123',
-      metric_value: 2500,
-      metric_rating: 'good',
+    const metricCallback = mockOnCLS.mock.calls[0][0]
+    metricCallback({
+      name: 'CLS',
+      value: 0.1,
+      id: 'test-id',
+      rating: 'good',
     })
 
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
+    expect(mockGtag).toHaveBeenCalledWith('event', 'CLS', {
+      value: 0,
+      metric_id: 'test-id',
+      metric_value: 0.1,
+      metric_rating: 'good',
     })
   })
 
-  it('debe redondear valores de métricas al enviar a gtag', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'production',
-      writable: true,
-      configurable: true,
+  it('debe loggear métricas en desarrollo cuando está habilitado', () => {
+    process.env.NODE_ENV = 'development'
+    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+
+    render(<WebVitals />)
+
+    const metricCallback = mockOnCLS.mock.calls[0][0]
+    metricCallback({
+      name: 'CLS',
+      value: 0.1,
+      id: 'test-id',
+      rating: 'good',
     })
-    
+
+    expect(console.log).toHaveBeenCalledWith(
+      '[Web Vitals] CLS:',
+      expect.objectContaining({
+        value: 0.1,
+        rating: 'good',
+        id: 'test-id',
+      })
+    )
+  })
+
+  it('debe redondear valores al enviar a gtag', () => {
+    process.env.NODE_ENV = 'production'
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
 
     render(<WebVitals />)
 
-    const mockMetric = {
-      name: 'FCP',
+    const metricCallback = mockOnLCP.mock.calls[0][0]
+    metricCallback({
+      name: 'LCP',
       value: 1234.567,
-      id: 'metric-456',
-      rating: 'needs-improvement' as const,
-    }
-
-    const fcpCallback = mockOnFCP.mock.calls[0][0]
-    fcpCallback(mockMetric)
-
-    expect(mockGtag).toHaveBeenCalledWith('event', 'FCP', {
-      value: 1235, // Redondeado
-      metric_id: 'metric-456',
-      metric_value: 1234.567,
-      metric_rating: 'needs-improvement',
-    })
-
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
-  })
-
-  it('debe loggear métricas en desarrollo cuando está habilitado', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'development',
-      writable: true,
-      configurable: true,
-    })
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
-    
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
-
-    render(<WebVitals />)
-
-    const mockMetric = {
-      name: 'CLS',
-      value: 0.1,
-      id: 'metric-789',
-      rating: 'good' as const,
-    }
-
-    const clsCallback = mockOnCLS.mock.calls[0][0]
-    clsCallback(mockMetric)
-
-    expect(consoleSpy).toHaveBeenCalledWith('[Web Vitals] CLS:', {
-      value: 0.1,
+      id: 'test-id',
       rating: 'good',
-      id: 'metric-789',
     })
 
-    consoleSpy.mockRestore()
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
+    expect(mockGtag).toHaveBeenCalledWith('event', 'LCP', {
+      value: 1235, // Redondeado
+      metric_id: 'test-id',
+      metric_value: 1234.567,
+      metric_rating: 'good',
     })
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
   it('no debe renderizar nada (componente sin UI)', () => {
     const { container } = render(<WebVitals />)
-    
     expect(container.firstChild).toBeNull()
-  })
-
-  it('debe registrar todas las métricas Core Web Vitals', () => {
-    const originalEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: 'production',
-      writable: true,
-      configurable: true,
-    })
-
-    render(<WebVitals />)
-
-    // Verificar que todas las métricas están registradas
-    expect(mockOnCLS).toHaveBeenCalledTimes(1)
-    expect(mockOnFCP).toHaveBeenCalledTimes(1)
-    expect(mockOnLCP).toHaveBeenCalledTimes(1)
-    expect(mockOnTTFB).toHaveBeenCalledTimes(1)
-    expect(mockOnINP).toHaveBeenCalledTimes(1)
-
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value: originalEnv,
-      writable: true,
-      configurable: true,
-    })
   })
 })

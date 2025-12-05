@@ -230,7 +230,7 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-300 text-center py-8" aria-live="polite">
+              <p className="text-gray-300 text-center py-8" role="status" aria-live="polite" aria-atomic="true">
                 No hay actividad reciente para mostrar
               </p>
             </CardContent>
