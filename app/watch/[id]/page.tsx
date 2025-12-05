@@ -167,7 +167,7 @@ export default async function WatchVideoPage({
                 </div>
                 {video.uploader?.public_profile_slug && (
                   <Link
-                    href={`/c/${video.uploader.public_profile_slug}` as '/c/[slug]'}
+                    href={`/c/${video.uploader.public_profile_slug}` as any}
                   >
                     <Button className="w-full" variant="outline">
                       Ver Perfil
