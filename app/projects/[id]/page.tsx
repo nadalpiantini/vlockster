@@ -175,7 +175,7 @@ export default async function ProjectDetailPage({
                       reward={reward}
                       projectId={project.id}
                       projectStatus={project.status}
-                      user={user as any}
+                      user={user ? { id: user.id, email: user.email || '', name: user.name, role: user.role as 'viewer' | 'creator' | 'moderator' | 'admin' } : null}
                     />
                   ))
                 )}
@@ -252,7 +252,7 @@ export default async function ProjectDetailPage({
                   )}
                 </div>
                 {project.creator?.public_profile_slug && (
-                  <Link href={`/c/${project.creator.public_profile_slug}` as any}>
+                  <Link href={`/c/${project.creator.public_profile_slug}` as '/c/[slug]'}>
                     <Button className="w-full" variant="outline">
                       Ver Perfil del Creador
                     </Button>

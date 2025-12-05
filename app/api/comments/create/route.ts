@@ -71,10 +71,10 @@ export async function POST(request: NextRequest) {
         .single()
 
       const { data: moderationLogs } = await supabase
-        .from('moderation_logs' as any)
+        .from('moderation_logs')
         .select('action')
         .eq('user_id', user.id)
-        .in('action', ['delete', 'ban'] as string[])
+        .in('action', ['delete', 'ban'])
 
       moderationResult = await moderateComment({
         comment_text: sanitizedContent,
@@ -181,17 +181,18 @@ export async function POST(request: NextRequest) {
 
     // Si requiere revisión, agregar a cola de moderación
     if (moderationResult.action === 'review' && comment) {
-      await supabase.from('moderation_queue' as any).insert({
+      const moderationQueueData: Database['public']['Tables']['moderation_queue']['Insert'] = {
         comment_id: comment.id,
         severity: moderationResult.severity,
         reasons: moderationResult.reasons,
         created_at: new Date().toISOString(),
-      } as any)
+      }
+      await supabase.from('moderation_queue').insert(moderationQueueData)
     }
 
     // Registrar en logs de moderación
     if (moderationResult && comment) {
-      await supabase.from('moderation_logs' as any).insert({
+      const moderationLogData: Database['public']['Tables']['moderation_logs']['Insert'] = {
         comment_id: comment.id,
         user_id: user.id,
         action: moderationResult.action,
@@ -199,7 +200,8 @@ export async function POST(request: NextRequest) {
         reasons: moderationResult.reasons,
         confidence: moderationResult.confidence,
         created_at: new Date().toISOString(),
-      } as any)
+      }
+      await supabase.from('moderation_logs').insert(moderationLogData)
     }
 
     return NextResponse.json({

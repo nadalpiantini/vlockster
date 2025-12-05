@@ -299,6 +299,7 @@ export type Database = {
           created_at: string | null
           id: string
           like_count: number | null
+          moderation_status: string | null
           parent_comment_id: string | null
           post_id: string
           updated_at: string | null
@@ -309,6 +310,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           like_count?: number | null
+          moderation_status?: string | null
           parent_comment_id?: string | null
           post_id: string
           updated_at?: string | null
@@ -319,6 +321,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           like_count?: number | null
+          moderation_status?: string | null
           parent_comment_id?: string | null
           post_id?: string
           updated_at?: string | null
@@ -2056,6 +2059,86 @@ export type Database = {
             columns: ["winner_id"]
             isOneToOne: false
             referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderation_logs: {
+        Row: {
+          action: string
+          comment_id: string | null
+          confidence: number | null
+          created_at: string | null
+          id: string
+          reasons: string[] | null
+          severity: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          comment_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          reasons?: string[] | null
+          severity: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          comment_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          reasons?: string[] | null
+          severity?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_logs_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "moderation_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderation_queue: {
+        Row: {
+          comment_id: string | null
+          created_at: string | null
+          id: string
+          reasons: string[] | null
+          severity: string
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          reasons?: string[] | null
+          severity: string
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          reasons?: string[] | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_queue_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
             referencedColumns: ["id"]
           },
         ]
