@@ -141,7 +141,7 @@
           "id": "3.3",
           "title": "Color Contrast Audit",
           "description": "Fix color contrast issues to meet WCAG AA standards",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": [],
           "details": "Run axe DevTools on all pages. Fix color contrast issues (WCAG AA: 4.5:1 for normal text, 3:1 for large text). Update Tailwind theme if needed for compliant colors. Document color palette with contrast ratios.",
@@ -151,7 +151,7 @@
           "id": "3.4",
           "title": "Screen Reader Testing",
           "description": "Test and fix screen reader compatibility",
-          "status": "pending",
+          "status": "done",
           "priority": "high",
           "dependencies": [
             "3.1",
