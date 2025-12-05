@@ -10,13 +10,16 @@
 
 import { logger } from '@/lib/utils/logger'
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
 
-if (!DEEPSEEK_API_KEY) {
-  throw new Error(
-    'Missing DEEPSEEK_API_KEY environment variable. Please set it in your .env.local file.'
-  )
+function getDeepSeekApiKey(): string {
+  const key = process.env.DEEPSEEK_API_KEY
+  if (!key) {
+    throw new Error(
+      'Missing DEEPSEEK_API_KEY environment variable. Please set it in your .env.local file.'
+    )
+  }
+  return key
 }
 
 export interface Recommendation {
@@ -119,7 +122,7 @@ Retorna SOLO un JSON válido con este formato:
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+        Authorization: `Bearer ${getDeepSeekApiKey()}`,
       },
       body: JSON.stringify({
         model: 'deepseek-chat',

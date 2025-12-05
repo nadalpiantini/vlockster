@@ -20,12 +20,14 @@ export const runtime = 'nodejs'
  * - Notifica al creator
  */
 
-const PAYPAL_WEBHOOK_SECRET = process.env.PAYPAL_WEBHOOK_SECRET
-
-if (!PAYPAL_WEBHOOK_SECRET) {
-  throw new Error(
-    'Missing PAYPAL_WEBHOOK_SECRET environment variable. This is required for webhook signature verification.'
-  )
+function getPayPalWebhookSecret(): string {
+  const secret = process.env.PAYPAL_WEBHOOK_SECRET
+  if (!secret) {
+    throw new Error(
+      'Missing PAYPAL_WEBHOOK_SECRET environment variable. This is required for webhook signature verification.'
+    )
+  }
+  return secret
 }
 
 function verifyPayPalSignature(
@@ -43,9 +45,10 @@ function verifyPayPalSignature(
     // Construir mensaje a verificar
     const message = `${transmissionId}|${transmissionTime}|${webhookId}|${body}`
 
-    // Calcular HMAC (PAYPAL_WEBHOOK_SECRET guaranteed non-null by check above)
+    // Calcular HMAC
+    const webhookSecret = getPayPalWebhookSecret()
     const expectedSig = crypto
-      .createHmac('sha256', PAYPAL_WEBHOOK_SECRET!)
+      .createHmac('sha256', webhookSecret)
       .update(message)
       .digest('hex')
 
