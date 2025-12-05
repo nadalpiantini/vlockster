@@ -4,7 +4,10 @@ import {
   projectCreateSchema,
   commentCreateSchema,
   postCreateSchema,
-  creatorRequestSchema,
+  signupSchema,
+  loginSchema,
+  rewardSchema,
+  projectBackingSchema,
 } from '@/lib/validations/schemas'
 
 describe('videoUploadSchema', () => {

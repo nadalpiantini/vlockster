@@ -35,7 +35,11 @@ describe('WebVitals', () => {
   })
 
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv
+    Object.defineProperty(process, 'env', {
+      value: { ...process.env, NODE_ENV: originalEnv },
+      writable: true,
+      configurable: true,
+    })
     global.window = originalWindow as any
   })
 
@@ -45,7 +49,11 @@ describe('WebVitals', () => {
   })
 
   it('should call web vitals functions in production', () => {
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process, 'env', {
+      value: { ...process.env, NODE_ENV: 'production' },
+      writable: true,
+      configurable: true,
+    })
     const { onCLS, onFCP, onLCP, onTTFB, onINP } = require('web-vitals')
     
     render(<WebVitals />)
@@ -58,8 +66,11 @@ describe('WebVitals', () => {
   })
 
   it('should call web vitals when NEXT_PUBLIC_ENABLE_WEB_VITALS is true', () => {
-    process.env.NODE_ENV = 'development'
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+    Object.defineProperty(process, 'env', {
+      value: { ...process.env, NODE_ENV: 'development', NEXT_PUBLIC_ENABLE_WEB_VITALS: 'true' },
+      writable: true,
+      configurable: true,
+    })
     const { onCLS, onFCP, onLCP, onTTFB, onINP } = require('web-vitals')
     
     render(<WebVitals />)

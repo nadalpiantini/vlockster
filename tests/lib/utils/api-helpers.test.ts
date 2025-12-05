@@ -26,7 +26,11 @@ describe('handleError', () => {
 
   it('debe incluir errorId en desarrollo', async () => {
     const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
+    Object.defineProperty(process, 'env', {
+      value: { ...process.env, NODE_ENV: 'development' },
+      writable: true,
+      configurable: true,
+    })
     
     const error = new Error('Test error')
     const result = handleError(error, 'Test operation')
@@ -34,7 +38,11 @@ describe('handleError', () => {
     
     expect(body).toHaveProperty('error')
     
-    process.env.NODE_ENV = originalEnv
+    Object.defineProperty(process, 'env', {
+      value: { ...process.env, NODE_ENV: originalEnv },
+      writable: true,
+      configurable: true,
+    })
   })
 
   it('debe incluir contexto adicional', () => {
