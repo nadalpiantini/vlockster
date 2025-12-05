@@ -53,8 +53,8 @@ export function RecommendationsSection() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-yellow-400" />
+          <CardTitle className="flex items-center gap-2" id="recommendations-heading">
+            <Sparkles className="w-5 h-5 text-yellow-400" aria-hidden="true" />
             Recomendaciones para ti
           </CardTitle>
           <CardDescription>
@@ -75,10 +75,10 @@ export function RecommendationsSection() {
   }
 
   return (
-    <Card>
+    <Card aria-labelledby="recommendations-heading">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-yellow-400" />
+        <CardTitle className="flex items-center gap-2" id="recommendations-heading">
+          <Sparkles className="w-5 h-5 text-yellow-400" aria-hidden="true" />
           Recomendaciones para ti
         </CardTitle>
         {insights && (
@@ -98,9 +98,9 @@ export function RecommendationsSection() {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between mb-2">
                     {rec.type === 'video' ? (
-                      <Film className="w-5 h-5 text-blue-400" />
+                      <Film className="w-5 h-5 text-blue-400" aria-hidden="true" />
                     ) : (
-                      <DollarSign className="w-5 h-5 text-green-400" />
+                      <DollarSign className="w-5 h-5 text-green-400" aria-hidden="true" />
                     )}
                     <span className="text-xs text-gray-400">
                       {Math.round(rec.confidence_score * 100)}% match
@@ -122,7 +122,11 @@ export function RecommendationsSection() {
         </div>
         {recommendations.length > 6 && (
           <div className="mt-4 text-center">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              aria-label={`Ver todas las ${recommendations.length} recomendaciones`}
+            >
               Ver todas las recomendaciones ({recommendations.length})
             </Button>
           </div>
