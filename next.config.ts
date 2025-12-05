@@ -25,9 +25,8 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors/warnings. Only use if you understand the risks.
-    ignoreDuringBuilds: true,
+    // ESLint enabled during builds to catch errors before production
+    ignoreDuringBuilds: false,
   },
   typescript: {
     // Warning: This allows production builds to successfully complete even if
@@ -77,7 +76,9 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.paypal.com https://www.paypalobjects.com",
+              // Note: PayPal SDK requires 'unsafe-inline' for scripts. To fully remove it,
+              // consider implementing nonce-based CSP or switching to PayPal's REST API
+              "script-src 'self' https://www.paypal.com https://www.paypalobjects.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https: blob:",

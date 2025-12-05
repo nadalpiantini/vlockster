@@ -19,26 +19,25 @@ vi.mock('web-vitals', () => ({
 }))
 
 describe('WebVitals', () => {
-  const originalEnv = process.env.NODE_ENV
   const originalGtag = (window as any).gtag
   const originalConsoleLog = console.log
 
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.unstubAllEnvs()
     ;(window as any).gtag = undefined
     console.log = vi.fn()
   })
 
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv
+    vi.unstubAllEnvs()
     ;(window as any).gtag = originalGtag
     console.log = originalConsoleLog
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
   })
 
   it('no debe medir en desarrollo por defecto', () => {
-    process.env.NODE_ENV = 'development'
-    delete process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS
+    vi.stubEnv('NODE_ENV', 'development')
+    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', undefined as any)
 
     render(<WebVitals />)
 
@@ -50,7 +49,7 @@ describe('WebVitals', () => {
   })
 
   it('debe medir en producción', () => {
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
 
     render(<WebVitals />)
 
@@ -62,8 +61,8 @@ describe('WebVitals', () => {
   })
 
   it('debe medir cuando NEXT_PUBLIC_ENABLE_WEB_VITALS está activo', () => {
-    process.env.NODE_ENV = 'development'
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+    vi.stubEnv('NODE_ENV', 'development')
+    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
 
     render(<WebVitals />)
 
@@ -75,7 +74,7 @@ describe('WebVitals', () => {
   })
 
   it('debe enviar métricas a gtag si está disponible', () => {
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
 
@@ -99,8 +98,8 @@ describe('WebVitals', () => {
   })
 
   it('debe loggear métricas en desarrollo cuando está habilitado', () => {
-    process.env.NODE_ENV = 'development'
-    process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS = 'true'
+    vi.stubEnv('NODE_ENV', 'development')
+    vi.stubEnv('NEXT_PUBLIC_ENABLE_WEB_VITALS', 'true')
 
     render(<WebVitals />)
 
@@ -123,7 +122,7 @@ describe('WebVitals', () => {
   })
 
   it('debe redondear valores al enviar a gtag', () => {
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     const mockGtag = vi.fn()
     ;(window as any).gtag = mockGtag
 

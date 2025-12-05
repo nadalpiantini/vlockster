@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test'
  * Comprehensive flow testing with validation and error handling
  */
 test.describe('E2E: Admin Moderation Flow', () => {
-  describe('Creator Requests Moderation', () => {
+  test.describe('Creator Requests Moderation', () => {
     test('should navigate to admin requests page', async ({ page }) => {
       await page.goto('/admin/requests')
       await page.waitForLoadState('networkidle')
@@ -97,7 +97,7 @@ test.describe('E2E: Admin Moderation Flow', () => {
     })
   })
 
-  describe('Content Reports Moderation', () => {
+  test.describe('Content Reports Moderation', () => {
     test('should navigate to admin reports page', async ({ page }) => {
       await page.goto('/admin/reports')
       await page.waitForLoadState('networkidle')
@@ -216,7 +216,7 @@ test.describe('E2E: Admin Moderation Flow', () => {
     })
   })
 
-  describe('User Management', () => {
+  test.describe('User Management', () => {
     test('should navigate to admin users page', async ({ page }) => {
       await page.goto('/admin/users')
       await page.waitForLoadState('networkidle')

@@ -12,15 +12,17 @@ import {
 } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import type { Route } from 'next'
 
 interface Notification {
   id: string
   type: string
   title: string
-  body: string
-  read: boolean
-  created_at: string
-  data?: any
+  content: string | null
+  read: boolean | null
+  created_at: string | null
+  link: string | null
+  user_id: string
 }
 
 export function NotificationsBell() {
@@ -48,8 +50,19 @@ export function NotificationsBell() {
         .limit(10)
 
       if (data) {
-        setNotifications(data as Notification[])
-        setUnreadCount(data.length)
+        // Mapear datos de la base de datos a la interfaz Notification
+        const mappedNotifications: Notification[] = data.map((n) => ({
+          id: n.id,
+          type: n.type,
+          title: n.title,
+          content: n.content,
+          read: n.read,
+          created_at: n.created_at,
+          link: n.link,
+          user_id: n.user_id,
+        }))
+        setNotifications(mappedNotifications)
+        setUnreadCount(mappedNotifications.length)
       }
       setLoading(false)
     }
@@ -68,7 +81,16 @@ export function NotificationsBell() {
           table: 'notifications',
         },
         (payload) => {
-          const newNotification = payload.new as Notification
+          const newNotification = payload.new as {
+            id: string
+            type: string
+            title: string
+            content: string | null
+            read: boolean | null
+            created_at: string | null
+            link: string | null
+            user_id: string
+          }
           setNotifications((prev) => [newNotification, ...prev])
           setUnreadCount((prev) => prev + 1)
         }
@@ -128,23 +150,26 @@ export function NotificationsBell() {
     }
   }
 
-  const getNotificationLink = (notification: Notification) => {
+  const getNotificationLink = (notification: Notification): Route => {
+    // Si hay un link directo en la notificación, usarlo
+    if (notification.link) {
+      return notification.link as Route
+    }
+    
+    // Fallback a rutas por tipo
     switch (notification.type) {
       case 'project_funded':
-      case 'new_backing':
-        return notification.data?.project_id
-          ? `/projects/${notification.data.project_id}`
-          : '/projects'
+      case 'project_backed':
+      case 'project_update':
+        return '/projects' as Route
       case 'video_processed':
-        return notification.data?.video_id
-          ? `/watch/${notification.data.video_id}`
-          : '/watch'
+        return '/watch' as Route
       case 'comment_reply':
-        return notification.data?.post_id
-          ? `/community/post/${notification.data.post_id}`
-          : '/community'
+      case 'post_like':
+      case 'comment_like':
+        return '/community' as Route
       default:
-        return '/dashboard'
+        return '/dashboard' as Route
     }
   }
 
@@ -223,17 +248,21 @@ export function NotificationsBell() {
                           >
                             {notification.title}
                           </p>
-                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                            {notification.body}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(notification.created_at).toLocaleDateString('es-ES', {
-                              day: 'numeric',
-                              month: 'short',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </p>
+                          {notification.content && (
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                              {notification.content}
+                            </p>
+                          )}
+                          {notification.created_at && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              {new Date(notification.created_at).toLocaleDateString('es-ES', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </p>
+                          )}
                         </div>
                         {!notification.read && (
                           <span

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { SearchBar } from '@/components/SearchBar'
 import { BrandHeader } from '@/components/BrandHeader'
+import { logger } from '@/lib/utils/logger'
 import {
   Card,
   CardContent,
@@ -31,16 +32,21 @@ async function searchContent(query: string) {
     .limit(20)
 
   // Buscar proyectos
-  const { data: projects } = await supabase
+  const { data: projects, error: projectsError } = await supabase
     .from('projects')
-    .select('id, title, description, genre, goal_amount, total_raised, status')
+    .select('id, title, description, category, goal_amount, current_amount, status')
     .ilike('title', `%${query}%`)
     .in('status', ['active', 'funded'])
     .limit(20)
 
+  // Manejar errores de query
+  if (projectsError) {
+    logger.error('Error fetching projects', projectsError, { page: 'search', query })
+  }
+
   return {
     videos: (videos || []) as Video[],
-    projects: (projects || []) as Project[],
+    projects: (projects && !projectsError ? projects : []) as Project[],
   }
 }
 
@@ -149,7 +155,7 @@ export default async function SearchPage({
                   {results.projects.map((project) => {
                     const progress =
                       project.goal_amount > 0
-                        ? ((project.total_raised || 0) / project.goal_amount) * 100
+                        ? ((project.current_amount || 0) / project.goal_amount) * 100
                         : 0
 
                     return (
@@ -162,8 +168,8 @@ export default async function SearchPage({
                         <Card className="hover:border-red-500/50 transition-colors cursor-pointer h-full">
                           <CardHeader>
                             <CardTitle className="text-lg line-clamp-2">{project.title}</CardTitle>
-                            {project.genre && (
-                              <CardDescription className="text-xs">{project.genre}</CardDescription>
+                            {project.category && (
+                              <CardDescription className="text-xs">{project.category}</CardDescription>
                             )}
                           </CardHeader>
                           <CardContent className="space-y-4">
@@ -182,7 +188,7 @@ export default async function SearchPage({
                             <div className="grid grid-cols-2 gap-4 text-center">
                               <div>
                                 <p className="text-lg font-bold text-blue-400">
-                                  ${(project.total_raised || 0).toLocaleString()}
+                                  ${(project.current_amount || 0).toLocaleString()}
                                 </p>
                                 <p className="text-xs text-gray-400">
                                   de ${project.goal_amount.toLocaleString()}

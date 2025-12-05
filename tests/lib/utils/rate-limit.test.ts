@@ -25,10 +25,11 @@ describe('checkRateLimit', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.unstubAllEnvs()
     // Mock environment variables
-    process.env.UPSTASH_REDIS_REST_URL = 'https://test.upstash.io'
-    process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token'
-    
+    vi.stubEnv('UPSTASH_REDIS_REST_URL', 'https://test.upstash.io')
+    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', 'test-token')
+
     // Create mock limiter
     mockLimiter = {
       limit: vi.fn(),
@@ -36,8 +37,7 @@ describe('checkRateLimit', () => {
   })
 
   afterEach(() => {
-    delete process.env.UPSTASH_REDIS_REST_URL
-    delete process.env.UPSTASH_REDIS_REST_TOKEN
+    vi.unstubAllEnvs()
   })
 
   it('debe permitir request cuando no hay límite alcanzado', async () => {
@@ -70,18 +70,11 @@ describe('checkRateLimit', () => {
   })
 
   it('debe retornar success cuando no hay limiter (desarrollo)', async () => {
-    const originalEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
+    vi.stubEnv('NODE_ENV', 'development')
 
     const result = await checkRateLimit('user-123', null)
 
     expect(result.success).toBe(true)
-
-    if (originalEnv) {
-      process.env.NODE_ENV = originalEnv
-    } else {
-      delete process.env.NODE_ENV
-    }
   })
 
   it('debe manejar errores de Redis gracefully', async () => {

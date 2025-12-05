@@ -43,9 +43,9 @@ function verifyPayPalSignature(
     // Construir mensaje a verificar
     const message = `${transmissionId}|${transmissionTime}|${webhookId}|${body}`
 
-    // Calcular HMAC
+    // Calcular HMAC (PAYPAL_WEBHOOK_SECRET guaranteed non-null by check above)
     const expectedSig = crypto
-      .createHmac('sha256', PAYPAL_WEBHOOK_SECRET)
+      .createHmac('sha256', PAYPAL_WEBHOOK_SECRET!)
       .update(message)
       .digest('hex')
 

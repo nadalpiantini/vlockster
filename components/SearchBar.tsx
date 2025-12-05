@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Search, X, Loader2 } from 'lucide-react'
+import { logger } from '@/lib/utils/logger'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
@@ -43,7 +44,7 @@ export function SearchBar() {
           setShowSuggestions(true)
         }
       } catch (error) {
-        console.error('Error fetching suggestions:', error)
+        logger.error('Error fetching suggestions', error, { component: 'SearchBar', query })
       } finally {
         setLoading(false)
       }

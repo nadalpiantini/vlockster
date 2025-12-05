@@ -66,20 +66,20 @@ pnpm deploy:prod:bash # Bash deployment script
 
 ### Authentication & Authorization
 
-**Current State**: Authentication is temporarily DISABLED via `DISABLE_AUTH = true` in `lib/utils/role-check.ts`. All protected routes return a mock guest user. To re-enable auth, set `DISABLE_AUTH = false`.
+**Current State**: Authentication is ENABLED via `DISABLE_AUTH = false` in `lib/utils/role-check.ts`. Protected routes require valid authentication. To temporarily disable auth for testing, set `DISABLE_AUTH = true`.
 
-**⚠️ Temporary Auth Bypass - Important Notes:**
-1. **Purpose**: Allows development and testing without Supabase auth setup
-2. **Impact**: All routes are accessible without authentication
-3. **Mock User**: Returns a guest user with `viewer` role
-4. **Location**: `lib/utils/role-check.ts` line 8
-5. **To Re-enable**:
+**⚠️ Auth Feature Flag - Important Notes:**
+1. **Purpose**: Allows temporary testing without Supabase auth setup
+2. **Current State**: ENABLED (`DISABLE_AUTH = false`)
+3. **Location**: `lib/utils/role-check.ts` line 24
+4. **To Temporarily Disable for Testing**:
    ```typescript
-   const DISABLE_AUTH = false // Change to false in lib/utils/role-check.ts
+   const DISABLE_AUTH = true // Change to true in lib/utils/role-check.ts
    ```
-6. **Before Production**: MUST set `DISABLE_AUTH = false` and test all protected routes
+5. **Impact when DISABLED**: All routes accessible, returns mock guest user with `viewer` role
+6. **Production Safety**: Always verify `DISABLE_AUTH = false` before production deployment
 
-**Files Affected by Auth Bypass:**
+**Files Using Auth Check:**
 - `app/dashboard/page.tsx` - Dashboard access
 - `app/apply/page.tsx` - Creator application
 - `app/projects/my/page.tsx` - Creator project management

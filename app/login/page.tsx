@@ -175,7 +175,7 @@ export default function LoginPage() {
                 {loading ? 'Signing in...' : 'Sign In'}
               </Button>
               <p className="text-sm text-gray-300 text-center">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/signup" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Crear cuenta nueva">
                   Sign up here
                 </Link>

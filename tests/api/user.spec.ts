@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test'
 test.describe('API: User (GDPR)', () => {
   const API_BASE = 'http://localhost:3007/api'
 
-  describe('/api/user/export', () => {
+  test.describe('/api/user/export', () => {
     test('should require authentication', async ({ request }) => {
       const response = await request.get(`${API_BASE}/user/export`)
 
@@ -52,7 +52,7 @@ test.describe('API: User (GDPR)', () => {
     })
   })
 
-  describe('/api/user/delete', () => {
+  test.describe('/api/user/delete', () => {
     test('should require authentication', async ({ request }) => {
       const response = await request.delete(`${API_BASE}/user/delete`, {
         data: {
