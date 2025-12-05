@@ -20,19 +20,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    // Obtener historial del usuario
-    // Videos vistos
+    // Obtener historial del usuario con relaciones optimizadas
+    // Videos vistos - usando select con relaciones para evitar N+1
     const { data: videoMetrics } = await supabase
       .from('video_metrics')
-      .select('video_id, watched_seconds, completed, videos(id, title, genre, uploader_id)')
+      .select('video_id, watched_seconds, completed, videos!inner(id, title, genre, uploader_id)')
       .eq('viewer_id', user.id)
       .order('created_at', { ascending: false })
       .limit(50)
 
-    // Proyectos apoyados
+    // Proyectos apoyados - usando select con relaciones para evitar N+1
     const { data: backings } = await supabase
       .from('backings')
-      .select('project_id, amount, projects(id, title, genre, creator_id)')
+      .select('project_id, amount, projects!inner(id, title, category, creator_id)')
       .eq('user_id', user.id)
       .eq('payment_status', 'completed')
       .order('created_at', { ascending: false })

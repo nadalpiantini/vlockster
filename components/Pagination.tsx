@@ -14,8 +14,16 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
   if (totalPages <= 1) return null
 
   const getPageUrl = (page: number): string => {
-    if (page === 1) return basePath
-    return `${basePath}?page=${page}`
+    // Handle basePath with existing query params
+    const url = new URL(basePath, 'http://localhost')
+    if (page === 1) {
+      url.searchParams.delete('page')
+    } else {
+      url.searchParams.set('page', page.toString())
+    }
+    // Extract pathname and search
+    const path = url.pathname + (url.search ? url.search : '')
+    return path
   }
 
   return (

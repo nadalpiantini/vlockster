@@ -198,7 +198,15 @@ export default async function AdminRequestsPage({
                   </CardHeader>
                 </Card>
               ))}
-            </div>
+              </div>
+              {reviewedTotalPages > 1 && (
+                <Pagination
+                  currentPage={reviewedCurrentPage}
+                  totalPages={reviewedTotalPages}
+                  basePath="/admin/requests?status=reviewed"
+                />
+              )}
+            </>
           )}
         </section>
       </main>
