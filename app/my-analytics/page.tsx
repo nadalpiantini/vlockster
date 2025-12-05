@@ -364,7 +364,7 @@ export default function MyAnalyticsPage() {
             </Card>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

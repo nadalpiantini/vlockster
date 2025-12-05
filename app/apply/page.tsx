@@ -101,7 +101,7 @@ export default function ApplyPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-2xl">
+      <main id="main-content" className="container mx-auto max-w-2xl" role="main" aria-label="Solicitar acceso de creator">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Solicitar Acceso de Creator</CardTitle>
@@ -192,7 +192,7 @@ export default function ApplyPage() {
             </CardContent>
           </form>
         </Card>
-      </div>
+      </main>
     </div>
   )
 }

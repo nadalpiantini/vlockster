@@ -168,7 +168,7 @@ export default function PostDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
+      <main id="main-content" className="container mx-auto max-w-4xl" role="main" aria-label="Post de comunidad">
         <Link href="/community">
           <Button variant="outline" className="mb-6">
             ← Volver a Comunidades
@@ -270,7 +270,7 @@ export default function PostDetailPage() {
             </CardContent>
           </Card>
         )}
-      </div>
+      </main>
     </div>
   )
 }

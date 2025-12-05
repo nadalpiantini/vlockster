@@ -312,7 +312,7 @@ export default function CommunityDetailPage() {
             </CardContent>
           </Card>
         )}
-      </div>
+      </main>
     </div>
   )
 }
