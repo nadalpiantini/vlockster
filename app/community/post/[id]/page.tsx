@@ -231,9 +231,9 @@ export default function PostDetailPage() {
           </h2>
           {comments.length === 0 ? (
             <Card>
-              <CardContent className="py-12 text-center text-gray-400">
+              <CardContent className="py-12 text-center text-gray-300">
                 No hay comentarios aún
-                {user && <p className="mt-2">¡Sé el primero en comentar!</p>}
+                {user && <p className="mt-2 text-gray-300">¡Sé el primero en comentar!</p>}
               </CardContent>
             </Card>
           ) : (
@@ -249,7 +249,7 @@ export default function PostDetailPage() {
                   <p className="text-gray-300 whitespace-pre-wrap">
                     {comment.content}
                   </p>
-                  <div className="mt-2 text-sm text-gray-400">
+                  <div className="mt-2 text-sm text-gray-300">
                     👍 {comment.like_count || 0} likes
                   </div>
                 </CardContent>
@@ -261,7 +261,7 @@ export default function PostDetailPage() {
         {!user && (
           <Card className="mt-6">
             <CardContent className="py-6 text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Inicia sesión para comentar
               </p>
               <Link href="/login">
