@@ -764,3 +764,34 @@ Mini Sprint 7: API Integration Tests - Community & User endpoints
 Mini Sprint 8: E2E Flow Tests - Video Upload & Project Creation flows
 
 ---
+
+
+### 2025-12-05 - Mini Sprint 8: Epic 4 - E2E Flow Tests Expansion (Video Upload & Project Creation) ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Expandir tests E2E para flujos completos de Video Upload y Project Creation
+
+**Tareas Realizadas**:
+1. ✅ Expandido video-upload-flow.spec.ts (3 → 10 tests)
+2. ✅ Expandido project-creation-flow.spec.ts (3 → 12 tests)
+3. ✅ Tests cubren: navegación completa, validación de formularios, estados de carga, manejo de errores, accesibilidad
+
+**Resultados**:
+- ✅ 22 tests E2E para flujos completos (expandidos de 6)
+- ✅ Cobertura completa de flujos de usuario
+- ✅ Tests de accesibilidad incluidos
+
+**Git**:
+- ✅ Commit Mini Sprint 8 realizado
+
+**Métricas**:
+- Tests expandidos: 16
+- Tests totales E2E flows: 22
+
+**Próximos Pasos**:
+Mini Sprint 9: E2E Flow Tests - Backing & Admin Moderation flows
+
+---
