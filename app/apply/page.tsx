@@ -113,8 +113,13 @@ export default function ApplyPage() {
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-6">
               {error && (
-                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm">
+                <div className="bg-destructive/10 border border-destructive/50 text-destructive px-4 py-3 rounded-md text-sm" role="alert" aria-live="assertive" aria-atomic="true">
                   {error}
+                </div>
+              )}
+              {loading && (
+                <div className="sr-only" role="status" aria-live="polite" aria-busy="true">
+                  Enviando solicitud, por favor espera...
                 </div>
               )}
 
