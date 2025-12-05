@@ -795,3 +795,34 @@ Mini Sprint 8: E2E Flow Tests - Video Upload & Project Creation flows
 Mini Sprint 9: E2E Flow Tests - Backing & Admin Moderation flows
 
 ---
+
+
+### 2025-12-05 - Mini Sprint 9: Epic 4 - E2E Flow Tests Expansion (Backing & Admin Moderation) ✅
+
+**Estado**: Completado
+
+**Contexto**:
+- Continuación de Epic 4: Test Coverage Expansion
+- Objetivo: Expandir tests E2E para flujos de Backing y Admin Moderation
+
+**Tareas Realizadas**:
+1. ✅ Creado backing-flow.spec.ts (10 tests)
+2. ✅ Creado admin-moderation-flow.spec.ts (15 tests)
+3. ✅ Tests cubren: navegación completa, acciones de moderación, manejo de errores, accesibilidad
+
+**Resultados**:
+- ✅ 25 nuevos tests E2E para flujos completos
+- ✅ Cobertura completa de flujos de backing y moderación
+- ✅ Tests de accesibilidad incluidos
+
+**Git**:
+- ✅ Commit Mini Sprint 9 realizado
+
+**Métricas**:
+- Tests nuevos: 25
+- Tests totales E2E flows: 47
+
+**Próximos Pasos**:
+Mini Sprint 10: Test Coverage Metrics - Setup thresholds, CI integration, documentation
+
+---
