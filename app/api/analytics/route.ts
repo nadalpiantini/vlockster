@@ -42,13 +42,14 @@ export async function GET(_request: NextRequest) {
 
     const totalVideos = videos?.length || 0
 
-    // Obtener métricas de videos
+    // Obtener métricas de videos (optimizado: una sola query en lugar de N+1)
     const videoIds = videos?.map((v) => (v as Database['public']['Tables']['videos']['Row']).id) || []
     const result = videoIds.length > 0
       ? await supabase
           .from('video_metrics')
           .select('video_id, watched_seconds, liked, completed')
           .in('video_id', videoIds)
+          .order('created_at', { ascending: false })
       : { data: null, error: null }
     const videoMetrics = result.data
 
