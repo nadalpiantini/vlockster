@@ -4,6 +4,7 @@ import { paypalCreateOrderSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
 import { logger } from '@/lib/utils/logger'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -57,7 +58,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (project.status !== 'active') {
+    type ProjectWithCreator = Database['public']['Tables']['projects']['Row'] & {
+      creator: { id: string } | null
+    }
+
+    const projectTyped = project as ProjectWithCreator
+
+    if (projectTyped.status !== 'active') {
       return NextResponse.json(
         { error: 'Este proyecto no está aceptando contribuciones' },
         { status: 400 }
@@ -65,7 +72,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Prevenir self-backing
-    const creatorProfile = project.creator as { id: string } | null
+    const creatorProfile = projectTyped.creator
     if (creatorProfile?.id === user.id) {
       return NextResponse.json(
         { error: 'No puedes respaldar tu propio proyecto' },
@@ -163,7 +170,7 @@ export async function POST(request: NextRequest) {
               currency_code: 'USD',
               value: Number(amount).toFixed(2),
             },
-            description: `Backing for: ${project.title}`,
+            description: `Backing for: ${projectTyped.title}`,
             custom_id: JSON.stringify({
               user_id: user.id,
               project_id,

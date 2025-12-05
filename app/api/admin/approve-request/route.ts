@@ -4,6 +4,7 @@ import { requireRole } from '@/lib/utils/role-check'
 import { adminApproveRequestSchema } from '@/lib/validations/schemas'
 import { handleValidationError, handleError } from '@/lib/utils/api-helpers'
 import { checkRateLimit, criticalRateLimit } from '@/lib/utils/rate-limit'
+import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -50,10 +51,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Actualizar el rol del usuario a creator
+    const userId = (creatorRequest as { user_id: string }).user_id
     const { error: updateRoleError } = await supabase
       .from('profiles')
-      .update({ role: 'creator' })
-      .eq('id', creatorRequest.user_id)
+      .update({ role: 'creator' } as Database['public']['Tables']['profiles']['Update'])
+      .eq('id', userId as string)
 
     if (updateRoleError) {
       return handleError(updateRoleError, 'Approve request - update role')
@@ -66,7 +68,7 @@ export async function POST(request: NextRequest) {
         status: 'approved',
         reviewed_by: admin.id,
         reviewed_at: new Date().toISOString(),
-      })
+      } as Database['public']['Tables']['creator_requests']['Update'])
       .eq('id', requestId)
 
     if (updateRequestError) {
