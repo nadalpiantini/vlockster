@@ -84,20 +84,20 @@ export async function GET(request: NextRequest) {
 
     const total_watch_time = videos_viewed.reduce((sum, v) => sum + (v.watched_seconds || 0), 0) / 60
 
-    // Obtener contenido disponible
+    // Obtener contenido disponible (optimizado: usar índices y límites)
     const { data: videos } = await supabase
       .from('videos')
       .select('id, title, description, genre, uploader_id, view_count, created_at')
       .eq('visibility', 'public')
       .order('created_at', { ascending: false })
-      .limit(50)
+      .limit(50) // Límite para performance
 
     const { data: projects } = await supabase
       .from('projects')
       .select('id, title, description, category, creator_id, goal_amount, current_amount, deadline')
       .eq('status', 'active')
       .order('created_at', { ascending: false })
-      .limit(30)
+      .limit(30) // Límite para performance
 
     // Mapear proyectos al formato esperado
     const projectsMapped = (projects || []).map((p) => ({
