@@ -10,6 +10,24 @@
 
 ## 📋 Plan de Mini Sprints - EN PROGRESO
 
+### 🚀 Mini Sprint: Mejoras de Accesibilidad - Live Regions (2025-12-05)
+- **Estado**: ✅ COMPLETADO + PUSH REALIZADO
+- **Tarea**: Mejorar aria-live regions en formularios y páginas interactivas
+- **Acciones realizadas**:
+  - Agregado aria-live='polite' y aria-busy='true' para estados de carga en upload
+  - Mejorado aria-live en apply page (assertive para errores, polite para carga)
+  - Cambiado aria-live de 'polite' a 'assertive' para errores críticos
+  - Agregado aria-atomic='true' para mensajes de error
+- **Resultado**: 
+  - ✅ Mejor feedback para lectores de pantalla
+  - ✅ Live regions consistentes en toda la aplicación
+  - ✅ 11 commits acumulados y pusheados
+- **Commits**: 
+  - feat(accessibility): Agregar aria-live para estado de carga en upload
+  - feat(accessibility): Mejorar aria-live en apply page
+
+---
+
 ### 🚀 Mini Sprint: Eliminar 'as any' en recommendations (2025-12-05)
 - **Estado**: ✅ COMPLETADO
 - **Tarea**: Completar eliminación de 'as any' en API routes
