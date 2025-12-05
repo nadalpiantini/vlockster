@@ -96,7 +96,7 @@ export default async function WatchPage({
               <p className="text-gray-400 mb-4">
                 Aún no hay videos disponibles
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-300">
                 Los creadores pronto comenzarán a subir contenido
               </p>
             </CardContent>
