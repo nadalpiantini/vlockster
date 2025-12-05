@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { Route } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
 import {
@@ -231,7 +232,7 @@ export default async function ProjectDetailPage({
                   projectId={project.id}
                   projectStatus={project.status}
                   goalAmount={Number(project.goal_amount)}
-                  user={user ? { id: user.id, email: user.email || '', name: user.name, role: user.role } : null}
+                  user={user ? { id: user.id, email: user.email || '', name: user.name, role: user.role as 'viewer' | 'creator' | 'moderator' | 'admin' } : null}
                 />
 
                 {project.status === 'funded' && (
@@ -265,7 +266,7 @@ export default async function ProjectDetailPage({
                 </div>
                 {project.creator?.public_profile_slug && (
                   <Link 
-                    href={`/c/${project.creator.public_profile_slug}`}
+                    href={`/c/${project.creator.public_profile_slug}` as Route}
                     aria-label={`Ver perfil de ${project.creator?.name || 'creador'}`}
                   >
                     <Button className="w-full" variant="outline" aria-label={`Ver perfil del creador ${project.creator.name || ''}`}>

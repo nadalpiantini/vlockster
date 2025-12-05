@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { Route } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
 import {

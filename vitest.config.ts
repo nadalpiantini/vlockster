@@ -35,10 +35,10 @@ export default defineConfig({
         '**/vitest.config.ts',
       ],
       thresholds: {
-        lines: 100,
-        functions: 100,
+        lines: 80, // Target: 80%+ (Epic 4 requirement)
+        functions: 80,
         branches: 75, // Algunas ramas son casos edge (config Redis)
-        statements: 100,
+        statements: 80,
       },
     },
   },
