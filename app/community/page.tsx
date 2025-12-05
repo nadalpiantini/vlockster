@@ -83,7 +83,7 @@ export default async function CommunityPage() {
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   )
 }
