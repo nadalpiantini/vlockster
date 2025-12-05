@@ -166,7 +166,7 @@ export default async function MyProjectsPage() {
             })}
           </div>
         )}
-      </div>
+      </main>
     </div>
   )
 }
