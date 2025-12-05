@@ -3,8 +3,24 @@ import { redirect } from 'next/navigation'
 
 export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
 
-// Autenticación habilitada para producción
-// Cambiar a true solo para testing local sin usuarios
+/**
+ * ⚠️ SECURITY WARNING: DISABLE_AUTH Feature Flag
+ * 
+ * This flag should ONLY be used for local development/testing when Supabase auth
+ * is not configured. NEVER enable this in production.
+ * 
+ * When DISABLE_AUTH = true:
+ * - All auth checks are bypassed
+ * - Returns mock guest user with 'viewer' role
+ * - All protected routes become accessible
+ * 
+ * Production Safety:
+ * - This constant is hardcoded to false
+ * - To enable for testing, manually change to true
+ * - Always verify it's false before deploying to production
+ * 
+ * @deprecated Consider removing this feature flag entirely if not needed
+ */
 const DISABLE_AUTH = false
 
 export async function getCurrentUser() {
