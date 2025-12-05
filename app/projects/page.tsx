@@ -72,12 +72,12 @@ export default async function ProjectsPage({
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">Proyectos en Crowdfunding</h1>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Apoya proyectos cinematográficos independientes
             </p>
           </div>
           <Link href="/dashboard" aria-label="Volver al dashboard">
-            <Button variant="outline">Volver</Button>
+            <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
           </Link>
         </div>
 
@@ -154,7 +154,7 @@ export default async function ProjectsPage({
                           <p className="text-2xl font-bold text-blue-400" aria-label={`Monto recaudado: $${Number(project.current_amount).toLocaleString()}`}>
                             ${Number(project.current_amount).toLocaleString()}
                           </p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-gray-300">
                             de ${Number(project.goal_amount).toLocaleString()}
                           </p>
                         </div>
@@ -162,11 +162,11 @@ export default async function ProjectsPage({
                           <p className="text-2xl font-bold text-blue-400" aria-label={`Días restantes: ${daysLeft}`}>
                             {daysLeft}
                           </p>
-                          <p className="text-xs text-gray-400">días restantes</p>
+                          <p className="text-xs text-gray-300">días restantes</p>
                         </div>
                       </div>
 
-                      <p className="text-sm text-gray-400 text-center">
+                      <p className="text-sm text-gray-300 text-center">
                         Por: {(project as Project & { creator: Profile | null }).creator?.name || 'Desconocido'}
                       </p>
                     </CardContent>

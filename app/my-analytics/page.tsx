@@ -101,8 +101,8 @@ export default function MyAnalyticsPage() {
             <p className="text-gray-400 mb-4">
               {error || 'No se pudieron cargar las estadísticas'}
             </p>
-            <Link href="/dashboard">
-              <Button>Volver al Dashboard</Button>
+            <Link href="/dashboard" aria-label="Volver al dashboard principal">
+              <Button aria-label="Volver al dashboard principal">Volver al Dashboard</Button>
             </Link>
           </CardContent>
         </Card>
@@ -121,8 +121,8 @@ export default function MyAnalyticsPage() {
               Estadísticas de tu contenido y proyectos
             </p>
           </div>
-          <Link href="/dashboard">
-            <Button variant="outline">Volver</Button>
+          <Link href="/dashboard" aria-label="Volver al dashboard">
+            <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
           </Link>
         </div>
 
@@ -248,7 +248,11 @@ export default function MyAnalyticsPage() {
                 ) : (
                   <div className="space-y-3">
                     {analytics.topVideos.map((video, index) => (
-                      <Link key={video.id} href={`/watch/${video.id}`}>
+                      <Link 
+                        key={video.id} 
+                        href={`/watch/${video.id}`}
+                        aria-label={`Ver video: ${video.title}`}
+                      >
                         <div className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors">
                           <span className="text-2xl font-bold text-gray-500">
                             #{index + 1}
@@ -324,7 +328,11 @@ export default function MyAnalyticsPage() {
                 ) : (
                   <div className="space-y-3">
                     {analytics.topProjects.map((project, index) => (
-                      <Link key={project.id} href={`/projects/${project.id}`}>
+                      <Link 
+                        key={project.id} 
+                        href={`/projects/${project.id}`}
+                        aria-label={`Ver proyecto: ${project.title}`}
+                      >
                         <div className="p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors">
                           <div className="flex items-center gap-3 mb-2">
                             <span className="text-2xl font-bold text-gray-500">

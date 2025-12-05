@@ -72,11 +72,11 @@ export default async function MyProjectsPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Link href="/projects/create">
-              <Button>Nuevo Proyecto</Button>
+            <Link href="/projects/create" aria-label="Crear nuevo proyecto de crowdfunding">
+              <Button aria-label="Crear nuevo proyecto de crowdfunding">Nuevo Proyecto</Button>
             </Link>
-            <Link href="/dashboard">
-              <Button variant="outline">Volver</Button>
+            <Link href="/dashboard" aria-label="Volver al dashboard">
+              <Button variant="outline" aria-label="Volver al dashboard">Volver</Button>
             </Link>
           </div>
         </div>
@@ -87,8 +87,8 @@ export default async function MyProjectsPage() {
               <p className="text-gray-400 mb-4">
                 Aún no has creado ningún proyecto
               </p>
-              <Link href="/projects/create">
-                <Button>Crear Mi Primer Proyecto</Button>
+              <Link href="/projects/create" aria-label="Crear mi primer proyecto de crowdfunding">
+                <Button aria-label="Crear mi primer proyecto de crowdfunding">Crear Mi Primer Proyecto</Button>
               </Link>
             </CardContent>
           </Card>
@@ -101,7 +101,11 @@ export default async function MyProjectsPage() {
                 100
 
               return (
-                <Link key={project.id} href={`/projects/${project.id}`}>
+                <Link 
+                  key={project.id} 
+                  href={`/projects/${project.id}`}
+                  aria-label={`Ver proyecto: ${project.title}`}
+                >
                   <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full">
                     <CardHeader>
                       <div className="flex justify-between items-start mb-2">

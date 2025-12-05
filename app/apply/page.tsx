@@ -180,7 +180,13 @@ export default function ApplyPage() {
                 </ul>
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={loading}
+                aria-label={loading ? 'Enviando solicitud de acceso como creator...' : 'Enviar solicitud de acceso como creator'}
+                aria-busy={loading}
+              >
                 {loading ? 'Enviando solicitud...' : 'Enviar Solicitud'}
               </Button>
             </CardContent>
