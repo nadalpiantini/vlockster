@@ -128,12 +128,23 @@
   * {
     border-color: hsl(var(--border));
   }
+  
+  /* Force dark background and white text globally */
+  html {
+    background-color: #000000 !important;
+  }
+  
   body {
-    background-color: transparent;
-    color: hsl(var(--foreground));
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
     margin: 0;
     padding: 0;
     font-family: var(--font-inter);
+  }
+  
+  /* Default text color is white - elements inherit unless they have explicit color classes */
+  body *:not([class*="text-red"]):not([class*="text-[#FF"]):not([class*="text-blue"]):not([class*="text-green"]):not([class*="text-yellow"]):not([class*="text-black"]):not([style*="color"]) {
+    color: #FFFFFF !important;
   }
 }
 

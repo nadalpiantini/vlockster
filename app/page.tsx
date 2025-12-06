@@ -93,7 +93,8 @@ export default function HomePage() {
     <div
       className="min-h-screen text-white relative overflow-hidden"
       style={{
-        backgroundColor: '#000000'
+        backgroundColor: '#000000',
+        color: '#FFFFFF'
       }}
     >
       {/* Header - STREAMLAB Style with Glassmorphism */}
