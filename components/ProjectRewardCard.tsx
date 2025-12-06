@@ -48,6 +48,8 @@ export function ProjectRewardCard({
     <Card
       className={`${!isAvailable ? 'opacity-50' : ''}`}
       aria-label={`Recompensa: ${reward.title} por $${Number(reward.amount).toLocaleString()} USD`}
+      role="region"
+      aria-roledescription="Tarjeta de recompensa de proyecto para apoyo financiero"
     >
       <CardHeader>
         <div className="flex justify-between items-start">
@@ -81,9 +83,10 @@ export function ProjectRewardCard({
           <Button
             className="w-full"
             disabled
-            aria-label={!isAvailable ? `Recompensa ${reward.title} agotada` : 'Campaña cerrada'}
+            aria-label={!isAvailable ? `Recompensa "${reward.title}" está agotada` : `La campaña para "${reward.title}" está cerrada`}
+            aria-describedby={`reward-unavailable-${reward.id}`}
           >
-            {!isAvailable ? 'Agotado' : 'Campaña cerrada'}
+            <span id={`reward-unavailable-${reward.id}`}>{!isAvailable ? 'Agotado' : 'Campaña cerrada'}</span>
           </Button>
         ) : user ? (
           <PayPalButton

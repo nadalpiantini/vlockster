@@ -306,7 +306,7 @@ export async function getBundleOptimizationData(): Promise<{
     // Combinar categorías de videos y proyectos
     const allCategoriesMap = new Map<string, { count: number; avg_engagement: number }>()
 
-    videoCategories?.forEach(cat => {
+    videoCategories?.forEach((cat: { category: string | null; count: string; avg_engagement: string }) => {
       if (cat.category) {
         allCategoriesMap.set(cat.category, {
           count: parseInt(cat.count),
@@ -315,7 +315,7 @@ export async function getBundleOptimizationData(): Promise<{
       }
     })
 
-    projectCategories?.forEach(cat => {
+    projectCategories?.forEach((cat: { category: string | null; count: string; avg_engagement: string }) => {
       if (cat.category) {
         const existing = allCategoriesMap.get(cat.category) || { count: 0, avg_engagement: 0 }
         allCategoriesMap.set(cat.category, {
