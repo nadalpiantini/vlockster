@@ -25,6 +25,7 @@ export function sanitizeText(text: string): string {
 /**
  * Sanitiza un objeto con campos de texto
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sanitizeObject<T extends Record<string, any>>(
   obj: T,
   textFields: (keyof T)[]

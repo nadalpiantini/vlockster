@@ -74,7 +74,7 @@ export default async function MyProjectsPage() {
           </Card>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project: any) => {
+            {projects.map((project: Database['public']['Tables']['projects']['Row']) => {
               const progress =
                 (Number(project.current_amount) /
                   Number(project.goal_amount)) *

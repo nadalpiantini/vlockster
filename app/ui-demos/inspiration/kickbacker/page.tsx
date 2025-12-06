@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart, Share2, Flag, Calendar, Users, DollarSign } from 'lucide-react'
+import { Heart, Share2, Flag, Users } from 'lucide-react'
 
 export default function KickBackerStylePage() {
   return (
@@ -18,7 +18,7 @@ export default function KickBackerStylePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/ui-demos" className="flex items-center gap-3 group">
               <Image
-                src="/items/vlockster_logo.jpeg"
+                src="/items/vlockster_logo.png"
                 alt="VLOCKSTER"
                 width={150}
                 height={40}

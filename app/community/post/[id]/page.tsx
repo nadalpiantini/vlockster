@@ -45,7 +45,7 @@ export default function PostDetailPage() {
   const id = params.id as string
   const [post, setPost] = useState<Post | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null)
   const [loading, setLoading] = useState(true)
   const [newComment, setNewComment] = useState('')
   const [creating, setCreating] = useState(false)

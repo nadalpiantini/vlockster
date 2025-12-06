@@ -27,7 +27,7 @@ export default function PeerTubeStylePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/ui-demos" className="flex items-center gap-3 group">
               <Image
-                src="/items/vlockster_logo.jpeg"
+                src="/items/vlockster_logo.png"
                 alt="VLOCKSTER"
                 width={150}
                 height={40}
@@ -166,7 +166,7 @@ export default function PeerTubeStylePage() {
               <div className="p-6 rounded-lg border border-white/10 bg-white/5">
                 <h3 className="font-semibold mb-4">Playlist</h3>
                 <div className="space-y-2">
-                  {videos.slice(0, 4).map((video, idx) => (
+                  {videos.slice(0, 4).map((video) => (
                     <div key={video.id} className="flex items-center gap-3 p-2 rounded hover:bg-white/5 transition-colors cursor-pointer">
                       <div className="w-16 h-10 rounded bg-gradient-to-br from-gray-700 to-gray-800 flex-shrink-0"></div>
                       <div className="flex-1 min-w-0">

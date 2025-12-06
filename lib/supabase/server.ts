@@ -4,6 +4,7 @@ import type { Database } from '@/types/database.types'
 
 function createMockClient() {
   const defaultResponse = { data: [], error: null, count: 0 }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const builder: any = {
     select: () => builder,
     order: () => builder,
@@ -15,6 +16,7 @@ function createMockClient() {
     update: () => Promise.resolve({ data: null, error: null }),
     insert: () => Promise.resolve({ data: null, error: null }),
     delete: () => Promise.resolve({ data: null, error: null }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     then: (onFulfilled: any, onRejected: any) =>
       Promise.resolve(defaultResponse).then(onFulfilled, onRejected),
   }
@@ -51,6 +53,7 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => {

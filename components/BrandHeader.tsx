@@ -29,7 +29,7 @@ export function BrandHeader({ showText = true, size = 'md' }: BrandHeaderProps) 
     >
       <div className={`relative ${sizeClasses[size]}`}>
         <Image
-          src="/items/vlockster_logo.jpeg"
+          src="/items/vlockster_logo.png"
           alt="VLOCKSTER Logo"
           fill
           className="object-contain group-hover:scale-110 transition-transform duration-300"

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 const COOKIE_CONSENT_KEY = 'vlockster-cookie-consent'
-const CONSENT_EXPIRY_DAYS = 365
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)

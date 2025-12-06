@@ -57,6 +57,7 @@ export function sanitizeContent(content: string, allowHtml = false): string {
 /**
  * Valida y sanitiza un objeto con campos de texto
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function validateAndSanitize<T extends Record<string, any>>(
   data: T,
   textFields: (keyof T)[]

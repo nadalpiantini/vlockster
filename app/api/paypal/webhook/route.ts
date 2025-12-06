@@ -36,8 +36,8 @@ function verifyPayPalSignature(
   webhookId: string
 ): boolean {
   try {
-    const authAlgo = headers.get('PAYPAL-AUTH-ALGO') || ''
-    const certUrl = headers.get('PAYPAL-CERT-URL') || ''
+    const _authAlgo = headers.get('PAYPAL-AUTH-ALGO') || ''
+    const _certUrl = headers.get('PAYPAL-CERT-URL') || ''
     const transmissionId = headers.get('PAYPAL-TRANSMISSION-ID') || ''
     const transmissionSig = headers.get('PAYPAL-TRANSMISSION-SIG') || ''
     const transmissionTime = headers.get('PAYPAL-TRANSMISSION-TIME') || ''
@@ -150,7 +150,10 @@ async function processPaymentCompleted(
   }
 }
 
-async function processPaymentCancelled(resource: any, supabase: any) {
+async function processPaymentCancelled(
+  resource: { id: string },
+  supabase: Awaited<ReturnType<typeof createClient>>
+) {
   const orderId = resource.id
 
   const cancelUpdate: Database['public']['Tables']['backings']['Update'] = {

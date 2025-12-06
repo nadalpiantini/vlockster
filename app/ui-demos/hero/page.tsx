@@ -1,7 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Play, Info } from 'lucide-react'
-import { DemoHeader } from '@/components/DemoHeader'
 
 export default function HeroDemoPage() {
   return (

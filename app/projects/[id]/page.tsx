@@ -25,7 +25,6 @@ type ProjectProfile = {
 } | null
 
 type ProjectRow = Database['public']['Tables']['projects']['Row']
-type ProfileRow = Database['public']['Tables']['profiles']['Row']
 
 async function getProject(id: string) {
   const supabase = await createClient()

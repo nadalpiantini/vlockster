@@ -45,7 +45,7 @@ export default function CreateProjectPage() {
     setRewards([...rewards, newReward])
   }
 
-  const updateReward = (id: string, field: keyof Reward, value: any) => {
+  const updateReward = (id: string, field: keyof Reward, value: string | number | null) => {
     setRewards(
       rewards.map((reward) =>
         reward.id === id ? { ...reward, [field]: value } : reward

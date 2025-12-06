@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser, type UserProfile } from '@/lib/utils/role-check'
 import { Button } from '@/components/ui/button'

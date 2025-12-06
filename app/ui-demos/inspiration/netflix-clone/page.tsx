@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Play, Plus, Info, Volume2, Maximize2 } from 'lucide-react'
+import { Play, Info, Volume2, Maximize2 } from 'lucide-react'
 
 export default function NetflixCloneStylePage() {
   return (
@@ -18,7 +18,7 @@ export default function NetflixCloneStylePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/ui-demos" className="flex items-center gap-3 group">
               <Image
-                src="/items/vlockster_logo.jpeg"
+                src="/items/vlockster_logo.png"
                 alt="VLOCKSTER"
                 width={150}
                 height={40}

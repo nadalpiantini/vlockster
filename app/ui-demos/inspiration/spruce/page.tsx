@@ -42,7 +42,7 @@ export default function SpruceStylePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/ui-demos" className="flex items-center gap-3 group">
               <Image
-                src="/items/vlockster_logo.jpeg"
+                src="/items/vlockster_logo.png"
                 alt="VLOCKSTER"
                 width={150}
                 height={40}

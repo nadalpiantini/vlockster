@@ -139,7 +139,7 @@ class Logger {
    * Log de operaciones de API
    */
   api(level: LogLevel, endpoint: string, message: string, context?: LogContext): void {
-    const entry = this.formatLog(level, message, {
+    const _entry = this.formatLog(level, message, {
       ...context,
       endpoint,
     })

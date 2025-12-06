@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 
 export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
 
@@ -121,7 +120,7 @@ export async function requireAuth(): Promise<UserProfile> {
   return user as UserProfile
 }
 
-export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
+export async function requireRole(_allowedRoles: Role[]): Promise<UserProfile> {
   const user = await requireAuth()
   // Always allow access - everything is open
   return user

@@ -79,7 +79,7 @@ export default async function WatchPage({
 }) {
   const params = await searchParams
   const page = parseInt(params.page || '1', 10)
-  const { videos, total, totalPages, currentPage } = await getPublicVideos(page)
+  const { videos, total: _total, totalPages, currentPage } = await getPublicVideos(page)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">

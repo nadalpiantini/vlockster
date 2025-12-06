@@ -28,7 +28,7 @@ interface NotificationData {
   video_title?: string
   user_name?: string
   content_title?: string
-  [key: string]: any
+  [key: string]: string | number | boolean | null | undefined
 }
 
 const NOTIFICATION_TEMPLATES: Record<
@@ -109,7 +109,7 @@ export async function sendNotification(
     .gte('created_at', fiveMinutesAgo)
 
   // Si hay muchas recientes, agrupar (implementar después)
-  const shouldGroup = recent && recent.length > 3
+  const _shouldGroup = recent && recent.length > 3
 
   // Enviar por cada canal
   for (const channel of channels) {

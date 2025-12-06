@@ -44,6 +44,7 @@ describe('role-check', () => {
         }),
       }
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vi.mocked(createClient).mockResolvedValue(mockSupabase as any)
       
       const user = await getCurrentUser()
@@ -89,6 +90,7 @@ describe('role-check', () => {
         }),
       }
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vi.mocked(createClient).mockResolvedValue(mockSupabase as any)
       
       const user = await getCurrentUser()
@@ -111,6 +113,7 @@ describe('role-check', () => {
         from: vi.fn(),
       }
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vi.mocked(createClient).mockResolvedValue(mockSupabase as any)
       
       // requireAuth debe intentar redirect cuando no hay usuario

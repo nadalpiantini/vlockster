@@ -5,7 +5,7 @@ import { logger } from './logger'
 const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-const consoleDebugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {})
+const _consoleDebugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {})
 
 describe('Logger', () => {
   beforeEach(() => {

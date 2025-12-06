@@ -85,7 +85,7 @@ export default function SignupPage() {
             <Link href="/" className="flex items-center space-x-3 group" aria-label="VLOCKSTER - Ir al inicio">
               <div className="relative w-10 h-10">
                 <Image
-                  src="/items/vlockster_logo.jpeg"
+                  src="/items/vlockster_logo.png"
                   alt="VLOCKSTER Logo"
                   fill
                   className="object-contain group-hover:scale-110 transition-transform duration-300"
@@ -113,7 +113,7 @@ export default function SignupPage() {
             <div className="flex justify-center mb-4">
               <div className="relative w-16 h-16">
                 <Image
-                  src="/vlockster_logo.png"
+                  src="/items/vlockster_logo.png"
                   alt="VLOCKSTER Logo"
                   fill
                   className="object-contain"
