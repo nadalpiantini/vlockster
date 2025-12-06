@@ -80,7 +80,7 @@ export default function ButtonsDemoPage() {
                 </div>
               </div>
               <code className="block text-sm text-gray-400 bg-black/30 px-4 py-3 rounded">
-                className="px-8 py-4 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-xl font-bold hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all shadow-2xl shadow-red-500/40"
+                className=&quot;px-8 py-4 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-xl font-bold hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all shadow-2xl shadow-red-500/40&quot;
               </code>
             </section>
 
@@ -102,7 +102,7 @@ export default function ButtonsDemoPage() {
                 </div>
               </div>
               <code className="block text-sm text-gray-400 bg-black/30 px-4 py-3 rounded">
-                className="px-8 py-4 border-2 border-white/20 text-white rounded-xl font-semibold hover:border-white/40 hover:bg-white/10 transition-all"
+                className=&quot;px-8 py-4 border-2 border-white/20 text-white rounded-xl font-semibold hover:border-white/40 hover:bg-white/10 transition-all&quot;
               </code>
             </section>
 
@@ -124,7 +124,7 @@ export default function ButtonsDemoPage() {
                 </div>
               </div>
               <code className="block text-sm text-gray-400 bg-black/30 px-4 py-3 rounded">
-                className="px-6 py-2.5 text-gray-300 hover:text-white transition-colors"
+                className=&quot;px-6 py-2.5 text-gray-300 hover:text-white transition-colors&quot;
               </code>
             </section>
 

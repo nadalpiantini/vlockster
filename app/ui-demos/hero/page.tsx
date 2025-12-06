@@ -153,7 +153,7 @@ export default function HeroDemoPage() {
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[#FF0000] rounded-full"></span>
-                    Badge "TRENDING NOW"
+                    Badge &quot;TRENDING NOW&quot;
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[#FF0000] rounded-full"></span>

@@ -221,7 +221,7 @@ export default function ThumbnailsDemoPage() {
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[#FF0000] rounded-full"></span>
-                    Botón "MORE VIDEOS"
+                    Botón &quot;MORE VIDEOS&quot;
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[#FF0000] rounded-full"></span>
