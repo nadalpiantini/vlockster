@@ -27,12 +27,24 @@ export async function POST(request: NextRequest) {
 
     // Verificar que el usuario es creator o admin
     type ProfileRow = Database['public']['Tables']['profiles']['Row']
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
+    if (profileError) {
+      logger.error('Error al obtener perfil de usuario', profileError, {
+        userId: user.id,
+        endpoint: '/api/videos/upload',
+      })
+      return NextResponse.json(
+        { error: 'Error al verificar permisos de usuario' },
+        { status: 500 }
+      )
+    }
+
+    // Asegurar el tipado correcto de los datos obtenidos de Supabase
     const profileTyped = profile as ProfileRow | null
     if (!profileTyped || !['creator', 'admin'].includes(profileTyped.role)) {
       return NextResponse.json(

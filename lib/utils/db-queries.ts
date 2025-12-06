@@ -574,3 +574,10 @@ export async function getProjectStatsByCategory(category: string): Promise<{
     return null
   }
 }
+
+// Re-exportar las funciones de performance para tenerlas en un solo lugar
+export {
+  getPerformanceMetrics,
+  getUsageMetrics,
+  getBundleOptimizationData
+} from './performance-queries'

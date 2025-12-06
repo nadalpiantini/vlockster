@@ -45,9 +45,14 @@ export async function GET(request: NextRequest) {
     // Combinar y deduplicar
     type VideoRow = { title: string }
     type ProjectRow = { title: string }
+
+    // Asegurar el tipado correcto de los datos obtenidos de Supabase
+    const typedVideos = videos as VideoRow[] | null;
+    const typedProjects = projects as ProjectRow[] | null;
+
     const suggestions = [
-      ...((videos as VideoRow[] | null)?.map((v: VideoRow) => v.title) || []),
-      ...((projects as ProjectRow[] | null)?.map((p: ProjectRow) => p.title) || []),
+      ...(typedVideos?.map((v: VideoRow) => v.title) || []),
+      ...(typedProjects?.map((p: ProjectRow) => p.title) || []),
     ]
       .filter((title: string, index: number, self: string[]) => self.indexOf(title) === index)
       .slice(0, 10)
