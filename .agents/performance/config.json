@@ -1,0 +1,29 @@
+{
+  "name": "performance-agent",
+  "version": "1.0.0",
+  "specialty": "Loading optimization and resource management",
+  "capabilities": [
+    "loading-state-optimization",
+    "image-and-video-optimization",
+    "bundle-size-reduction",
+    "caching-strategy-implementation",
+    "preloading-strategies",
+    "resource-prioritization"
+  ],
+  "metrics": {
+    "targetLCP": "<= 2.5s",
+    "targetFID": "<= 100ms",
+    "targetCLS": "<= 0.1",
+    "targetFCP": "<= 1.8s"
+  },
+  "integrationPoints": [
+    "performance-monitoring",
+    "resource-optimization",
+    "loading-states"
+  ],
+  "qualityStandards": {
+    "speed": "premium",
+    "efficiency": "optimal",
+    "userExperience": "seamless"
+  }
+}

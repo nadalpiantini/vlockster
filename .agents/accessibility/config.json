@@ -1,0 +1,24 @@
+{
+  "name": "accessibility-agent",
+  "version": "1.0.0",
+  "specialty": "WCAG 2.1 AA compliance and inclusive design",
+  "capabilities": [
+    "wcag-compliance-auditing",
+    "aria-attribute-implementation",
+    "color-contrast-validation",
+    "keyboard-navigation",
+    "screen-reader-compatibility",
+    "focus-management"
+  ],
+  "standards": "WCAG-2.1-AA",
+  "integrationPoints": [
+    "component-library",
+    "accessibility-testing",
+    "user-feedback"
+  ],
+  "qualityStandards": {
+    "complianceLevel": "AA",
+    "errorTolerance": 0,
+    "userExperience": "inclusive"
+  }
+}

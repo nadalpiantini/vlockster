@@ -1,0 +1,23 @@
+{
+  "name": "user-flow-agent",
+  "version": "1.0.0",
+  "specialty": "User journey enhancement and conversion optimization",
+  "capabilities": [
+    "user-journey-mapping",
+    "conversion-path-optimization",
+    "navigation-improvement",
+    "engagement-flow-enhancement",
+    "user-testing-coordination",
+    "a-b-test-implementation"
+  ],
+  "integrationPoints": [
+    "user-analytics",
+    "conversion-tracking",
+    "user-feedback"
+  ],
+  "qualityStandards": {
+    "conversionRate": "+10%",
+    "engagement": "+15%",
+    "userSatisfaction": ">90%"
+  }
+}

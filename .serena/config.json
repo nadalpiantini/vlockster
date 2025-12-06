@@ -1,0 +1,19 @@
+{
+  "projectName": "vlockster-enhanced",
+  "language": "typescript",
+  "framework": "nextjs",
+  "features": {
+    "semanticAnalysis": true,
+    "codeRefactoring": true,
+    "dependencyManagement": true,
+    "bestPracticeChecks": true
+  },
+  "ignorePaths": [
+    "node_modules",
+    ".next",
+    ".git",
+    "dist",
+    "build",
+    ".serena"
+  ]
+}

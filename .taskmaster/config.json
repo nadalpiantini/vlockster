@@ -1,47 +1,49 @@
 {
   "project": "VLOCKSTER",
   "version": "1.0.0",
+  "orchestrator": {
+    "concurrency": 4,
+    "timeout": 30000,
+    "retryAttempts": 3
+  },
   "agents": {
-    "code_analyzer": {
+    "uiEnhancer": {
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "tasks": ["component-standardization", "design-system-implementation"]
     },
-    "ui_enhancer": {
+    "accessibilityAgent": {
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "tasks": ["wcag-compliance", "aria-implementation", "contrast-validation"]
     },
-    "test_generator": {
+    "performanceOptimizer": {
       "enabled": true,
-      "priority": "medium"
+      "priority": "medium",
+      "tasks": ["bundle-optimization", "loading-states", "caching-strategy"]
     },
-    "accessibility_checker": {
+    "userFlowOptimizer": {
       "enabled": true,
-      "priority": "high"
-    },
-    "performance_optimizer": {
-      "enabled": true,
-      "priority": "medium"
+      "priority": "medium",
+      "tasks": ["journey-mapping", "conversion-optimization", "engagement-analysis"]
     }
   },
   "workflows": {
-    "ui_redesign": {
-      "steps": [
-        "analyze_existing_ui",
-        "generate_improvement_plan",
-        "implement_changes",
-        "generate_tests",
-        "accessibility_audit",
-        "performance_check"
-      ]
-    },
-    "feature_implementation": {
-      "steps": [
-        "requirements_analysis",
-        "code_generation",
-        "testing",
-        "accessibility_check",
-        "performance_optimization"
-      ]
+    "enhancement-cycle": {
+      "stages": [
+        "discovery-and-audit",
+        "standardization",
+        "enhancement",
+        "testing-and-validation",
+        "deployment"
+      ],
+      "dependencies": {
+        "discovery-and-audit": [],
+        "standardization": ["discovery-and-audit"],
+        "enhancement": ["standardization"],
+        "testing-and-validation": ["enhancement"],
+        "deployment": ["testing-and-validation"]
+      }
     }
   }
 }
