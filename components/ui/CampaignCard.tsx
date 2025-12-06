@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Route } from 'next'
 import { Heart, Users } from 'lucide-react'
-import { ProgressBar } from './ProgressBar'
 
 export interface CampaignCardProps {
   id: string

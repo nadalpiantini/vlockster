@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Route } from 'next'
 import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react'
-import { ReactNode } from 'react'
 
 export interface FeedCardProps {
   id: string
@@ -31,7 +30,7 @@ export interface FeedCardProps {
 }
 
 export function FeedCard({
-  id,
+  id: _id,
   author,
   content,
   media,

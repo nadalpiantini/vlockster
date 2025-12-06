@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Route } from 'next'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
 import { VideoPlayer } from '@/components/ui/VideoPlayer'
@@ -55,7 +54,7 @@ export default async function WatchVideoPage({
 }) {
   const { id } = await params
   const video = await getVideo(id)
-  const user = await getCurrentUser()
+  const _user = await getCurrentUser()
 
   if (!video) {
     notFound()
