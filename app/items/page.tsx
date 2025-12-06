@@ -1,7 +1,9 @@
+'use client'
+
 import PosterGallery from '@/components/PosterGallery'
 import { motion } from 'framer-motion'
 
-const PosterPage = async () => {
+const PosterPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
       {/* Animated background */}
