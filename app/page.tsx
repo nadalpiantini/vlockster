@@ -84,37 +84,78 @@ export default function HomePage() {
         backgroundImage: 'linear-gradient(to bottom, #0a0a0a 0%, #050505 50%, #0a0a0a 100%)'
       }}
     >
-      {/* Header - Netflix Style */}
-      <header className="bg-gradient-to-b from-black via-black/80 to-transparent fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+      {/* Header - STREAMLAB Style with Glassmorphism */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <Image
                 src="/items/vlockster_logo.jpeg"
                 alt="VLOCKSTER"
-                width={180}
-                height={45}
-                className="object-contain h-10 w-auto transition-opacity duration-300 group-hover:opacity-80"
+                width={150}
+                height={40}
+                className="object-contain h-10 w-auto transition-transform duration-300 group-hover:scale-105"
                 priority
               />
-              <span className="font-display text-2xl font-bold text-white hidden sm:block">
+              <span className="font-display text-xl font-bold text-white hidden md:block" style={{ letterSpacing: '-0.01em' }}>
                 VLOCKSTER
               </span>
             </Link>
-            <nav className="flex items-center gap-6 text-sm" role="navigation" aria-label="Main navigation">
-              <Link href="/watch" className="text-gray-300 hover:text-white transition-colors">
+
+            {/* Navigation Links - Central */}
+            <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Main navigation">
+              <Link
+                href="/"
+                className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
+              >
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF0000] group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link
+                href="/watch"
+                className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
+              >
                 Watch
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF0000] group-hover:w-full transition-all duration-300"></span>
               </Link>
-              <Link href={"/menu" as Route} className="text-gray-300 hover:text-white transition-colors">
+              <Link
+                href={"/menu" as Route}
+                className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
+              >
                 Gallery
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF0000] group-hover:w-full transition-all duration-300"></span>
               </Link>
-              <Link href="/login" className="text-gray-300 hover:text-white transition-colors">
-                Iniciar Sesión
-              </Link>
-              <Link href="/signup" className="text-gray-300 hover:text-white transition-colors">
-                Registrarse
+              <Link
+                href="/projects"
+                className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
+              >
+                Projects
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF0000] group-hover:w-full transition-all duration-300"></span>
               </Link>
             </nav>
+
+            {/* Right Side: Search, Notifications, SUBSCRIBE */}
+            <div className="flex items-center gap-4">
+              <button
+                className="p-2 text-gray-300 hover:text-white transition-colors"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              <button
+                className="p-2 text-gray-300 hover:text-white transition-colors relative"
+                aria-label="Notifications"
+              >
+                <Bell className="w-5 h-5" />
+              </button>
+              <Link
+                href="/signup"
+                className="px-6 py-2.5 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded font-semibold hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all shadow-lg shadow-red-500/30"
+              >
+                SUBSCRIBE
+              </Link>
+            </div>
           </div>
         </div>
       </header>
