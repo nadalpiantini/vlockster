@@ -43,7 +43,8 @@ export async function GET(_request: NextRequest) {
     const totalVideos = videos?.length || 0
 
     // Obtener métricas de videos (optimizado: una sola query en lugar de N+1)
-    const videoIds = videos?.map((v) => (v as Database['public']['Tables']['videos']['Row']).id) || []
+    type VideoSelect = { id: string; title: string | null; created_at: string | null }
+    const videoIds = videos?.map((v: VideoSelect) => v.id) || []
     const result = videoIds.length > 0
       ? await supabase
           .from('video_metrics')
@@ -56,13 +57,13 @@ export async function GET(_request: NextRequest) {
     type VideoMetric = Database['public']['Tables']['video_metrics']['Row']
     const totalViews = videoMetrics?.length || 0
     const totalWatchTime = (videoMetrics as VideoMetric[] | null)?.reduce(
-      (sum, m) => sum + (m.watched_seconds || 0),
+      (sum: number, m: VideoMetric) => sum + (m.watched_seconds || 0),
       0
     ) || 0
-    const totalLikes = (videoMetrics as VideoMetric[] | null)?.filter((m) => m.liked).length || 0
+    const totalLikes = (videoMetrics as VideoMetric[] | null)?.filter((m: VideoMetric) => m.liked).length || 0
     const completionRate =
       totalViews > 0
-        ? (((videoMetrics as VideoMetric[] | null)?.filter((m) => m.completed).length || 0) / totalViews) * 100
+        ? (((videoMetrics as VideoMetric[] | null)?.filter((m: VideoMetric) => m.completed).length || 0) / totalViews) * 100
         : 0
 
     // Obtener estadísticas de proyectos
@@ -73,13 +74,13 @@ export async function GET(_request: NextRequest) {
 
     type Project = Database['public']['Tables']['projects']['Row']
     const totalProjects = projects?.length || 0
-    const activeProjects = (projects as Project[] | null)?.filter((p) => p.status === 'active').length || 0
-    const fundedProjects = (projects as Project[] | null)?.filter((p) => p.status === 'funded').length || 0
+    const activeProjects = (projects as Project[] | null)?.filter((p: Project) => p.status === 'active').length || 0
+    const fundedProjects = (projects as Project[] | null)?.filter((p: Project) => p.status === 'funded').length || 0
     const totalRaised =
-      (projects as Project[] | null)?.reduce((sum, p) => sum + Number(p.current_amount || 0), 0) || 0
+      (projects as Project[] | null)?.reduce((sum: number, p: Project) => sum + Number(p.current_amount || 0), 0) || 0
 
     // Obtener backings recibidos (optimizado: una sola query en lugar de N+1)
-    const projectIds = (projects as Project[] | null)?.map((p) => p.id) || []
+    const projectIds = (projects as Project[] | null)?.map((p: Project) => p.id) || []
     const backingResult = projectIds.length > 0
       ? await supabase
           .from('backings')
@@ -99,15 +100,15 @@ export async function GET(_request: NextRequest) {
     type Video = Database['public']['Tables']['videos']['Row']
     type Backing = Database['public']['Tables']['backings']['Row']
     const recentVideos =
-      (videos as Video[] | null)?.filter((v) => new Date(v.created_at || '') >= thirtyDaysAgo).length || 0
+      (videos as Video[] | null)?.filter((v: Video) => new Date(v.created_at || '') >= thirtyDaysAgo).length || 0
 
     const recentBackings =
-      (backings as Backing[] | null)?.filter((b) => new Date(b.created_at || '') >= thirtyDaysAgo).length || 0
+      (backings as Backing[] | null)?.filter((b: Backing) => new Date(b.created_at || '') >= thirtyDaysAgo).length || 0
 
     const recentRevenue =
       (backings as Backing[] | null)
-        ?.filter((b) => new Date(b.created_at || '') >= thirtyDaysAgo)
-        .reduce((sum, b) => sum + Number(b.amount || 0), 0) || 0
+        ?.filter((b: Backing) => new Date(b.created_at || '') >= thirtyDaysAgo)
+        .reduce((sum: number, b: Backing) => sum + Number(b.amount || 0), 0) || 0
 
     return NextResponse.json({
       videos: {
@@ -142,7 +143,7 @@ export async function GET(_request: NextRequest) {
           .slice(0, 5) || [],
       topProjects:
         (projects as Project[] | null)
-          ?.map((project) => ({
+          ?.map((project: Project) => ({
             id: project.id,
             title: project.title,
             raised: Number(project.current_amount),
