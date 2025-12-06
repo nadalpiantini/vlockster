@@ -33,22 +33,23 @@ async function getProject(id: string) {
 
   if (error || !project) return null
 
-  const projectTyped = project as ProjectRow
-
   // Fetch creator profile separately
-  if (projectTyped.creator_id) {
+  let creatorProfile: ProjectProfile = null
+  if (project.creator_id) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('id, name, public_profile_slug, bio')
-      .eq('id', projectTyped.creator_id)
+      .select('id, name, public_profile_slug, bio, avatar_url')
+      .eq('id', project.creator_id)
       .single()
 
-    if (profile) {
-      ;(projectTyped as ProjectRow & { creator: ProjectProfile }).creator = profile as ProjectProfile
-    }
+    creatorProfile = profile
   }
 
-  return projectTyped as ProjectRow & { creator: ProjectProfile }
+  // Crear un objeto combinado con tipado seguro
+  return {
+    ...project,
+    creator: creatorProfile
+  } as ProjectRow & { creator: ProjectProfile }
 }
 
 type Reward = {
@@ -77,10 +78,10 @@ async function getProjectRewards(projectId: string): Promise<Reward[]> {
     id: reward.id,
     title: reward.title,
     description: reward.description ?? null,
-    amount: reward.amount,
-    limit: reward.limit_quantity ?? null,
-    backers_count: reward.backers_count ?? 0,
-    delivery_date: reward.delivery_date ?? null,
+    amount: Number(reward.amount), // Asegurar conversión a número
+    limit: reward.limit_quantity ? Number(reward.limit_quantity) : null,
+    backers_count: reward.backers_count ? Number(reward.backers_count) : 0,
+    delivery_date: reward.delivery_date,
   }))
 }
 

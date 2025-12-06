@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     const errorId = logger.error('Error inesperado al generar descripción de proyecto', error, {
       endpoint: '/api/projects/generate-description',
     })
-    return handleError(error, 'Generate description', errorId)
+    return handleError(error, 'Generate description', { endpoint: '/api/projects/generate-description' })
   }
 }
 

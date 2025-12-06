@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
         communityId: community_id,
         endpoint: '/api/posts/create',
       })
-      return handleError(postError, 'Create post', errorId)
+      return handleError(postError, 'Create post', { endpoint: '/api/posts/create' })
     }
 
     logger.info('Post creado exitosamente', {
@@ -123,6 +123,6 @@ export async function POST(request: NextRequest) {
     const errorId = logger.error('Error inesperado en creación de post', error, {
       endpoint: '/api/posts/create',
     })
-    return handleError(error, 'Create post', errorId)
+    return handleError(error, 'Create post', { endpoint: '/api/posts/create' })
   }
 }

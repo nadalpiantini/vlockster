@@ -128,7 +128,7 @@ export async function getProfilesByIds(userIds: string[]): Promise<ProfileRow[]>
     }
 
     // Guardar en cache los resultados nuevos
-    data?.forEach(profile => {
+    data?.forEach((profile: ProfileRow) => {
       simpleCache.set(`profile:${profile.id}`, { data: profile, timestamp: Date.now() })
     })
 
@@ -247,8 +247,8 @@ export async function getCreatorStats(creatorId: string): Promise<{
       return null
     }
 
-    const backersCount = projectsData?.reduce((sum, project) => sum + (project.backers_count || 0), 0) || 0
-    const totalFunded = projectsData?.reduce((sum, project) => sum + (project.funded_amount || 0), 0) || 0
+    const backersCount = projectsData?.reduce((sum: number, project: Database['public']['Tables']['projects']['Row']) => sum + (project.backers_count || 0), 0) || 0
+    const totalFunded = projectsData?.reduce((sum: number, project: Database['public']['Tables']['projects']['Row']) => sum + (project.current_amount || 0), 0) || 0
 
     return {
       projectsCount: projectsCount || 0,

@@ -232,7 +232,7 @@ export default function CreateProjectPage() {
                   aria-required="true"
                 />
                 <p id="description-help-text" className="text-xs text-gray-400" role="definition">
-                  Describe tu proyecto: sinopsis, equipo, plan de producción... O haz clic en 'Generar con IA' para crear una descripción automática
+                  Describe tu proyecto: sinopsis, equipo, plan de producción... O haz clic en &apos;Generar con IA&apos; para crear una descripción automática
                 </p>
                 {generatingDescription && (
                   <p className="text-xs text-gray-300" role="status" aria-live="polite" aria-busy="true">
