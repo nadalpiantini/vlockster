@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     }
 
     const videos_viewed =
-      (videoMetrics as VideoMetricWithVideo[] | null)?.map((vm) => ({
+      (videoMetrics as VideoMetricWithVideo[] | null)?.map((vm: VideoMetricWithVideo) => ({
         video_id: vm.video_id,
         title: vm.videos?.title || '',
         genre: vm.videos?.genre || '',
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       })) || []
 
     const projects_backed =
-      (backings as BackingWithProject[] | null)?.map((b) => ({
+      (backings as BackingWithProject[] | null)?.map((b: BackingWithProject) => ({
         project_id: b.project_id,
         title: b.projects?.title || '',
         genre: b.projects?.category || '', // Projects use 'category', not 'genre'
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
 
-    const total_watch_time = videos_viewed.reduce((sum, v) => sum + (v.watched_seconds || 0), 0) / 60
+    const total_watch_time = videos_viewed.reduce((sum: number, v: { watched_seconds?: number }) => sum + (v.watched_seconds || 0), 0) / 60
 
     // Obtener contenido disponible (optimizado: usar índices y límites)
     const { data: videos } = await supabase
@@ -100,7 +100,8 @@ export async function GET(request: NextRequest) {
       .limit(30) // Límite para performance
 
     // Mapear proyectos al formato esperado
-    const projectsMapped = (projects || []).map((p) => ({
+    type ProjectRow = Database['public']['Tables']['projects']['Row']
+    const projectsMapped = ((projects as ProjectRow[] | null) || []).map((p: ProjectRow) => ({
       id: p.id,
       title: p.title,
       description: p.description || '',
@@ -112,7 +113,8 @@ export async function GET(request: NextRequest) {
     }))
 
     // Mapear videos al formato esperado
-    const videosMapped = (videos || []).map((v) => ({
+    type VideoRow = Database['public']['Tables']['videos']['Row']
+    const videosMapped = ((videos as VideoRow[] | null) || []).map((v: VideoRow) => ({
       id: v.id,
       title: v.title,
       description: v.description || '',

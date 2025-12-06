@@ -36,9 +36,9 @@ export default function ApplyPage() {
       } = await supabase.auth.getUser()
 
       // Always open - allow application without auth
-      // if (!user) {
-      //   throw new Error('You must sign in to request creator access.')
-      // }
+      if (!user) {
+        throw new Error('You must sign in to request creator access.')
+      }
 
       // Verificar si ya existe una solicitud pendiente
       const { data: existingRequest } = await supabase

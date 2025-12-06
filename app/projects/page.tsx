@@ -149,7 +149,6 @@ export default async function ProjectsPage({
                           .creator?.name || 'Unknown'
                       }
                       thumbnail={
-                        project.thumbnail_url ||
                         '/placeholder-project.jpg'
                       }
                       current={Number(project.current_amount)}

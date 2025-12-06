@@ -1,17 +1,15 @@
 import { createBrowserClient } from '@supabase/ssr'
 import type { Database } from '@/types/database.types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-function createMockClient() {
-  return {
-    from: () => ({
-      select: () => Promise.resolve({ data: [], error: null, count: 0 }),
-    }),
-    auth: {
-      getUser: async () => ({ data: { user: { id: 'mock-admin' } }, error: null }),
-      signInWithPassword: async () => ({ data: { user: { id: 'mock-admin' } }, error: null }),
-      signOut: async () => ({ error: null }),
-    },
-  }
+function createMockClient(): SupabaseClient<Database> {
+  // Create a minimal mock that matches the SupabaseClient type
+  // This will only be used in development when env vars are missing
+  const mockClient = createBrowserClient<Database>(
+    'https://mock.supabase.co',
+    'mock-anon-key'
+  )
+  return mockClient
 }
 
 export function createClient() {

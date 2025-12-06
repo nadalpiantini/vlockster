@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Route } from 'next'
-import { Play, Film, Users, DollarSign, ArrowRight, Star, Heart, MessageCircle } from 'lucide-react'
+import { Play, Film, Users, DollarSign, ArrowRight, Star, Heart, MessageCircle, Search, Bell, Info } from 'lucide-react'
 
 export default function HomePage() {
   const featuredContent = [

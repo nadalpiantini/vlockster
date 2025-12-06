@@ -43,11 +43,13 @@ export async function GET(request: NextRequest) {
       .limit(5)
 
     // Combinar y deduplicar
+    type VideoRow = { title: string }
+    type ProjectRow = { title: string }
     const suggestions = [
-      ...(videos?.map((v) => v.title) || []),
-      ...(projects?.map((p) => p.title) || []),
+      ...((videos as VideoRow[] | null)?.map((v: VideoRow) => v.title) || []),
+      ...((projects as ProjectRow[] | null)?.map((p: ProjectRow) => p.title) || []),
     ]
-      .filter((title, index, self) => self.indexOf(title) === index)
+      .filter((title: string, index: number, self: string[]) => self.indexOf(title) === index)
       .slice(0, 10)
 
     return NextResponse.json({

@@ -3,6 +3,9 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/Pagination'
 import { Users, MessageCircle, TrendingUp } from 'lucide-react'
+import type { Database } from '@/types/database.types'
+
+type Community = Database['public']['Tables']['communities']['Row']
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -105,7 +108,7 @@ export default async function CommunityPage({
                 role="list"
                 aria-label="Lista de comunidades"
               >
-                {communities.map((community) => (
+                {communities.map((community: Community) => (
                   <Link
                     key={community.id}
                     href={`/community/${community.slug}`}
