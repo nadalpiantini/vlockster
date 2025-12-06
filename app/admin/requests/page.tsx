@@ -84,12 +84,13 @@ async function getCreatorRequests(page: number = 1, status: 'pending' | 'reviewe
 export default async function AdminRequestsPage({
   searchParams,
 }: {
-  searchParams: { page?: string; status?: string }
+  searchParams: Promise<{ page?: string; status?: string }>
 }) {
   await requireRole(['admin'])
   
-  const page = parseInt(searchParams.page || '1', 10)
-  const status = (searchParams.status as 'pending' | 'reviewed') || 'pending'
+  const params = await searchParams
+  const page = parseInt(params.page || '1', 10)
+  const status = (params.status as 'pending' | 'reviewed') || 'pending'
   
   const { requests, total, totalPages, currentPage, error } = await getCreatorRequests(page, status)
 
