@@ -1,14 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Route } from 'next'
-import { Play, Film, Users, DollarSign, ArrowRight, Star, Heart, MessageCircle, Search, Bell, Info, Clock, Check, Calendar, Sparkles, Zap, Target, TrendingUp, User, Rocket, Crown, Gem, Sparkle, Star as StarIcon, Award, Camera, Ticket, Popcorn } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { HeroVideo } from '@/components/HeroVideo'
-import { HorizontalCarousel } from '@/components/HorizontalCarousel'
-import { VideoCard } from '@/components/VideoCard'
+import { Play, Pause, Search, Bell, User, Star, Clock, Calendar, Award, MessageCircle, Heart, TrendingUp, Users, DollarSign, ArrowRight, Film } from 'lucide-react'
 
 // Types
 interface ContentItem {
@@ -31,7 +26,7 @@ interface Campaign {
   features: string[]
 }
 
-// Mock data
+// Mock data - inspired by Nextflix, PeerTube, and Netflix clones
 const featuredContent: ContentItem[] = [
   {
     id: 1,
@@ -130,12 +125,9 @@ const mockCampaign: Campaign = {
 }
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState('home')
-  const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [glowPosition, setGlowPosition] = useState({ x: 0, y: 0 })
-  const heroRef = useRef<HTMLDivElement>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,768 +137,359 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setGlowPosition({ x: e.clientX, y: e.clientY })
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
   const progressPercentage = (mockCampaign.currentAmount / mockCampaign.goalAmount) * 100
 
   return (
-    <div className="min-h-screen text-white relative overflow-x-hidden">
-      {/* Glowing cursor effect */}
-      <div 
-        className="fixed w-96 h-96 pointer-events-none -translate-x-1/2 -translate-y-1/2 z-0 opacity-20 transition-all duration-300"
-        style={{
-          left: glowPosition.x,
-          top: glowPosition.y,
-          background: 'radial-gradient(600px circle at center, rgba(255, 0, 0, 0.15), transparent 40%)',
-        }}
-      />
-
-      {/* Animated background elements */}
-      <div className="fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        {/* Floating particles */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-white/30 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.3, 1, 0.3],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Header with enhanced glamor */}
-      <motion.header 
+    <div className="min-h-screen text-white relative bg-black">
+      {/* Nextflix-inspired Header */}
+      <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'bg-black/80 backdrop-blur-xl border-b border-white/10 py-2' 
-            : 'bg-transparent py-4'
+            ? 'bg-black/95 backdrop-blur-xl border-b border-gray-800 py-2' 
+            : 'bg-black/70 py-4'
         }`}
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Logo with glamour effect */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative"
-              >
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] rounded-full blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <Image
-                  src="/items/vlockster_logo.png"
-                  alt="VLOCKSTER"
-                  width={150}
-                  height={40}
-                  className="relative object-contain h-10 w-auto z-10"
-                  priority
-                />
-              </motion.div>
+            {/* Logo - Nextflix style */}
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/items/vlockster_logo.png"
+                alt="VLOCKSTER"
+                width={120}
+                height={32}
+                className="object-contain h-8 w-auto"
+                priority
+              />
             </Link>
 
-            {/* Navigation with glamour */}
-            <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Main navigation">
-              {[
-                { id: 'home', label: 'Home', icon: <Sparkles className="w-4 h-4" /> },
-                { id: 'watch', label: 'Watch', icon: <Play className="w-4 h-4" /> },
-                { id: 'gallery', label: 'Gallery', icon: <Film className="w-4 h-4" /> },
-                { id: 'projects', label: 'Projects', icon: <Rocket className="w-4 h-4" /> },
-              ].map((item, idx) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all relative group ${
-                    activeTab === item.id
-                      ? 'text-[#FF0000] bg-white/10'
-                      : 'text-white/80 hover:text-white'
-                  }`}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
+            {/* Navigation - Inspired by Nextflix */}
+            <nav className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
+              {['Home', 'TV Shows', 'Movies', 'New & Popular', 'My List'].map((item) => (
+                <Link
+                  key={item}
+                  href={item === 'Home' ? '/' : '#'}
+                  className="text-white hover:text-gray-300 transition-colors text-sm font-medium"
                 >
-                  {item.icon}
-                  {item.label}
-                  {activeTab === item.id && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 bg-gradient-to-r from-[#FF0000]/20 to-[#FF6B35]/20 rounded-full -z-10"
-                      initial={false}
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </motion.button>
+                  {item}
+                </Link>
               ))}
             </nav>
 
-            {/* Right Side with glamour */}
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search films..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#FF0000]/50 w-48 transition-all duration-300 group-focus-within:w-64 group-focus-within:bg-white/20"
-                />
-                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
-              </div>
-              <motion.button
-                className="p-3 text-white hover:text-white transition-colors relative group"
-                aria-label="Notifications"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Bell className="w-5 h-5" />
-                <motion.div
-                  className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                />
-              </motion.button>
-              <motion.button
-                className="px-8 py-3 bg-gradient-to-r from-[#FF0000] via-[#FF4500] to-[#FF6B35] text-white rounded-full font-semibold hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all shadow-2xl shadow-red-500/40 relative overflow-hidden group"
-                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px -10px rgba(255, 0, 0, 0.4)' }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <Sparkle className="w-4 h-4" />
-                  JOIN NOW
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12"></div>
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </motion.header>
-
-      <main id="main-content" className="relative z-10 pt-20" role="main">
-        {/* Glamorous Hero Section */}
-        <div ref={heroRef} className="relative h-screen flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/30 z-10"></div>
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={featuredContent[0].image}
-              alt={featuredContent[0].title}
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent" />
-          </div>
-          
-          <div className="relative z-20 container mx-auto px-4 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="mb-8"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF0000]/20 to-[#FF6B35]/20 border border-[#FF0000]/30 backdrop-blur-sm mb-6">
-                <Crown className="w-4 h-4 text-[#FFD700]" />
-                <span className="text-sm font-bold uppercase tracking-wider text-white">FEATURED FILM</span>
-                <Award className="w-4 h-4 text-[#FFD700]" />
-              </div>
-              
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 bg-gradient-to-r from-white via-[#FFD700] to-[#FF0000] bg-clip-text text-transparent">
-                {featuredContent[0].title}
-              </h1>
-              
-              <div className="flex items-center justify-center gap-6 mb-8">
-                <div className="flex items-center gap-1">
-                  <StarIcon className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-xl font-bold">{featuredContent[0].rating}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-5 h-5 text-white" />
-                  <span className="text-white">{featuredContent[0].duration}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-5 h-5 text-white" />
-                  <span className="text-white">{featuredContent[0].year}</span>
-                </div>
-              </div>
-              
-              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-10">
-                The platform for independent cinema. Streaming, crowdfunding, and community in one place for creators and fans.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <motion.button
-                  className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-full font-bold text-lg group"
-                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px -10px rgba(255, 0, 0, 0.4)' }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6" />
-                  <span>WATCH NOW</span>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-                
-                <motion.button
-                  className="flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-bold text-lg border border-white/20 hover:bg-white/20"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Heart className="w-6 h-6" />
-                  <span>HEART IT</span>
-                </motion.button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Featured Content - Enhanced */}
-        <section className="py-16 relative z-10 -mt-32">
-          {contentRows.map((row, idx) => (
-            <div key={idx} className="mb-16">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between mb-8">
-                  <motion.h2 
-                    className="text-3xl font-bold text-white flex items-center gap-3"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                  >
-                    <TrendingUp className="w-6 h-6 text-[#FF0000]" />
-                    {row.title}
-                    <Gem className="w-6 h-6 text-[#FFD700]" />
-                  </motion.h2>
-                  <motion.button
-                    className="px-6 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    View All
-                  </motion.button>
-                </div>
-              </div>
-              <div className="px-4">
-                <HorizontalCarousel title={row.title} showAllLink={row.items.length > 8 ? "/watch" : undefined}>
-                  {row.items.map((item, itemIdx) => (
-                    <motion.div
-                      key={item.id}
-                      className="relative group"
-                      whileHover={{ scale: 1.05, zIndex: 10 }}
-                      onHoverStart={() => setHoveredCard(item.id)}
-                      onHoverEnd={() => setHoveredCard(null)}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: itemIdx * 0.1 }}
-                    >
-                      <div className="relative">
-                        <VideoCard
-                          id={item.id.toString()}
-                          title={item.title}
-                          description={`${item.title} - ${item.genre}`}
-                          thumbnailUrl={item.image}
-                          duration={item.duration}
-                          year={item.year}
-                          rating={item.rating}
-                          className="min-w-[200px] md:min-w-[240px] rounded-2xl overflow-hidden"
-                        />
-                        <AnimatePresence>
-                          {hoveredCard === item.id && (
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-2xl flex items-end p-4"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                            >
-                              <div className="text-white">
-                                <h4 className="font-bold text-lg">{item.title}</h4>
-                                <p className="text-sm text-white/80">{item.genre}</p>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </motion.div>
-                  ))}
-                </HorizontalCarousel>
-              </div>
-            </div>
-          ))}
-        </section>
-
-        {/* AI-Powered Features Section - Glamorous */}
-        <section className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
-            >
-              <div className="inline-flex items-center gap-2 mb-6">
-                <Sparkles className="w-6 h-6 text-[#FFD700]" />
-                <span className="text-sm font-bold uppercase tracking-wider text-white/80">AI-POWERED</span>
-                <Sparkles className="w-6 h-6 text-[#FFD700]" />
-              </div>
-              <h2 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-white via-[#FFD700] to-[#FF0000] bg-clip-text text-transparent">
-                The Future of Cinema
-              </h2>
-              <p className="text-xl text-white/80 max-w-3xl mx-auto">
-                Experience films like never before with our cutting-edge AI technology
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  title: "Smart Recommendations",
-                  description: "AI-powered suggestions based on your viewing history and preferences",
-                  icon: <Target className="w-10 h-10 text-[#FF0000]" />,
-                  gradient: "from-blue-500 to-purple-500",
-                  stat: "95%",
-                  statLabel: "Accuracy"
-                },
-                {
-                  title: "Intelligent Search",
-                  description: "Find content using natural language queries with semantic understanding",
-                  icon: <Search className="w-10 h-10 text-[#FF0000]" />,
-                  gradient: "from-green-500 to-teal-500",
-                  stat: "10M+",
-                  statLabel: "Indexed Films"
-                },
-                {
-                  title: "Creator Analytics",
-                  description: "Advanced AI insights for filmmakers to optimize their projects and reach",
-                  icon: <TrendingUp className="w-10 h-10 text-[#FF0000]" />,
-                  gradient: "from-red-500 to-orange-500",
-                  stat: "300%",
-                  statLabel: "ROI Increase"
-                },
-                {
-                  title: "Community Matching",
-                  description: "Connect with like-minded filmmakers and fans using advanced algorithms",
-                  icon: <Users className="w-10 h-10 text-[#FF0000]" />,
-                  gradient: "from-pink-500 to-rose-500",
-                  stat: "1M+",
-                  statLabel: "Creators"
-                }
-              ].map((feature, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  className="group relative p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-lg border border-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative z-10">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FF0000] to-[#FF6B35] flex items-center justify-center mb-6">
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                    <p className="text-white/70 mb-6">{feature.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-3xl font-black text-white">{feature.stat}</div>
-                        <div className="text-sm text-white/60">{feature.statLabel}</div>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#FF0000] to-[#FF6B35] flex items-center justify-center">
-                        <ArrowRight className="w-4 h-4 text-white" />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Enhanced Crowdfunding Section - Glamorous */}
-        <section className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-gradient-to-br from-gray-900 to-black/80 rounded-3xl border-2 border-white/20 shadow-2xl overflow-hidden relative"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF0000]/5 to-transparent"></div>
-                
-                {/* Campaign Header */}
-                <div className="bg-gradient-to-r from-[#FF0000] to-[#FF6B35] p-10 text-white relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,255,255,0.1),_transparent_70%)]"></div>
-                  <div className="relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                      <div>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 mb-4">
-                          <Film className="w-4 h-4" />
-                          <span className="text-sm">Film & Video</span>
-                        </div>
-                        <h3 className="text-4xl font-black flex items-center gap-4">
-                          {mockCampaign.title}
-                          <motion.span 
-                            className="text-lg bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 rounded-full text-black font-bold"
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                          >
-                            🎬 PREMIUM
-                          </motion.span>
-                        </h3>
-                        <p className="text-white/90 mt-2 text-lg">
-                          An award-winning documentary about the power of cinema
-                        </p>
-                      </div>
-                      <Link
-                        href="/projects"
-                        className="px-8 py-4 bg-white text-[#FF0000] rounded-xl font-black text-lg hover:bg-gray-100 transition-colors flex items-center gap-3 justify-center group"
-                      >
-                        <motion.button
-                          className="w-full h-full flex items-center justify-center gap-3 bg-transparent border-none cursor-pointer"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Heart className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                          <span>SUPPORT FILM</span>
-                          <Ticket className="w-6 h-6" />
-                        </motion.button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Progress Section */}
-                <div className="p-10 border-b border-white/10">
-                  <div className="mb-8">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                      <div>
-                        <div className="text-5xl font-black text-[#FF0000] mb-2">
-                          ${mockCampaign.currentAmount.toLocaleString()}
-                        </div>
-                        <div className="text-white/80 text-lg">raised of ${mockCampaign.goalAmount.toLocaleString()} goal</div>
-                      </div>
-                      <div className="text-right md:text-left">
-                        <div className="text-4xl font-black text-white">{Math.round(progressPercentage)}%</div>
-                        <div className="text-white/80 text-lg">funded</div>
-                      </div>
-                    </div>
-                    <div className="w-full h-6 bg-gray-700 rounded-full overflow-hidden relative">
-                      <motion.div 
-                        className="h-full bg-gradient-to-r from-[#FF0000] via-[#FF4500] to-[#FF6B35] rounded-full relative"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progressPercentage}%` }}
-                        transition={{ duration: 2, ease: "easeOut" }}
-                      >
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.3),_transparent_70%)]"></div>
-                      </motion.div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
-                    <div className="text-center py-4">
-                      <div className="text-4xl font-black text-white mb-2">{mockCampaign.backers}</div>
-                      <div className="flex items-center justify-center gap-2 text-white/80">
-                        <Users className="w-5 h-5" />
-                        backers
-                      </div>
-                    </div>
-                    <div className="text-center py-4">
-                      <div className="text-4xl font-black text-white mb-2">{mockCampaign.daysLeft}</div>
-                      <div className="flex items-center justify-center gap-2 text-white/80">
-                        <Calendar className="w-5 h-5" />
-                        days left
-                      </div>
-                    </div>
-                    <div className="text-center py-4">
-                      <div className="text-4xl font-black text-white mb-2">${mockCampaign.avgPledge}</div>
-                      <div className="text-white/80">avg pledge</div>
-                    </div>
-                    <div className="text-center py-4">
-                      <div className="text-4xl font-black text-white mb-2">25%</div>
-                      <div className="text-white/80">funded</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Campaign Content */}
-                <div className="p-10">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Sparkles className="w-6 h-6 text-[#FF0000]" />
-                    <h4 className="text-3xl font-black text-white">About this project</h4>
-                    <Camera className="w-6 h-6 text-[#FF0000]" />
-                  </div>
-                  <div className="prose max-w-none text-white space-y-6 mb-10">
-                    <p className="text-lg leading-relaxed">
-                      Este proyecto busca revolucionar la forma en que se produce y distribuye el cine independiente.
-                      Con tu apoyo, podremos crear una plataforma completa que combine streaming, crowdfunding y comunidad.
-                    </p>
-                    <p className="text-lg leading-relaxed">
-                      Our AI-powered tools help filmmakers reach their audience more effectively and provide backers with
-                      real-time updates on project progress and exclusive behind-the-scenes content.
-                    </p>
-                  </div>
-
-                  {/* Features List */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {mockCampaign.features.map((feature, idx) => (
-                      <motion.div 
-                        key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="flex items-center gap-4 p-6 rounded-2xl bg-gradient-to-r from-white/10 to-white/5 border border-white/20 group hover:bg-gradient-to-r hover:from-[#FF0000]/10 hover:to-[#FF6B35]/10 transition-all"
-                      >
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FF0000] to-[#FF6B35] flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Check className="w-7 h-7 text-white" />
-                        </div>
-                        <span className="text-lg text-white">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Community Section - Enhanced Glamor */}
-        <section className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
-            >
-              <div className="inline-flex items-center gap-3 mb-6">
-                <Popcorn className="w-6 h-6 text-[#FFD700]" />
-                <span className="text-4xl font-black text-white">Creator</span>
-                <Sparkles className="w-6 h-6 text-[#FF0000]" />
-                <span className="text-4xl font-black text-white">Community</span>
-                <Ticket className="w-6 h-6 text-[#FFD700]" />
-              </div>
-              <p className="text-xl text-white/80 max-w-3xl mx-auto">
-                Connect with filmmakers, share ideas, and collaborate on groundbreaking projects
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {[
-                {
-                  title: "Premium Forums",
-                  description: "Exclusive discussions with award-winning filmmakers and industry experts.",
-                  count: "1,234",
-                  label: "active discussions",
-                  icon: <MessageCircle className="w-10 h-10 text-[#FF0000]" />,
-                  badge: "🏆"
-                },
-                {
-                  title: "VIP Memberships",
-                  description: "Exclusive access to premieres, creator content, and behind-the-scenes footage.",
-                  count: "567",
-                  label: "active members",
-                  icon: <Heart className="w-10 h-10 text-[#FF0000]" />,
-                  badge: "💎"
-                },
-                {
-                  title: "Project Hub",
-                  description: "Follow your favorite projects from concept to release with real-time updates.",
-                  count: "89",
-                  label: "active projects",
-                  icon: <Users className="w-10 h-10 text-[#FF0000]" />,
-                  badge: "🚀"
-                }
-              ].map((card, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  whileHover={{ y: -15, scale: 1.03 }}
-                  className="group relative p-10 rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl hover:border-white/30 transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/20 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
-                  <div className="absolute top-4 right-4 text-2xl">{card.badge}</div>
-                  <div className="relative z-10 flex flex-col items-center text-center">
-                    <div className="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-8">
-                      {card.icon}
-                    </div>
-                    <h3 className="font-display text-3xl font-black text-white mb-6">{card.title}</h3>
-                    <p className="text-white/80 mb-8 flex-grow text-lg">{card.description}</p>
-                    <div className="flex items-center gap-3 text-white">
-                      <span className="text-4xl font-black">{card.count}</span>
-                      <div className="text-left">
-                        <div className="text-lg text-white/80">{card.label}</div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Creator CTA Section - Ultra Glamorous */}
-        <section className="py-20 relative z-10">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-50"></div>
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF0000]/5 via-transparent to-transparent"></div>
-              
-              <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
-                <div className="space-y-6 text-center md:text-left">
-                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#FF0000]/20 to-[#FF6B35]/20 border border-[#FF0000]/30 backdrop-blur-sm mx-auto md:mx-0">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Crown className="w-5 h-5 text-[#FFD700]" />
-                    </motion.div>
-                    <span className="text-sm font-black uppercase tracking-wider text-white">FOR CREATORS</span>
-                    <motion.div
-                      animate={{ rotate: -360 }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Gem className="w-5 h-5 text-[#FFD700]" />
-                    </motion.div>
-                  </div>
-                  
-                  <h3 className="font-display text-4xl md:text-5xl font-black text-white leading-tight text-center md:text-left">
-                    <span className="bg-gradient-to-r from-white to-[#FFD700] bg-clip-text text-transparent">Are you a</span>
-                    <br />
-                    <span className="bg-gradient-to-r from-[#FF0000] to-[#FF6B35] bg-clip-text text-transparent">Filmmaker?</span>
-                    <br />
-                    <span className="text-xl md:text-2xl text-white/80 font-semibold block mt-4">
-                      Request Creator Access
-                    </span>
-                  </h3>
-                  
-                  <p className="text-xl text-white/80 max-w-2xl leading-relaxed text-center md:text-left">
-                    Join our exclusive creator network and unlock advanced tools, analytics, and funding opportunities.
-                  </p>
-                </div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] rounded-3xl blur-xl opacity-50"></div>
-                  <button className="group relative px-10 py-6 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-3xl font-black text-xl hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all shadow-2xl shadow-red-500/40 flex items-center gap-3 whitespace-nowrap">
-                    <Rocket className="w-7 h-7" />
-                    <span>REQUEST ACCESS</span>
-                    <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-                  </button>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer - Enhanced Glamor */}
-      <footer className="relative z-10 border-t border-white/20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FF0000] to-[#FF6B35] flex items-center justify-center">
-                  <Film className="w-8 h-8 text-white" />
-                </div>
-                <div>
-                  <span className="font-display font-black text-2xl text-white">VLOCKSTER</span>
-                  <span className="text-white/60 block">• Independent Cinema Excellence</span>
-                </div>
-              </div>
-              <p className="text-white/70 max-w-md">
-                The premier platform for independent filmmakers and cinema enthusiasts. 
-                Discover, create, and fund the next generation of cinematic experiences.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-black text-white text-lg mb-4">Explore</h4>
-              <ul className="space-y-2">
-                {['Films', 'Series', 'Documentaries', 'Shorts'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-black text-white text-lg mb-4">Support</h4>
-              <ul className="space-y-2">
-                {['Help Center', 'Contact', 'Privacy', 'Terms'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-white/60 text-sm">
-              © 2025 VLOCKSTER. All rights reserved. For independent cinema.
-            </div>
-            <div className="flex items-center gap-6 mt-4 md:mt-0">
-              <motion.button
-                className="p-3 text-white/70 hover:text-white transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
+            {/* Right side - Inspired by Nextflix + OrKa */}
+            <div className="flex items-center gap-3">
+              <button
+                className="p-2 text-white hover:text-gray-300 transition-colors"
+                aria-label="Search"
               >
                 <Search className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                className="p-3 text-white/70 hover:text-white transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <User className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                className="p-3 text-white/70 hover:text-white transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
+              </button>
+              <button
+                className="p-2 text-white hover:text-gray-300 transition-colors"
+                aria-label="Notifications"
               >
                 <Bell className="w-5 h-5" />
-              </motion.button>
+              </button>
+              <div className="w-8 h-8 rounded bg-red-600 flex items-center justify-center cursor-pointer">
+                <span className="text-xs font-bold">U</span>
+              </div>
             </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Netflix-style Hero Section - Inspired by Netflix Clone */}
+      <div className="relative h-screen flex items-center">
+        <div className="absolute inset-0">
+          <Image
+            src={featuredContent[0].image}
+            alt={featuredContent[0].title}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+        </div>
+
+        {/* Hero Content - Netflix/Nextflix style */}
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="max-w-2xl">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 text-white">
+              {featuredContent[0].title}
+            </h1>
+            
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-1">
+                <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                <span className="text-white text-lg">{featuredContent[0].rating}</span>
+              </div>
+              <span className="text-white">{featuredContent[0].year}</span>
+              <span className="text-white">{featuredContent[0].duration}</span>
+              <span className="text-white border border-white/30 px-2 py-1 text-xs rounded">
+                {featuredContent[0].genre}
+              </span>
+            </div>
+            
+            <p className="text-lg text-white/90 mb-8 leading-relaxed">
+              {featuredContent[0].title} - An extraordinary journey that captivates audiences with its innovative storytelling and powerful cinematography.
+            </p>
+            
+            <div className="flex gap-4">
+              <Link href={`/watch/${featuredContent[0].id}`}>
+                <button className="flex items-center gap-2 bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200 transition-colors">
+                  <Play className="w-5 h-5 fill-current" />
+                  Play
+                </button>
+              </Link>
+              <Link href={`/projects/${featuredContent[0].id}`}>
+                <button className="flex items-center gap-2 bg-gray-600/70 text-white px-8 py-3 rounded font-bold hover:bg-gray-500/70 transition-colors">
+                  <Heart className="w-5 h-5" />
+                  Support Project
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Rows - Nextflix/Netflix style */}
+      <main className="relative z-10 -mt-32">
+        {contentRows.map((row, idx) => (
+          <div key={idx} className="mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4 px-4">
+              {row.title}
+            </h2>
+            <div className="px-4">
+              <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4">
+                {row.items.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="flex-shrink-0 relative group"
+                    onMouseEnter={() => setHoveredCard(item.id)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                  >
+                    <div className="w-64 h-36 relative rounded-lg overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                        <h3 className="font-bold">{item.title}</h3>
+                        <div className="flex items-center gap-2 text-sm">
+                          <span>{item.year}</span>
+                          <span>•</span>
+                          <span>{item.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </main>
+
+      {/* PeerTube-inspired Community Section */}
+      <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-white">Community</h2>
+            <Link href="/community" className="text-gray-300 hover:text-white flex items-center gap-2">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Inspired by OrKa and NodeBB */}
+            {[
+              { title: 'Film Discussions', posts: 1247, icon: MessageCircle, color: 'text-blue-500' },
+              { title: 'Creator Spotlights', posts: 892, icon: Award, color: 'text-yellow-500' },
+              { title: 'Behind the Scenes', posts: 2156, icon: Film, color: 'text-purple-500' },
+              { title: 'Fan Reviews', posts: 3421, icon: Star, color: 'text-red-500' }
+            ].map((forum, index) => (
+              <div key={index} className="bg-gray-800/50 rounded-lg p-6 hover:bg-gray-700/50 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3 mb-3">
+                  <forum.icon className={`w-8 h-8 ${forum.color}`} />
+                  <h3 className="text-lg font-bold text-white">{forum.title}</h3>
+                </div>
+                <p className="text-gray-400 text-sm">{forum.posts.toLocaleString()} posts</p>
+                <div className="mt-4">
+                  <div className="text-xs text-gray-500">Latest: {featuredContent[index % featuredContent.length].title}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* KickBacker-inspired Crowdfunding Section */}
+      <section className="py-16 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-white">Featured Projects</h2>
+            <Link href="/projects" className="text-gray-300 hover:text-white flex items-center gap-2">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl p-8">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="lg:w-1/3">
+                <Image
+                  src={mockCampaign.title === 'Una Ola A La Vez' ? featuredContent[0].image : '/items/posters/POSTER NOCHE DE CIRCO.jpg'}
+                  alt={mockCampaign.title}
+                  width={300}
+                  height={400}
+                  className="rounded-lg w-full h-64 object-cover"
+                />
+              </div>
+              
+              <div className="lg:w-2/3">
+                <div className="flex items-center gap-3 mb-4">
+                  <DollarSign className="w-6 h-6 text-green-500" />
+                  <span className="text-sm font-bold text-green-500">FUNDING ACTIVE</span>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-white mb-2">{mockCampaign.title}</h3>
+                <p className="text-gray-300 mb-6">
+                  Help bring this award-winning documentary to life. Join {mockCampaign.backers} backers supporting independent cinema.
+                </p>
+                
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>${mockCampaign.currentAmount.toLocaleString()} raised</span>
+                    <span>${mockCampaign.goalAmount.toLocaleString()} goal</span>
+                  </div>
+                  <div className="w-full h-3 bg-gray-700 rounded-full mb-2">
+                    <div 
+                      className="h-full bg-gradient-to-r from-green-500 to-blue-500 rounded-full"
+                      style={{ width: `${progressPercentage}%` }}
+                    ></div>
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    {Math.round(progressPercentage)}% funded • {mockCampaign.daysLeft} days left
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-white">{mockCampaign.backers}</div>
+                    <div className="text-gray-400 text-sm">Backers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-white">{mockCampaign.daysLeft}</div>
+                    <div className="text-gray-400 text-sm">Days Left</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-white">${mockCampaign.avgPledge}</div>
+                    <div className="text-gray-400 text-sm">Avg Pledge</div>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded font-bold transition-colors">
+                    Support Project
+                  </button>
+                  <button className="border border-gray-600 hover:border-gray-500 text-white px-6 py-3 rounded font-bold transition-colors">
+                    Learn More
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OrKa-inspired Creator Spotlight */}
+      <section className="py-16 bg-gray-900">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-white mb-8">Creator Spotlight</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: 'Alejandro González', role: 'Documentary Director', followers: 12500, image: '/items/vlockster_logo.png' },
+              { name: 'María Rodríguez', role: 'Independent Filmmaker', followers: 8900, image: '/items/vlockster_logo.png' },
+              { name: 'Carlos Mendoza', role: 'Cinematographer', followers: 6400, image: '/items/vlockster_logo.png' }
+            ].map((creator, index) => (
+              <div key={index} className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                    <User className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white">{creator.name}</h3>
+                    <p className="text-gray-400 text-sm">{creator.role}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">{creator.followers.toLocaleString()} followers</span>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                    Follow
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - Inspired by multiple sources */}
+      <footer className="bg-black py-12 border-t border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Image
+                  src="/items/vlockster_logo.png"
+                  alt="VLOCKSTER"
+                  width={100}
+                  height={27}
+                  className="object-contain h-6 w-auto"
+                />
+              </div>
+              <p className="text-gray-400 text-sm">
+                VLOCKSTER - The platform for independent cinema. Streaming, crowdfunding, and community in one place.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-bold mb-4">Browse</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/watch" className="hover:text-white transition-colors">Watch</Link></li>
+                <li><Link href="/projects" className="hover:text-white transition-colors">Projects</Link></li>
+                <li><Link href="/community" className="hover:text-white transition-colors">Community</Link></li>
+                <li><Link href="/apply" className="hover:text-white transition-colors">For Creators</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-bold mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/apply" className="hover:text-white transition-colors">Help Center</Link></li>
+                <li><Link href="/legal/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link href="/legal/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                <li><Link href="/apply" className="hover:text-white transition-colors">Contact</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-bold mb-4">Connect</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/menu" className="hover:text-white transition-colors">Gallery</Link></li>
+                <li><Link href="/community" className="hover:text-white transition-colors">Community</Link></li>
+                <li><Link href="/projects" className="hover:text-white transition-colors">Projects</Link></li>
+                <li><Link href="/watch" className="hover:text-white transition-colors">Watch</Link></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+            © 2025 VLOCKSTER. All rights reserved. Independent Cinema Platform.
           </div>
         </div>
       </footer>

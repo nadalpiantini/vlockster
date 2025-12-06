@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import type { Route } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
 import { EnhancedVideoPlayer } from '@/components/EnhancedVideoPlayer'
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/database.types'
-import { User, Calendar } from 'lucide-react'
+import { User, Calendar, Heart, Users, DollarSign } from 'lucide-react'
+import { CreatorProjects } from '@/components/CreatorProjects'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -54,163 +54,94 @@ export default async function WatchVideoPage({
 }) {
   const { id } = await params
   const video = await getVideo(id)
-  const _user = await getCurrentUser()
+  const user = await getCurrentUser()
 
   if (!video) {
     notFound()
   }
 
-  // Everything is open - no restrictions
-  // All videos are accessible to everyone
-
   return (
-    <div className="min-h-screen bg-vlockster-black text-vlockster-white">
-      <main
-        id="main-content"
-        className="container mx-auto max-w-7xl px-4 py-8"
-        role="main"
-        aria-label={`Reproductor de video: ${video.title}`}
-      >
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Video Player */}
-            <div role="region" aria-label="Reproductor de video">
-              {video.stream_id && process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
-                <EnhancedVideoPlayer
-                  videoId={video.stream_id}
-                  title={video.title}
-                  poster={video.thumbnail_url || undefined}
-                  controls={true}
-                />
-              ) : (
-                <div className="aspect-video bg-vlockster-gray-dark rounded-lg flex items-center justify-center">
-                  <div className="text-center p-8" role="alert">
-                    <p className="text-vlockster-white-soft mb-2">
-                      {video.stream_id
-                        ? 'Cloudflare Stream no configurado'
-                        : 'Video no disponible'}
-                    </p>
-                    {video.stream_id && (
-                      <p className="text-sm text-vlockster-gray-text">
-                        Video ID: {video.stream_id}
-                      </p>
-                    )}
-                  </div>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-8">
+        {/* Video Player Section */}
+        <div className="mb-8">
+          <EnhancedVideoPlayer
+            videoId={video.id}
+            title={video.title}
+            poster={video.thumbnail_url || undefined}
+          />
+        </div>
+
+        {/* Video Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <h1 className="text-3xl font-bold mb-4">{video.title}</h1>
+            
+            <div className="flex items-center gap-4 mb-6">
+              {video.uploader?.name && (
+                <div className="flex items-center gap-2 text-gray-300">
+                  <User className="w-5 h-5" />
+                  <span>By {video.uploader.name}</span>
                 </div>
               )}
+              <div className="flex items-center gap-2 text-gray-300">
+                <Calendar className="w-5 h-5" />
+                <span>{new Date(video.created_at || '').toLocaleDateString()}</span>
+              </div>
             </div>
 
-            {/* Video Info */}
-            <div
-              className="bg-vlockster-gray-dark rounded-lg p-6 space-y-4"
-              role="article"
-              aria-labelledby="video-title"
-            >
-              <div>
-                <h1
-                  id="video-title"
-                  className="text-3xl font-bold text-vlockster-white mb-3"
-                  aria-label={`Título del video: ${video.title}`}
-                >
-                  {video.title}
-                </h1>
-
-                <div className="flex items-center gap-4 text-vlockster-gray-text text-sm">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <time
-                      aria-label={`Fecha de publicación: ${
-                        video.created_at
-                          ? new Date(video.created_at).toLocaleDateString(
-                              'es-ES',
-                              {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                              }
-                            )
-                          : 'Fecha no disponible'
-                      }`}
-                    >
-                      {video.created_at
-                        ? new Date(video.created_at).toLocaleDateString(
-                            'es-ES',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            }
-                          )
-                        : 'Fecha no disponible'}
-                    </time>
-                  </div>
-                </div>
-              </div>
-
-              {video.description && (
-                <div className="pt-4 border-t border-vlockster-gray">
-                  <h2 className="text-sm font-semibold text-vlockster-white mb-2 uppercase tracking-wide">
-                    Descripción
-                  </h2>
-                  <p
-                    className="text-vlockster-white-soft whitespace-pre-wrap leading-relaxed"
-                    aria-label={`Descripción: ${video.description}`}
-                  >
-                    {video.description}
-                  </p>
-                </div>
-              )}
+            <p className="text-gray-300 mb-6">{video.description}</p>
+            
+            <div className="flex gap-4">
+              <Button variant="secondary" className="bg-red-600 hover:bg-red-700">
+                <Heart className="w-4 h-4 mr-2" />
+                Like
+              </Button>
+              <Button variant="secondary">Share</Button>
             </div>
           </div>
 
-          {/* Sidebar */}
-          <aside className="space-y-6" role="complementary" aria-label="Información del creador">
-            {/* Creator Card */}
-            <div className="bg-vlockster-gray-dark rounded-lg p-6 space-y-4">
-              <h2 className="text-sm font-semibold text-vlockster-white uppercase tracking-wide">
-                Creador
-              </h2>
+          {/* Sidebar with creator's other projects */}
+          <div>
+            {video.uploader?.id && (
+              <CreatorProjects 
+                creatorId={video.uploader.id} 
+                currentVideoId={id}
+                title="More from this creator"
+              />
+            )}
 
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-vlockster-gray overflow-hidden flex items-center justify-center">
-                  <User className="w-8 h-8 text-vlockster-gray-text" />
-                </div>
-                <div className="flex-1">
-                  <p
-                    className="font-bold text-lg text-vlockster-white"
-                    aria-label={`Creador: ${video.uploader?.name || 'Desconocido'}`}
-                  >
-                    {video.uploader?.name || 'Desconocido'}
-                  </p>
-                  {video.uploader?.bio && (
-                    <p
-                      className="text-sm text-vlockster-gray-text mt-1"
-                      aria-label={`Biografía: ${video.uploader.bio}`}
-                    >
-                      {video.uploader.bio}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {video.uploader?.public_profile_slug && (
-                <Link
-                  href={`/c/${video.uploader.public_profile_slug}` as Route}
-                  aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
-                >
-                  <Button
-                    className="w-full bg-vlockster-red hover:bg-vlockster-red-dark text-vlockster-white"
-                    aria-label={`Ver perfil de ${video.uploader.name || 'creador'}`}
-                  >
-                    Ver Perfil
-                  </Button>
-                </Link>
-              )}
+            {/* Related Projects Section - shows projects related to this video */}
+            <div className="mt-6">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <Heart className="w-4 h-4 text-red-500" />
+                Related Campaigns
+              </h3>
+              <p className="text-gray-400 text-sm mb-4">
+                Support similar projects from this creator
+              </p>
+              <Link href={`/projects/create?related_to=${id}`} className="block">
+                <Button variant="outline" className="w-full border-red-500 text-red-500 hover:bg-red-500 hover:text-white">
+                  Start a Campaign
+                </Button>
+              </Link>
             </div>
-          </aside>
+          </div>
         </div>
-      </main>
+
+        {/* Comments Section */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">Comments</h2>
+          <div className="bg-gray-800 rounded-lg p-6">
+            <textarea 
+              placeholder="Add a comment..." 
+              className="w-full bg-gray-700 text-white rounded p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-red-500"
+              rows={3}
+            ></textarea>
+            <Button>Post Comment</Button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

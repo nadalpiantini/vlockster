@@ -36,6 +36,8 @@
     "agents:check": "echo 'Available agents: UI Enhancer, Test Agents, Accessibility Checker, Performance Optimizer'"
   },
   "dependencies": {
+    "@mux/mux-player": "^3.10.0",
+    "@mux/mux-player-react": "^3.10.0",
     "@paypal/react-paypal-js": "^8.1.3",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
