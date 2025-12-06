@@ -174,7 +174,7 @@ export default function CreateProjectPage() {
 
               {/* Título */}
               <div className="space-y-2">
-                <Label htmlFor="title">
+                <Label htmlFor="title" aria-describedby="title-help-text">
                   Título del Proyecto <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -185,14 +185,18 @@ export default function CreateProjectPage() {
                   onChange={(e) => setTitle(e.target.value)}
                   required
                   aria-required="true"
+                  aria-describedby="title-help-text"
                   disabled={creating}
                 />
+                <p id="title-help-text" className="text-xs text-gray-400" role="definition">
+                  Proporciona un título atractivo y descriptivo para tu proyecto
+                </p>
               </div>
 
               {/* Descripción */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="description">
+                  <Label htmlFor="description" aria-describedby="description-help-text">
                     Descripción <span className="text-red-500">*</span>
                   </Label>
                   <Button
@@ -202,10 +206,11 @@ export default function CreateProjectPage() {
                     variant="outline"
                     size="sm"
                     className="text-xs"
+                    aria-describedby="description-help-text"
                   >
                     {generatingDescription ? (
                       <>
-                        <span className="animate-spin mr-2">⏳</span>
+                        <span className="animate-spin mr-2" aria-label="Cargando">⏳</span>
                         Generando...
                       </>
                     ) : (
@@ -223,7 +228,12 @@ export default function CreateProjectPage() {
                   required
                   disabled={creating}
                   rows={6}
+                  aria-describedby="description-help-text"
+                  aria-required="true"
                 />
+                <p id="description-help-text" className="text-xs text-gray-400" role="definition">
+                  Describe tu proyecto: sinopsis, equipo, plan de producción... O haz clic en 'Generar con IA' para crear una descripción automática
+                </p>
                 {generatingDescription && (
                   <p className="text-xs text-gray-300" role="status" aria-live="polite" aria-busy="true">
                     La IA está creando una descripción convincente para tu proyecto...
@@ -234,7 +244,7 @@ export default function CreateProjectPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Meta de Financiamiento */}
                 <div className="space-y-2">
-                  <Label htmlFor="goalAmount">
+                  <Label htmlFor="goalAmount" aria-describedby="goalAmount-help-text">
                     Meta (USD) <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -242,36 +252,44 @@ export default function CreateProjectPage() {
                     type="number"
                     min="1"
                     step="0.01"
-                  placeholder="5000"
-                  value={goalAmount}
-                  onChange={(e) => setGoalAmount(e.target.value)}
-                  required
-                  aria-required="true"
-                  disabled={creating}
-                />
-              </div>
+                    placeholder="5000"
+                    value={goalAmount}
+                    onChange={(e) => setGoalAmount(e.target.value)}
+                    required
+                    aria-required="true"
+                    aria-describedby="goalAmount-help-text"
+                    disabled={creating}
+                  />
+                  <p id="goalAmount-help-text" className="text-xs text-gray-400" role="definition">
+                    Cantidad en dólares estadounidenses que deseas recaudar
+                  </p>
+                </div>
 
                 {/* Fecha Límite */}
                 <div className="space-y-2">
-                  <Label htmlFor="deadline">
+                  <Label htmlFor="deadline" aria-describedby="deadline-help-text">
                     Fecha Límite <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="deadline"
                     type="date"
-                  min={minDate}
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
-                  required
-                  aria-required="true"
-                  disabled={creating}
-                />
-              </div>
+                    min={minDate}
+                    value={deadline}
+                    onChange={(e) => setDeadline(e.target.value)}
+                    required
+                    aria-required="true"
+                    aria-describedby="deadline-help-text"
+                    disabled={creating}
+                  />
+                  <p id="deadline-help-text" className="text-xs text-gray-400" role="definition">
+                    Fecha límite para alcanzar tu meta de financiamiento
+                  </p>
+                </div>
               </div>
 
               {/* Video ID (Opcional) */}
               <div className="space-y-2">
-                <Label htmlFor="videoId">
+                <Label htmlFor="videoId" aria-describedby="videoId-help-text">
                   ID del Video (Opcional)
                 </Label>
                 <Input
@@ -281,16 +299,17 @@ export default function CreateProjectPage() {
                   value={videoId}
                   onChange={(e) => setVideoId(e.target.value)}
                   disabled={creating}
+                  aria-describedby="videoId-help-text"
                 />
-                <p className="text-xs text-gray-300">
+                <p id="videoId-help-text" className="text-xs text-gray-400" role="definition">
                   Puedes subir un video primero en /upload y luego pegar su ID aquí
                 </p>
               </div>
 
               {/* Recompensas */}
-              <div className="space-y-4">
+              <div className="space-y-4" role="group" aria-labelledby="rewards-label">
                 <div className="flex justify-between items-center">
-                  <Label className="text-lg">Recompensas</Label>
+                  <Label id="rewards-label" className="text-lg">Recompensas</Label>
                   <Button
                     type="button"
                     variant="outline"
@@ -304,13 +323,15 @@ export default function CreateProjectPage() {
                 </div>
 
                 {rewards.length === 0 ? (
-                  <p className="text-sm text-gray-300 text-center py-4">
-                    Agrega recompensas para incentivar a los backers
-                  </p>
+                  <div role="status" aria-live="polite">
+                    <p className="text-sm text-gray-300 text-center py-4">
+                      Agrega recompensas para incentivar a los backers
+                    </p>
+                  </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-4" role="list" aria-label="Lista de recompensas">
                     {rewards.map((reward, index) => (
-                      <Card key={reward.id}>
+                      <Card key={reward.id} role="listitem" aria-label={`Recompensa ${index + 1}`}>
                         <CardHeader>
                           <div className="flex justify-between items-start">
                             <CardTitle className="text-base">
@@ -331,7 +352,7 @@ export default function CreateProjectPage() {
                         <CardContent className="space-y-3">
                           <div className="grid md:grid-cols-2 gap-3">
                             <div className="space-y-1">
-                              <Label htmlFor={`reward-title-${reward.id}`}>
+                              <Label htmlFor={`reward-title-${reward.id}`} aria-describedby={`reward-title-${reward.id}-help`}>
                                 Título
                               </Label>
                               <Input
@@ -343,10 +364,14 @@ export default function CreateProjectPage() {
                                   updateReward(reward.id, 'title', e.target.value)
                                 }
                                 disabled={creating}
+                                aria-describedby={`reward-title-${reward.id}-help`}
                               />
+                              <p id={`reward-title-${reward.id}-help`} className="text-xs text-gray-400" role="definition">
+                                Título de la recompensa que verán los backers
+                              </p>
                             </div>
                             <div className="space-y-1">
-                              <Label htmlFor={`reward-amount-${reward.id}`}>
+                              <Label htmlFor={`reward-amount-${reward.id}`} aria-describedby={`reward-amount-${reward.id}-help`}>
                                 Monto ($)
                               </Label>
                               <Input
@@ -363,11 +388,15 @@ export default function CreateProjectPage() {
                                   )
                                 }
                                 disabled={creating}
+                                aria-describedby={`reward-amount-${reward.id}-help`}
                               />
+                              <p id={`reward-amount-${reward.id}-help`} className="text-xs text-gray-400" role="definition">
+                                Cantidad en dólares que el backer debe pagar para recibir esta recompensa
+                              </p>
                             </div>
                           </div>
                           <div className="space-y-1">
-                            <Label htmlFor={`reward-description-${reward.id}`}>
+                            <Label htmlFor={`reward-description-${reward.id}`} aria-describedby={`reward-description-${reward.id}-help`}>
                               Descripción
                             </Label>
                             <Textarea
@@ -379,10 +408,14 @@ export default function CreateProjectPage() {
                               }
                               disabled={creating}
                               rows={2}
+                              aria-describedby={`reward-description-${reward.id}-help`}
                             />
+                            <p id={`reward-description-${reward.id}-help`} className="text-xs text-gray-400" role="definition">
+                              Descripción detallada de qué recibirá el backer a cambio
+                            </p>
                           </div>
                           <div className="space-y-1">
-                            <Label htmlFor={`reward-limit-${reward.id}`}>
+                            <Label htmlFor={`reward-limit-${reward.id}`} aria-describedby={`reward-limit-${reward.id}-help`}>
                               Límite (Opcional)
                             </Label>
                             <Input
@@ -399,7 +432,11 @@ export default function CreateProjectPage() {
                                 )
                               }
                               disabled={creating}
+                              aria-describedby={`reward-limit-${reward.id}-help`}
                             />
+                            <p id={`reward-limit-${reward.id}-help`} className="text-xs text-gray-400" role="definition">
+                              Número máximo de veces que se puede reclamar esta recompensa (dejar vacío para ilimitado)
+                            </p>
                           </div>
                         </CardContent>
                       </Card>
@@ -409,14 +446,21 @@ export default function CreateProjectPage() {
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-4" role="group" aria-label="Acciones del formulario">
                 <Button
                   type="submit"
                   className="flex-1"
                   disabled={creating}
                   aria-label="Crear proyecto"
                 >
-                  {creating ? 'Creando Proyecto...' : 'Crear Proyecto'}
+                  {creating ? (
+                    <>
+                      <span className="animate-spin mr-2" aria-label="Cargando">⏳</span>
+                      Creando Proyecto...
+                    </>
+                  ) : (
+                    'Crear Proyecto'
+                  )}
                 </Button>
                 <Button
                   type="button"
