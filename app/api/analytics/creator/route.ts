@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { handleError } from '@/lib/utils/api-helpers'
+import type { Database } from '@/types/database.types'
+
+type Project = Database['public']['Tables']['projects']['Row']
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -49,7 +52,7 @@ export async function GET(request: NextRequest) {
       .gte('created_at', startDate.toISOString())
 
     // Backings recibidos
-    const projectIds = (projects?.map((p) => p.id) || []) as string[]
+    const projectIds = ((projects as Project[] | null)?.map((p: Project) => p.id) || []) as string[]
     const { data: backings } = await supabase
       .from('backings')
       .select('id, amount, project_id, created_at')
@@ -58,18 +61,18 @@ export async function GET(request: NextRequest) {
       .gte('created_at', startDate.toISOString())
 
     // Métricas de videos
-    const totalViews = videos?.reduce((sum, v) => sum + (v.view_count || 0), 0) || 0
-    const totalLikes = videos?.reduce((sum, v) => sum + (v.like_count || 0), 0) || 0
+    const totalViews = videos?.reduce((sum: number, v: { view_count?: number }) => sum + (v.view_count || 0), 0) || 0
+    const totalLikes = videos?.reduce((sum: number, v: { like_count?: number }) => sum + (v.like_count || 0), 0) || 0
     const avgViewsPerVideo = videos?.length ? totalViews / videos.length : 0
 
     // Métricas de proyectos
-    const totalRevenue = backings?.reduce((sum, b) => sum + (b.amount || 0), 0) || 0
-    const activeProjects = projects?.filter((p) => p.status === 'active').length || 0
-    const fundedProjects = projects?.filter((p) => p.status === 'funded').length || 0
+    const totalRevenue = backings?.reduce((sum: number, b: { amount?: number }) => sum + (b.amount || 0), 0) || 0
+    const activeProjects = projects?.filter((p: { status: string }) => p.status === 'active').length || 0
+    const fundedProjects = projects?.filter((p: { status: string }) => p.status === 'funded').length || 0
     const avgBacking = backings?.length ? totalRevenue / backings.length : 0
 
     // Engagement
-    const postIds = (projects?.map((p) => p.id) || []) as string[]
+    const postIds = ((projects as Project[] | null)?.map((p: Project) => p.id) || []) as string[]
     const { data: comments } = await supabase
       .from('comments')
       .select('id')
@@ -95,7 +98,7 @@ export async function GET(request: NextRequest) {
         total: projects?.length || 0,
         active: activeProjects,
         funded: fundedProjects,
-        total_goal: projects?.reduce((sum, p) => sum + (p.goal_amount || 0), 0) || 0,
+        total_goal: projects?.reduce((sum: number, p: { goal_amount?: number }) => sum + (p.goal_amount || 0), 0) || 0,
         total_raised: totalRevenue,
       },
       backings: {
