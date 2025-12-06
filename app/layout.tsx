@@ -6,9 +6,9 @@ import { WebVitals } from '@/components/WebVitals'
 import { inter, spaceGrotesk } from './fonts'
 
 export const metadata: Metadata = {
-  title: 'VLOCKSTER | cine independiente, Streaming & Crowdfunding',
+  title: 'VLOCKSTER | Independent Cinema, Streaming & Crowdfunding',
   description:
-    'Streaming, crowdfunding y comunidad para cine independiente en VLOCKSTER',
+    'Streaming, crowdfunding, and community for independent cinema on VLOCKSTER',
 }
 
 export default function RootLayout({

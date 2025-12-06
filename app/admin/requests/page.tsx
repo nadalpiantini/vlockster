@@ -57,17 +57,17 @@ async function getCreatorRequests(page: number = 1, status: 'pending' | 'reviewe
     return { requests: [], total: count || 0, totalPages: 0, currentPage: page }
   }
 
-  const userIds = [...new Set(requests.map((r) => r.user_id))]
+  const userIds = [...new Set(requests.map((r: { user_id: string }) => r.user_id))]
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, name, email')
     .in('id', userIds)
 
   const profileMap = new Map(
-    (profiles || []).map((p) => [p.id, { name: p.name, email: p.email }])
+    (profiles || []).map((p: { id: string; name: string; email: string }) => [p.id, { name: p.name, email: p.email }])
   )
 
-  const requestsWithProfiles = requests.map((request) => ({
+  const requestsWithProfiles = requests.map((request: { user_id: string }) => ({
     ...request,
     profiles: profileMap.get(request.user_id) || null,
   })) as RequestWithProfile[]
