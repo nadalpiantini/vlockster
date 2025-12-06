@@ -3,9 +3,11 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/Pagination'
 import { Users, MessageCircle, TrendingUp } from 'lucide-react'
+import { CommunityCategory } from '@/components/CommunityCategory'
 import type { Database } from '@/types/database.types'
 
 type Community = Database['public']['Tables']['communities']['Row']
+type CommunityWithStats = Community & { view_count: number }
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -19,7 +21,16 @@ async function getCommunities(page: number = 1) {
 
   const { data: communities, error, count } = await supabase
     .from('communities')
-    .select('*', { count: 'exact' })
+    .select(`
+      id,
+      name,
+      description,
+      slug,
+      is_private,
+      member_count,
+      post_count,
+      created_at
+    `, { count: 'exact' })
     .eq('is_private', false)
     .order('created_at', { ascending: false })
     .range(from, to)
@@ -27,9 +38,15 @@ async function getCommunities(page: number = 1) {
   if (error) {
     return { communities: [], total: 0, totalPages: 0, currentPage: page }
   }
-  
+
+  // Para cada comunidad, obtener conteo de vistas (simulado por ahora)
+  const communitiesWithStats = (communities || []).map((community: Community) => ({
+    ...community,
+    view_count: Math.floor(Math.random() * 1000) + 100 // Simulated view count
+  }))
+
   return {
-    communities: communities || [],
+    communities: communitiesWithStats as CommunityWithStats[],
     total: count || 0,
     totalPages: Math.ceil((count || 0) / COMMUNITIES_PER_PAGE),
     currentPage: page,
@@ -44,6 +61,9 @@ export default async function CommunityPage({
   const params = await searchParams
   const page = parseInt(params.page || '1', 10)
   const { communities, total, totalPages, currentPage } = await getCommunities(page)
+
+  // Type assertion for type safety
+  const communitiesWithStats = communities as CommunityWithStats[]
 
   return (
     <div className="min-h-screen bg-vlockster-black text-vlockster-white">
@@ -104,57 +124,21 @@ export default async function CommunityPage({
           ) : (
             <>
               <div
-                className="space-y-4"
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 role="list"
                 aria-label="Lista de comunidades"
               >
-                {communities.map((community: Community) => (
-                  <Link
+                {communitiesWithStats.map((community: CommunityWithStats) => (
+                  <CommunityCategory
                     key={community.id}
-                    href={`/community/${community.slug}`}
-                    aria-label={`Unirse a la comunidad: ${community.name}`}
-                  >
-                    <div
-                      className="bg-vlockster-gray-dark rounded-lg p-6 hover:ring-2 hover:ring-vlockster-red transition-all cursor-pointer"
-                      role="listitem"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 rounded-full bg-vlockster-gray flex items-center justify-center">
-                              <Users className="w-5 h-5 text-vlockster-red" />
-                            </div>
-                            <div>
-                              <h3
-                                className="text-xl font-bold text-vlockster-white"
-                                aria-label={`Comunidad: ${community.name}`}
-                              >
-                                {community.name}
-                              </h3>
-                              <span
-                                className="text-xs text-vlockster-gray-text"
-                                role="status"
-                                aria-label="Public community"
-                              >
-                                Public community
-                              </span>
-                            </div>
-                          </div>
-                          <p
-                            className="text-vlockster-white-soft mt-3"
-                            aria-label={`Descripción: ${community.description || 'Sin descripción'}`}
-                          >
-                            {community.description || 'No description'}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-vlockster-gray-text">
-                          <MessageCircle className="w-4 h-4" />
-                          <TrendingUp className="w-4 h-4 text-vlockster-green" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                    id={community.slug}
+                    name={community.name}
+                    description={community.description || 'No description'}
+                    postCount={community.post_count || 0}
+                    memberCount={community.member_count || 0}
+                    viewCount={community.view_count}
+                    isPrivate={community.is_private || false}
+                  />
                 ))}
               </div>
 

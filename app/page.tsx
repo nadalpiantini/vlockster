@@ -2,6 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Route } from 'next'
 import { Play, Film, Users, DollarSign, ArrowRight, Star, Heart, MessageCircle, Search, Bell, Info, Clock, Check, Calendar } from 'lucide-react'
+import { HeroVideo } from '@/components/HeroVideo'
+import { HorizontalCarousel } from '@/components/HorizontalCarousel'
+import { VideoCard } from '@/components/VideoCard'
 
 export default function HomePage() {
   const featuredContent = [
@@ -169,84 +172,17 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section - BD Screens / Nextflix Style Combined */}
-      <section className="relative min-h-[85vh] flex items-center pt-20 pb-12 overflow-hidden">
-        {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0a0a] to-black z-0"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FF0000]/5 via-transparent to-[#FF6B35]/5 z-0"></div>
-        
-        {/* Hero Background Image */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0">
-            <Image
-              src={featuredContent[0].image}
-              alt="Hero background"
-              fill
-              className="object-cover opacity-50"
-              priority
-              unoptimized
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/50"></div>
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl">
-            {/* Badge - BD Screens Style */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF0000]/20 border border-[#FF0000]/30 backdrop-blur-sm mb-6 shadow-lg">
-              <span className="w-2 h-2 bg-[#FF0000] rounded-full animate-pulse"></span>
-              <span className="text-sm font-bold uppercase tracking-wider text-white">NEW RELEASE</span>
-            </div>
-            
-            {/* Main Title - BD Screens Style */}
-            <h1 
-              className="font-display text-6xl md:text-7xl lg:text-8xl font-black leading-tight mb-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
-              style={{ letterSpacing: '-0.04em' }}
-            >
-              {featuredContent[0].title}
-            </h1>
-            
-            {/* Ratings - BD Screens Style */}
-            <div className="flex items-center gap-4 mb-6 text-lg">
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                <span className="font-bold text-white">{featuredContent[0].rating}</span>
-              </div>
-              <span className="text-white">•</span>
-              <span className="text-white">{featuredContent[0].year}</span>
-              <span className="text-white">•</span>
-              <span className="px-3 py-1 border border-white/40 text-xs rounded text-white bg-white/10 backdrop-blur-sm">{featuredContent[0].genre}</span>
-              <span className="text-white">•</span>
-              <span className="text-white">{featuredContent[0].duration}</span>
-            </div>
-            
-            <p className="text-lg text-white mb-8 leading-relaxed max-w-2xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              The platform for independent cinema. Streaming, crowdfunding, and community in one place for creators and fans.
-            </p>
-
-            {/* CTA Buttons - BD Screens Style */}
-            <div className="flex gap-4" role="group" aria-label="Main actions">
-              <Link
-                href="/watch"
-                data-testid="cta-watch"
-                className="px-8 py-4 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors flex items-center gap-2 text-lg"
-              >
-                <Play className="w-6 h-6 fill-current" />
-                Play
-              </Link>
-              <Link
-                href="/signup"
-                data-testid="cta-signup"
-                className="px-8 py-4 bg-gray-600/70 text-white rounded-lg font-semibold hover:bg-gray-600/90 transition-colors flex items-center gap-2 text-lg backdrop-blur-sm"
-              >
-                <Info className="w-5 h-5" />
-                More Info
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section - Netflix Style */}
+      <HeroVideo
+        title={featuredContent[0].title}
+        description="The platform for independent cinema. Streaming, crowdfunding, and community in one place for creators and fans."
+        imageUrl={featuredContent[0].image}
+        year={featuredContent[0].year}
+        duration={featuredContent[0].duration}
+        rating={featuredContent[0].rating}
+        genre={featuredContent[0].genre}
+        videoId={featuredContent[0].id.toString()}
+      />
 
       <main
         id="main-content"
@@ -254,80 +190,29 @@ export default function HomePage() {
         role="main"
         aria-label="Plataforma VLOCKSTER"
       >
-        {/* Content Rows - Nextflix/BD Screens Style */}
+        {/* Content Rows - Nextflix Style */}
         <div className="relative z-10 -mt-32 pb-16">
           {contentRows.map((row, idx) => (
-            <section key={idx} className="mb-12">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="font-display text-3xl md:text-4xl font-black text-white" style={{ letterSpacing: '-0.02em', textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>
-                    {row.title}
-                  </h2>
-                  {row.items.length > 8 && (
-                    <Link href="/watch" className="flex items-center gap-1 text-white hover:text-[#FF0000] transition-colors font-sans">
-                      See all <ArrowRight className="w-4 h-4 text-[#FF0000]" />
-                    </Link>
-                  )}
+            <HorizontalCarousel
+              key={idx}
+              title={row.title}
+              showAllLink={row.items.length > 8 ? "/watch" : undefined}
+            >
+              {row.items.map((item) => (
+                <div key={item.id} role="listitem">
+                  <VideoCard
+                    id={item.id.toString()}
+                    title={item.title}
+                    description={`${item.title} - ${item.genre}`}
+                    thumbnailUrl={item.image}
+                    duration={item.duration}
+                    year={item.year}
+                    rating={item.rating}
+                    className="min-w-[190px] md:min-w-[220px]"
+                  />
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                  {row.items.map((item) => (
-                    <Link
-                      key={item.id}
-                      href="/watch"
-                      className="group relative flex-shrink-0 w-48 md:w-56 aspect-[2/3] rounded-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-300 shadow-lg"
-                    >
-                      <div className="absolute inset-0 bg-gray-900">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover opacity-100"
-                          unoptimized
-                          priority={idx === 0 && row.items.indexOf(item) < 4}
-                        />
-                      </div>
-                      
-                      {/* Light gradient overlay always visible for text readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-0"></div>
-                      
-                      {/* Title always visible at bottom */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3 z-10 bg-gradient-to-t from-black via-black/90 to-transparent">
-                        <h3 className="font-display text-sm font-bold mb-1 text-white" style={{ letterSpacing: '-0.01em', textShadow: '2px 2px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,1)' }}>
-                          {item.title}
-                        </h3>
-                        <div className="flex items-center gap-2 text-xs text-white" style={{ textShadow: '1px 1px 3px rgba(0,0,0,1), 0 0 6px rgba(0,0,0,1)' }}>
-                          <span>{item.year}</span>
-                          <span className="text-white">•</span>
-                          <span>{item.duration}</span>
-                        </div>
-                      </div>
-                      
-                      {/* Rating Badge - Always visible */}
-                      <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-black/80 backdrop-blur-sm rounded border border-white/30 shadow-lg z-10">
-                        <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                        <span className="text-xs font-bold text-white">{item.rating}</span>
-                      </div>
-                      
-                      {/* Play button on hover */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                        <div className="w-14 h-14 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center border-2 border-white/50 shadow-xl">
-                          <Play className="w-7 h-7 text-white fill-white ml-0.5" />
-                        </div>
-                      </div>
-                      
-                      {/* Additional overlay on hover for better contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                        <div className="absolute bottom-0 left-0 right-0 p-3">
-                          <button className="w-full px-3 py-1.5 bg-white text-black rounded text-xs font-semibold hover:bg-gray-200 transition-colors shadow-lg">
-                            ▶ Play
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </section>
+              ))}
+            </HorizontalCarousel>
           ))}
         </div>
 
@@ -391,7 +276,7 @@ export default function HomePage() {
           
           <div className="max-w-5xl mx-auto">
             {/* Campaign Card - Open Crowd Fund Style */}
-            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg overflow-hidden">
+            <div className="bg-gray-900 rounded-2xl border-2 border-white/10 shadow-lg overflow-hidden">
               {/* Campaign Header */}
               <div className="bg-gradient-to-r from-[#FF0000] to-[#FF6B35] p-8 text-white">
                 <div className="flex items-center justify-between mb-4">
@@ -409,48 +294,48 @@ export default function HomePage() {
               </div>
 
               {/* Progress Bar - Large and Clear */}
-              <div className="p-8 border-b border-gray-200">
+              <div className="p-8 border-b border-white/10">
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
                     <div>
                       <div className="text-4xl font-black text-[#FF0000] mb-1">$125,000</div>
-                      <div className="text-gray-600">raised of $500,000 goal</div>
+                      <div className="text-white">raised of $500,000 goal</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-black text-gray-900">25%</div>
-                      <div className="text-gray-600">funded</div>
+                      <div className="text-3xl font-black text-white">25%</div>
+                      <div className="text-white">funded</div>
                     </div>
                   </div>
-                  <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-[#FF0000] to-[#FF6B35] rounded-full" style={{ width: '25%' }}></div>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">234</div>
-                    <div className="text-sm text-gray-600 flex items-center justify-center gap-1">
+                    <div className="text-2xl font-bold text-white mb-1">234</div>
+                    <div className="text-sm text-white flex items-center justify-center gap-1">
                       <Users className="w-4 h-4" />
                       backers
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">45</div>
-                    <div className="text-sm text-gray-600 flex items-center justify-center gap-1">
+                    <div className="text-2xl font-bold text-white mb-1">45</div>
+                    <div className="text-sm text-white flex items-center justify-center gap-1">
                       <Calendar className="w-4 h-4" />
                       days left
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">$534</div>
-                    <div className="text-sm text-gray-600">avg pledge</div>
+                    <div className="text-2xl font-bold text-white mb-1">$534</div>
+                    <div className="text-sm text-white">avg pledge</div>
                   </div>
                 </div>
               </div>
 
               {/* Campaign Content */}
               <div className="p-8">
-                <h4 className="text-2xl font-bold mb-4">About this project</h4>
-                <div className="prose max-w-none text-gray-700 space-y-4 mb-8">
+                <h4 className="text-2xl font-bold mb-4 text-white">About this project</h4>
+                <div className="prose max-w-none text-white space-y-4 mb-8">
                   <p>
                     Este proyecto busca revolucionar la forma en que se produce y distribuye el cine independiente.
                     Con tu apoyo, podremos crear una plataforma completa que combine streaming, crowdfunding y comunidad.
@@ -465,9 +350,9 @@ export default function HomePage() {
                     'Producer credit in the film',
                     'Digital download of the final cut'
                   ].map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                    <div key={idx} className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10">
                       <Check className="w-5 h-5 text-[#FF0000] flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-white">{feature}</span>
                     </div>
                   ))}
                 </div>

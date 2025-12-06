@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { Route } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
-import { VideoPlayer } from '@/components/ui/VideoPlayer'
+import { EnhancedVideoPlayer } from '@/components/EnhancedVideoPlayer'
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/database.types'
 import { User, Calendar } from 'lucide-react'
@@ -77,10 +77,11 @@ export default async function WatchVideoPage({
             {/* Video Player */}
             <div role="region" aria-label="Reproductor de video">
               {video.stream_id && process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
-                <VideoPlayer
+                <EnhancedVideoPlayer
                   videoId={video.stream_id}
                   title={video.title}
                   poster={video.thumbnail_url || undefined}
+                  controls={true}
                 />
               ) : (
                 <div className="aspect-video bg-vlockster-gray-dark rounded-lg flex items-center justify-center">

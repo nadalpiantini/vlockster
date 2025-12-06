@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SearchBar } from '@/components/SearchBar'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/Pagination'
-import { CampaignCard } from '@/components/ui/CampaignCard'
+import { CrowdfundingProject } from '@/components/CrowdfundingProject'
 import { Film, TrendingUp } from 'lucide-react'
 import type { Database } from '@/types/database.types'
 
@@ -22,7 +22,19 @@ async function getActiveProjects(page: number = 1) {
 
   const { data: projects, error, count } = await supabase
     .from('projects')
-    .select('*', { count: 'exact' })
+    .select(`
+      id,
+      title,
+      description,
+      goal_amount,
+      current_amount,
+      deadline,
+      creator_id,
+      category,
+      status,
+      backers_count,
+      created_at
+    `, { count: 'exact' })
     .in('status', ['active', 'funded'])
     .order('created_at', { ascending: false })
     .range(from, to)
@@ -33,7 +45,7 @@ async function getActiveProjects(page: number = 1) {
     const creatorIds = [...new Set(projectsArray.map((p) => p.creator_id))]
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, name, public_profile_slug')
+      .select('id, name, public_profile_slug, avatar_url')
       .in('id', creatorIds)
 
     if (profiles) {
@@ -132,31 +144,22 @@ export default async function ProjectsPage({
                 aria-label="Lista de proyectos"
               >
                 {projects.map((project) => {
-                  const daysLeft = project.deadline
-                    ? Math.ceil(
-                        (new Date(project.deadline).getTime() - Date.now()) /
-                          (1000 * 60 * 60 * 24)
-                      )
-                    : 0
+                  const creator = (project as Project & { creator: Profile | null }).creator
 
                   return (
-                    <CampaignCard
+                    <CrowdfundingProject
                       key={project.id}
                       id={project.id}
                       title={project.title}
-                      creator={
-                        (project as Project & { creator: Profile | null })
-                          .creator?.name || 'Unknown'
-                      }
-                      thumbnail={
-                        '/placeholder-project.jpg'
-                      }
-                      current={Number(project.current_amount)}
-                      goal={Number(project.goal_amount)}
-                      backers={project.backers_count || 0}
-                      daysLeft={daysLeft}
-                      category={project.category || undefined}
-                      featured={project.status === 'funded'}
+                      description={project.description}
+                      goalAmount={Number(project.goal_amount)}
+                      currentAmount={Number(project.current_amount)}
+                      deadline={project.deadline}
+                      creator={{
+                        name: creator?.name || 'Creador anónimo',
+                        avatar: creator?.avatar_url || undefined
+                      }}
+                      backersCount={project.backers_count || 0}
                     />
                   )
                 })}

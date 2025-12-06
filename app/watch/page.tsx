@@ -1,14 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { SearchBar } from '@/components/SearchBar'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { VideoCard } from '@/components/VideoCard'
+import { HorizontalCarousel } from '@/components/HorizontalCarousel'
 import { Pagination } from '@/components/Pagination'
 import type { Database } from '@/types/database.types'
 
@@ -21,6 +15,9 @@ type Video = {
   description: string | null
   thumbnail_url: string | null
   uploader_id: string
+  duration_seconds: number | null
+  created_at: string | null
+  like_count: number | null
   uploader?: { name: string | null; public_profile_slug: string | null } | null
 }
 
@@ -41,7 +38,7 @@ async function getPublicVideos(page: number = 1): Promise<{
 
   const { data: videos, error, count } = await supabase
     .from('videos')
-    .select('*', { count: 'exact' })
+    .select('id, title, description, thumbnail_url, uploader_id, duration_seconds, created_at, like_count', { count: 'exact' })
     .eq('visibility', 'public')
     .order('created_at', { ascending: false })
     .range(from, to)
@@ -99,61 +96,97 @@ export default async function WatchPage({
         </div>
 
         {videos.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-gray-300 mb-4">
-                No videos available yet
-              </p>
-              <p className="text-sm text-gray-300">
-                Creators will start uploading content soon
-              </p>
-            </CardContent>
-          </Card>
+          <div className="bg-gray-900 rounded-lg p-8 text-center">
+            <h3 className="text-xl font-semibold text-white mb-2">No hay videos disponibles</h3>
+            <p className="text-gray-400">
+              Los creadores aún no han subido contenido
+            </p>
+          </div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" role="list" aria-label="Lista de videos">
-              {videos.map((video: Video) => (
-              <Link key={video.id} href={`/watch/${video.id}`} aria-label={`Ver video: ${video.title}`}>
-                <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full" role="listitem">
-                  {/* Thumbnail */}
-                  <div className="aspect-video bg-gray-800 relative overflow-hidden">
-                    {video.thumbnail_url ? (
-                      <Image
-                        src={video.thumbnail_url}
-                        alt={video.title || 'Video thumbnail'}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300" role="img" aria-label="Sin miniatura">
-                        <span className="text-6xl" aria-hidden="true">🎬</span>
-                      </div>
-                    )}
+            {/* Categorías de contenido */}
+            <div className="space-y-12">
+              <HorizontalCarousel title="Populares" showAllLink="/watch">
+                {videos.map((video: Video) => (
+                  <div key={video.id} role="listitem">
+                    <VideoCard
+                      id={video.id}
+                      title={video.title}
+                      description={video.description || undefined}
+                      thumbnailUrl={video.thumbnail_url || undefined}
+                      uploader={video.uploader || undefined}
+                      duration={video.duration_seconds ? `${Math.floor(video.duration_seconds / 60)}m` : undefined}
+                      year={video.created_at ? new Date(video.created_at).getFullYear().toString() : undefined}
+                      rating={video.like_count ? `${video.like_count} likes` : undefined}
+                      className="min-w-[190px] md:min-w-[220px]"
+                    />
                   </div>
+                ))}
+              </HorizontalCarousel>
 
-                  <CardHeader>
-                    <CardTitle className="line-clamp-2">{video.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">
-                      {video.description || 'No description'}
-                    </CardDescription>
-                  </CardHeader>
+              <HorizontalCarousel title="Recientes" showAllLink="/watch">
+                {videos.slice(0, 8).map((video: Video) => (
+                  <div key={`recent-${video.id}`} role="listitem">
+                    <VideoCard
+                      id={video.id}
+                      title={video.title}
+                      description={video.description || undefined}
+                      thumbnailUrl={video.thumbnail_url || undefined}
+                      uploader={video.uploader || undefined}
+                      duration={video.duration_seconds ? `${Math.floor(video.duration_seconds / 60)}m` : undefined}
+                      year={video.created_at ? new Date(video.created_at).getFullYear().toString() : undefined}
+                      rating={video.like_count ? `${video.like_count} likes` : undefined}
+                      className="min-w-[190px] md:min-w-[220px]"
+                    />
+                  </div>
+                ))}
+              </HorizontalCarousel>
 
-                  <CardContent>
-                    <p className="text-sm text-gray-300">
-                      By: {video.uploader?.name || 'Unknown'}
-                    </p>
-                  </CardContent>
-                </Card>
-                </Link>
-              ))}
+              <HorizontalCarousel title="Documentales" showAllLink="/watch">
+                {videos.filter(v => v.title.toLowerCase().includes('documentary') || (v.description && v.description.toLowerCase().includes('documentary'))).slice(0, 8).map((video: Video) => (
+                  <div key={`doc-${video.id}`} role="listitem">
+                    <VideoCard
+                      id={video.id}
+                      title={video.title}
+                      description={video.description || undefined}
+                      thumbnailUrl={video.thumbnail_url || undefined}
+                      uploader={video.uploader || undefined}
+                      duration={video.duration_seconds ? `${Math.floor(video.duration_seconds / 60)}m` : undefined}
+                      year={video.created_at ? new Date(video.created_at).getFullYear().toString() : undefined}
+                      rating={video.like_count ? `${video.like_count} likes` : undefined}
+                      className="min-w-[190px] md:min-w-[220px]"
+                    />
+                  </div>
+                ))}
+              </HorizontalCarousel>
+
+              <HorizontalCarousel title="Más Vistos" showAllLink="/watch">
+                {videos.slice(0, 8).map((video: Video) => (
+                  <div key={`trending-${video.id}`} role="listitem">
+                    <VideoCard
+                      id={video.id}
+                      title={video.title}
+                      description={video.description || undefined}
+                      thumbnailUrl={video.thumbnail_url || undefined}
+                      uploader={video.uploader || undefined}
+                      duration={video.duration_seconds ? `${Math.floor(video.duration_seconds / 60)}m` : undefined}
+                      year={video.created_at ? new Date(video.created_at).getFullYear().toString() : undefined}
+                      rating={video.like_count ? `${video.like_count} likes` : undefined}
+                      className="min-w-[190px] md:min-w-[220px]"
+                    />
+                  </div>
+                ))}
+              </HorizontalCarousel>
             </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              basePath="/watch"
-            />
+
+            {/* Paginación al final */}
+            <div className="mt-12">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                basePath="/watch"
+              />
+            </div>
           </>
         )}
       </main>
