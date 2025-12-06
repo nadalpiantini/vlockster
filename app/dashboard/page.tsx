@@ -25,11 +25,12 @@ export default async function DashboardPage() {
   //   redirect('/login')
   // }
 
-  // Si no hay usuario, usar valores por defecto
+  // Always open - use mock admin user if no real user
   const userProfile = (user || {
-    name: 'Invitado',
-    email: 'guest@vlockster.com',
-    role: 'viewer',
+    id: 'mock-admin',
+    name: 'Admin User',
+    email: 'admin@vlockster.test',
+    role: 'admin',
   }) as UserProfile
   const isCreator = ['creator', 'admin'].includes(userProfile.role)
   const isAdmin = userProfile.role === 'admin'

@@ -1,17 +1,13 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Route } from 'next'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/utils/role-check'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { VideoPlayer } from '@/components/ui/VideoPlayer'
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/database.types'
+import { User, Calendar } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -65,127 +61,153 @@ export default async function WatchVideoPage({
     notFound()
   }
 
-  // Verificar permisos de acceso según visibilidad
-  const canWatch =
-    video.visibility === 'public' ||
-    (user && video.visibility === 'members') ||
-    (user && video.uploader_id === user.id)
-
-  if (!canWatch) {
-    return (
-      <main id="main-content" className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4" role="main" aria-label="Video restringido">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle>Contenido Restringido</CardTitle>
-            <CardDescription>
-              Este video solo está disponible para miembros
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/login">
-              <Button className="w-full">Iniciar Sesión</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </main>
-    )
-  }
+  // Everything is open - no restrictions
+  // All videos are accessible to everyone
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-8 px-4">
-      <main id="main-content" className="container mx-auto max-w-6xl" role="main" aria-label={`Reproductor de video: ${video.title}`}>
-        {/* Video Player */}
-        <Card className="mb-6">
-          <CardContent className="p-0">
-            <div className="aspect-video bg-gray-950 flex items-center justify-center" role="region" aria-label="Reproductor de video">
-              {video.stream_id ? (
-                <div className="w-full h-full">
-                  {process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
-                    <iframe
-                      src={`https://customer-${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${video.stream_id}/iframe`}
-                      className="w-full h-full"
-                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                      allowFullScreen
-                      title={`Reproductor de video: ${video.title}`}
-                      aria-label={`Reproductor de video: ${video.title}`}
-                    />
-                  ) : (
-                    <div className="text-center p-8" role="alert" aria-label="Configuración de Cloudflare Stream requerida">
-                      <p className="text-gray-300 mb-2">Cloudflare Stream no configurado</p>
-                      <p className="text-sm text-gray-300">
+    <div className="min-h-screen bg-vlockster-black text-vlockster-white">
+      <main
+        id="main-content"
+        className="container mx-auto max-w-7xl px-4 py-8"
+        role="main"
+        aria-label={`Reproductor de video: ${video.title}`}
+      >
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Video Player */}
+            <div role="region" aria-label="Reproductor de video">
+              {video.stream_id && process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID ? (
+                <VideoPlayer
+                  videoId={video.stream_id}
+                  title={video.title}
+                  poster={video.thumbnail_url || undefined}
+                />
+              ) : (
+                <div className="aspect-video bg-vlockster-gray-dark rounded-lg flex items-center justify-center">
+                  <div className="text-center p-8" role="alert">
+                    <p className="text-vlockster-white-soft mb-2">
+                      {video.stream_id
+                        ? 'Cloudflare Stream no configurado'
+                        : 'Video no disponible'}
+                    </p>
+                    {video.stream_id && (
+                      <p className="text-sm text-vlockster-gray-text">
                         Video ID: {video.stream_id}
                       </p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center" role="alert" aria-label="Video no disponible">
-                  <p className="text-gray-300">Video no disponible</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Video Info */}
-          <div className="lg:col-span-2" role="article" aria-labelledby="video-title">
-            <Card>
-              <CardHeader>
-                <CardTitle id="video-title" className="text-2xl" aria-label={`Título del video: ${video.title}`}>{video.title}</CardTitle>
-                <CardDescription aria-label={`Fecha de publicación: ${video.created_at
-                    ? new Date(video.created_at).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'Fecha no disponible'}`}>
-                  {video.created_at
-                    ? new Date(video.created_at).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'Fecha no disponible'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 whitespace-pre-wrap" aria-label={`Descripción: ${video.description || 'Sin descripción'}`}>
-                  {video.description || 'Sin descripción'}
-                </p>
-              </CardContent>
-            </Card>
+            {/* Video Info */}
+            <div
+              className="bg-vlockster-gray-dark rounded-lg p-6 space-y-4"
+              role="article"
+              aria-labelledby="video-title"
+            >
+              <div>
+                <h1
+                  id="video-title"
+                  className="text-3xl font-bold text-vlockster-white mb-3"
+                  aria-label={`Título del video: ${video.title}`}
+                >
+                  {video.title}
+                </h1>
+
+                <div className="flex items-center gap-4 text-vlockster-gray-text text-sm">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    <time
+                      aria-label={`Fecha de publicación: ${
+                        video.created_at
+                          ? new Date(video.created_at).toLocaleDateString(
+                              'es-ES',
+                              {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              }
+                            )
+                          : 'Fecha no disponible'
+                      }`}
+                    >
+                      {video.created_at
+                        ? new Date(video.created_at).toLocaleDateString(
+                            'es-ES',
+                            {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            }
+                          )
+                        : 'Fecha no disponible'}
+                    </time>
+                  </div>
+                </div>
+              </div>
+
+              {video.description && (
+                <div className="pt-4 border-t border-vlockster-gray">
+                  <h2 className="text-sm font-semibold text-vlockster-white mb-2 uppercase tracking-wide">
+                    Descripción
+                  </h2>
+                  <p
+                    className="text-vlockster-white-soft whitespace-pre-wrap leading-relaxed"
+                    aria-label={`Descripción: ${video.description}`}
+                  >
+                    {video.description}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Creator Info */}
-          <aside role="complementary" aria-label="Información del creador">
-            <Card>
-              <CardHeader>
-                <CardTitle>Creador</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="font-semibold text-lg" aria-label={`Creador: ${video.uploader?.name || 'Desconocido'}`}>
+          {/* Sidebar */}
+          <aside className="space-y-6" role="complementary" aria-label="Información del creador">
+            {/* Creator Card */}
+            <div className="bg-vlockster-gray-dark rounded-lg p-6 space-y-4">
+              <h2 className="text-sm font-semibold text-vlockster-white uppercase tracking-wide">
+                Creador
+              </h2>
+
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-vlockster-gray overflow-hidden flex items-center justify-center">
+                  <User className="w-8 h-8 text-vlockster-gray-text" />
+                </div>
+                <div className="flex-1">
+                  <p
+                    className="font-bold text-lg text-vlockster-white"
+                    aria-label={`Creador: ${video.uploader?.name || 'Desconocido'}`}
+                  >
                     {video.uploader?.name || 'Desconocido'}
                   </p>
                   {video.uploader?.bio && (
-                    <p className="text-sm text-gray-300 mt-2" aria-label={`Biografía: ${video.uploader.bio}`}>
+                    <p
+                      className="text-sm text-vlockster-gray-text mt-1"
+                      aria-label={`Biografía: ${video.uploader.bio}`}
+                    >
                       {video.uploader.bio}
                     </p>
                   )}
                 </div>
-                {video.uploader?.public_profile_slug && (
-                  <Link
-                    href={`/c/${video.uploader.public_profile_slug}` as Route}
-                    aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
+              </div>
+
+              {video.uploader?.public_profile_slug && (
+                <Link
+                  href={`/c/${video.uploader.public_profile_slug}` as Route}
+                  aria-label={`Ver perfil de ${video.uploader?.name || 'creador'}`}
+                >
+                  <Button
+                    className="w-full bg-vlockster-red hover:bg-vlockster-red-dark text-vlockster-white"
+                    aria-label={`Ver perfil de ${video.uploader.name || 'creador'}`}
                   >
-                    <Button className="w-full" variant="outline" aria-label={`Ver perfil de ${video.uploader.name || 'creador'}`}>
-                      Ver Perfil
-                    </Button>
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
+                    Ver Perfil
+                  </Button>
+                </Link>
+              )}
+            </div>
           </aside>
         </div>
       </main>

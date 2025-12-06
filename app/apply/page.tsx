@@ -35,10 +35,10 @@ export default function ApplyPage() {
         data: { user },
       } = await supabase.auth.getUser()
 
-      // Auth check: Require authenticated user for creator application
-      if (!user) {
-        throw new Error('Debes iniciar sesión para solicitar acceso como creator.')
-      }
+      // Always open - allow application without auth
+      // if (!user) {
+      //   throw new Error('You must sign in to request creator access.')
+      // }
 
       // Verificar si ya existe una solicitud pendiente
       const { data: existingRequest } = await supabase

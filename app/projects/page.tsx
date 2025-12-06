@@ -1,15 +1,10 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { SearchBar } from '@/components/SearchBar'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/Pagination'
+import { CampaignCard } from '@/components/ui/CampaignCard'
+import { Film, TrendingUp } from 'lucide-react'
 import type { Database } from '@/types/database.types'
 
 export const dynamic = 'force-dynamic'
@@ -68,128 +63,114 @@ export default async function ProjectsPage({
   const { projects, total, totalPages, currentPage } = await getActiveProjects(page)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-      <main id="main-content" className="container mx-auto" role="main" aria-label="Proyectos de crowdfunding">
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Crowdfunding Projects</h1>
-              <p className="text-gray-300">
-                Support independent film projects
-              </p>
+    <div className="min-h-screen bg-vlockster-black text-vlockster-white">
+      <main
+        id="main-content"
+        className="container mx-auto px-4"
+        role="main"
+        aria-label="Proyectos de crowdfunding"
+      >
+        {/* Hero Header */}
+        <div className="py-12 border-b border-vlockster-gray">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-vlockster-red flex items-center justify-center">
+                  <Film className="w-6 h-6 text-vlockster-white" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold text-vlockster-white">
+                    Proyectos
+                  </h1>
+                  <p className="text-vlockster-gray-text">
+                    Apoya proyectos de cine independiente
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-6 text-sm text-vlockster-gray-text">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-vlockster-green" />
+                  <span>{total} proyectos activos</span>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-4">
-              <div className="w-full md:w-auto max-w-md">
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="w-full sm:w-auto max-w-md">
                 <SearchBar />
               </div>
               <Link href="/dashboard" aria-label="Volver al dashboard">
-                <Button variant="outline" aria-label="Back to dashboard">Back</Button>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-vlockster-gray hover:bg-vlockster-gray-dark"
+                  aria-label="Back to dashboard"
+                >
+                  Back
+                </Button>
               </Link>
             </div>
           </div>
         </div>
 
-        {projects.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-gray-300 mb-4">
+        {/* Projects Grid */}
+        <div className="py-12">
+          {projects.length === 0 ? (
+            <div className="bg-vlockster-gray-dark rounded-lg p-12 text-center">
+              <Film className="w-16 h-16 text-vlockster-gray-text mx-auto mb-4" />
+              <p className="text-vlockster-white-soft text-lg mb-2">
                 No active projects at the moment
               </p>
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-vlockster-gray-text">
                 Creators will launch new campaigns soon
               </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Lista de proyectos">
-              {projects.map((project) => {
-              const progress =
-                (Number(project.current_amount) /
-                  Number(project.goal_amount)) *
-                100
-              const daysLeft = project.deadline
-                ? Math.ceil(
-                    (new Date(project.deadline).getTime() - Date.now()) /
-                      (1000 * 60 * 60 * 24)
-                  )
-                : 0
-
-              return (
-                <Link key={project.id} href={`/projects/${project.id}`} aria-label={`Ver proyecto: ${project.title}`}>
-                  <Card className="hover:border-blue-500 transition-colors cursor-pointer h-full" role="listitem">
-                    <CardHeader>
-                      <div className="flex justify-between items-start mb-2">
-                        <CardTitle className="line-clamp-2">
-                          {project.title}
-                        </CardTitle>
-                        {project.status === 'funded' && (
-                          <span 
-                            className="bg-green-900/50 text-green-300 text-xs px-2 py-1 rounded-full"
-                            role="status"
-                            aria-label="Proyecto financiado exitosamente"
-                          >
-                            Funded
-                          </span>
-                        )}
-                      </div>
-                      <CardDescription className="line-clamp-3">
-                        {project.description}
-                      </CardDescription>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      {/* Progress Bar */}
-                      <div role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progreso de financiamiento: ${progress.toFixed(0)}%`}>
-                        <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-300">Progress</span>
-                          <span className="font-semibold" aria-live="polite">
-                            {progress.toFixed(0)}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-700 rounded-full h-2" role="presentation">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all"
-                            style={{ width: `${Math.min(progress, 100)}%` }}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Stats */}
-                      <div className="grid grid-cols-2 gap-4 text-center" role="group" aria-label="Estadísticas del proyecto">
-                        <div>
-                          <p className="text-2xl font-bold text-blue-400" aria-label={`Monto recaudado: $${Number(project.current_amount).toLocaleString()}`}>
-                            ${Number(project.current_amount).toLocaleString()}
-                          </p>
-                          <p className="text-xs text-gray-300">
-                            de ${Number(project.goal_amount).toLocaleString()}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-2xl font-bold text-blue-400" aria-label={`Días restantes: ${daysLeft}`}>
-                            {daysLeft}
-                          </p>
-                          <p className="text-xs text-gray-300">days left</p>
-                        </div>
-                      </div>
-
-                      <p className="text-sm text-gray-300 text-center">
-                        By: {(project as Project & { creator: Profile | null }).creator?.name || 'Unknown'}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )
-            })}
             </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              basePath="/projects"
-            />
-          </>
-        )}
+          ) : (
+            <>
+              <div
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+                role="list"
+                aria-label="Lista de proyectos"
+              >
+                {projects.map((project) => {
+                  const daysLeft = project.deadline
+                    ? Math.ceil(
+                        (new Date(project.deadline).getTime() - Date.now()) /
+                          (1000 * 60 * 60 * 24)
+                      )
+                    : 0
+
+                  return (
+                    <CampaignCard
+                      key={project.id}
+                      id={project.id}
+                      title={project.title}
+                      creator={
+                        (project as Project & { creator: Profile | null })
+                          .creator?.name || 'Unknown'
+                      }
+                      thumbnail={
+                        project.thumbnail_url ||
+                        '/placeholder-project.jpg'
+                      }
+                      current={Number(project.current_amount)}
+                      goal={Number(project.goal_amount)}
+                      backers={project.backers_count || 0}
+                      daysLeft={daysLeft}
+                      category={project.category || undefined}
+                      featured={project.status === 'funded'}
+                    />
+                  )
+                })}
+              </div>
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                basePath="/projects"
+              />
+            </>
+          )}
+        </div>
       </main>
     </div>
   )

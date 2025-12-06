@@ -1,8 +1,11 @@
 import Link from 'next/link'
+import type { Route } from 'next'
 import Image from 'next/image'
 import { Play, ExternalLink, CheckCircle, Clock } from 'lucide-react'
 
 export default function IntegrationMenuPage() {
+  const uiDemosRoute = "/ui-demos" as Route
+  
   const repositories = [
     {
       id: 'nextflix',
@@ -179,7 +182,7 @@ export default function IntegrationMenuPage() {
               </span>
             </Link>
             <div className="flex items-center gap-4">
-              <Link href="/ui-demos" className="text-sm text-gray-400 hover:text-white transition-colors font-sans">
+              <Link href={uiDemosRoute} className="text-sm text-gray-400 hover:text-white transition-colors font-sans">
                 UI Demos
               </Link>
               <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors font-sans">

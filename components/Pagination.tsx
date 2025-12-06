@@ -32,31 +32,23 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
       aria-label="Navegación de páginas"
       role="navigation"
     >
-      <Link
-        href={(currentPage === 1 ? '#' : getPageUrl(currentPage - 1)) as Route}
-        aria-label="Página anterior"
-        aria-disabled={currentPage === 1}
-        tabIndex={currentPage === 1 ? -1 : 0}
-        onClick={(e) => {
-          if (currentPage === 1) {
-            e.preventDefault()
-          }
-        }}
-        onKeyDown={(e) => {
-          if (currentPage === 1 && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
-          }
-        }}
-      >
+      {currentPage === 1 ? (
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage === 1}
-          aria-label="Ir a página anterior"
+          disabled
+          aria-label="Página anterior no disponible"
+          aria-disabled="true"
         >
           Anterior
         </Button>
-      </Link>
+      ) : (
+        <Link href={getPageUrl(currentPage - 1) as Route} aria-label="Página anterior">
+          <Button variant="outline" size="sm" aria-label="Ir a página anterior">
+            Anterior
+          </Button>
+        </Link>
+      )}
 
       <div className="flex gap-1" role="list">
         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -90,31 +82,23 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
         })}
       </div>
 
-      <Link
-        href={(currentPage === totalPages ? '#' : getPageUrl(currentPage + 1)) as Route}
-        aria-label="Página siguiente"
-        aria-disabled={currentPage === totalPages}
-        tabIndex={currentPage === totalPages ? -1 : 0}
-        onClick={(e) => {
-          if (currentPage === totalPages) {
-            e.preventDefault()
-          }
-        }}
-        onKeyDown={(e) => {
-          if (currentPage === totalPages && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
-          }
-        }}
-      >
+      {currentPage === totalPages ? (
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage === totalPages}
-          aria-label="Ir a página siguiente"
+          disabled
+          aria-label="Página siguiente no disponible"
+          aria-disabled="true"
         >
           Siguiente
         </Button>
-      </Link>
+      ) : (
+        <Link href={getPageUrl(currentPage + 1) as Route} aria-label="Página siguiente">
+          <Button variant="outline" size="sm" aria-label="Ir a página siguiente">
+            Siguiente
+          </Button>
+        </Link>
+      )}
 
       <span className="text-sm text-gray-300 ml-4" aria-live="polite">
         Página {currentPage} de {totalPages}
@@ -122,4 +106,3 @@ export function Pagination({ currentPage, totalPages, basePath }: PaginationProp
     </nav>
   )
 }
-

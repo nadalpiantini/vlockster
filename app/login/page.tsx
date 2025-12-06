@@ -82,7 +82,7 @@ export default function LoginPage() {
               className="px-6 py-2.5 bg-gradient-to-r from-[#FF0000] to-[#FF6B35] text-white rounded-lg font-semibold text-sm hover:from-[#FF1a1a] hover:to-[#FF7B45] transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-105"
               aria-label="Crear cuenta nueva"
             >
-              Sign Up
+              Crear Cuenta
             </Link>
           </div>
         </div>
@@ -106,10 +106,10 @@ export default function LoginPage() {
               <span className="text-sm text-gray-300">Welcome back</span>
             </div>
             <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
-              Sign In
+              Iniciar Sesión
             </CardTitle>
             <CardDescription className="text-gray-300 text-base">
-              Enter your email and password to access VLOCKSTER
+              Ingresa tu correo y contraseña para acceder a VLOCKSTER
             </CardDescription>
           </CardHeader>
           <form 
@@ -172,12 +172,12 @@ export default function LoginPage() {
                 aria-label={loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
                 aria-busy={loading}
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </Button>
               <p className="text-sm text-gray-300 text-center">
-                Don&apos;t have an account?{' '}
+                ¿No tienes cuenta?{' '}
                 <Link href="/signup" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Crear cuenta nueva">
-                  Sign up here
+                  Crear cuenta
                 </Link>
               </p>
             </CardFooter>

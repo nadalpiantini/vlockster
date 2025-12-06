@@ -184,6 +184,7 @@ export default function CreateProjectPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
+                  aria-required="true"
                   disabled={creating}
                 />
               </div>
@@ -241,13 +242,14 @@ export default function CreateProjectPage() {
                     type="number"
                     min="1"
                     step="0.01"
-                    placeholder="5000"
-                    value={goalAmount}
-                    onChange={(e) => setGoalAmount(e.target.value)}
-                    required
-                    disabled={creating}
-                  />
-                </div>
+                  placeholder="5000"
+                  value={goalAmount}
+                  onChange={(e) => setGoalAmount(e.target.value)}
+                  required
+                  aria-required="true"
+                  disabled={creating}
+                />
+              </div>
 
                 {/* Fecha Límite */}
                 <div className="space-y-2">
@@ -257,13 +259,14 @@ export default function CreateProjectPage() {
                   <Input
                     id="deadline"
                     type="date"
-                    min={minDate}
-                    value={deadline}
-                    onChange={(e) => setDeadline(e.target.value)}
-                    required
-                    disabled={creating}
-                  />
-                </div>
+                  min={minDate}
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  required
+                  aria-required="true"
+                  disabled={creating}
+                />
+              </div>
               </div>
 
               {/* Video ID (Opcional) */}
@@ -410,9 +413,10 @@ export default function CreateProjectPage() {
                 <Button
                   type="submit"
                   className="flex-1"
-                  disabled={!title || !description || !goalAmount || !deadline || creating}
+                  disabled={creating}
+                  aria-label="Crear proyecto"
                 >
-                  {creating ? 'Creando Proyecto...' : 'Lanzar Proyecto'}
+                  {creating ? 'Creando Proyecto...' : 'Crear Proyecto'}
                 </Button>
                 <Button
                   type="button"

@@ -225,6 +225,7 @@ export default function UploadPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
+                  aria-required="true"
                   disabled={uploading}
                   aria-describedby="title-description"
                   aria-invalid={false}
@@ -281,7 +282,7 @@ export default function UploadPage() {
                 <Button
                   type="submit"
                   className="flex-1"
-                  disabled={!file || !title || uploading}
+                  disabled={uploading}
                   aria-label={uploading ? 'Subiendo video...' : 'Subir video'}
                 >
                   {uploading ? 'Subiendo...' : 'Subir Video'}

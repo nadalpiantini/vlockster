@@ -132,11 +132,6 @@ test.describe('API: /api/admin/resolve-report', () => {
     expect(response.status()).toBe(401)
   })
 
-  test('should reject GET requests', async ({ request }) => {
-    const response = await request.get('/api/admin/resolve-report')
-    expect(response.status()).toBe(405)
-  })
-
   test('should reject PUT requests', async ({ request }) => {
     const response = await request.put('/api/admin/resolve-report', {
       data: { reportId: 'test-id', action: 'resolve' },

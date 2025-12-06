@@ -101,7 +101,7 @@ export default function SignupPage() {
               className="px-5 py-2.5 text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200"
               aria-label="Iniciar sesión"
             >
-              Sign In
+              Iniciar Sesión
             </Link>
           </div>
         </div>
@@ -122,13 +122,13 @@ export default function SignupPage() {
             </div>
             <div className="inline-flex items-center space-x-2 px-4 py-2 glass-card rounded-full mb-2">
               <Sparkles className="w-4 h-4 text-[#FF0000]" aria-hidden="true" />
-              <span className="text-sm text-gray-300">Join the community</span>
+              <span className="text-sm text-gray-300">Únete a la comunidad</span>
             </div>
             <CardTitle className="text-3xl font-black bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
-              Create Account
+              Crear Cuenta
             </CardTitle>
             <CardDescription className="text-gray-300 text-base">
-              Join VLOCKSTER and discover the best independent cinema
+              Únete a VLOCKSTER y descubre el mejor cine independiente
             </CardDescription>
           </CardHeader>
           <form 
@@ -232,12 +232,12 @@ export default function SignupPage() {
                 aria-label={loading ? 'Creando cuenta...' : 'Crear cuenta'}
                 aria-busy={loading}
               >
-                {loading ? 'Creating account...' : 'Create Account'}
+                {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
               </Button>
               <p className="text-sm text-gray-300 text-center">
-                Already have an account?{' '}
+                ¿Ya tienes cuenta?{' '}
                 <Link href="/login" className="text-[#FF0000] hover:text-[#FF6B35] font-semibold transition-colors" aria-label="Iniciar sesión">
-                  Sign in here
+                  Inicia sesión aquí
                 </Link>
               </p>
             </CardFooter>

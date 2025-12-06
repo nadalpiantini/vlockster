@@ -76,13 +76,13 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // Note: PayPal SDK requires 'unsafe-inline' for scripts. To fully remove it,
+              // Note: PayPal SDK and Next.js require 'unsafe-inline' for scripts. To fully remove it,
               // consider implementing nonce-based CSP or switching to PayPal's REST API
-              "script-src 'self' https://www.paypal.com https://www.paypalobjects.com",
+              "script-src 'self' 'unsafe-inline' https://www.paypal.com https://www.paypalobjects.com https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co https://*.cloudflarestream.com https://api.paypal.com https://api-m.sandbox.paypal.com",
+              "connect-src 'self' https://*.supabase.co https://*.cloudflarestream.com https://api.paypal.com https://api-m.sandbox.paypal.com https://vitals.vercel-insights.com",
               "frame-src 'self' https://www.paypal.com https://www.sandbox.paypal.com",
               "object-src 'none'",
               "base-uri 'self'",

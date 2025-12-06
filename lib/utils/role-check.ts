@@ -21,12 +21,49 @@ export type Role = 'viewer' | 'creator' | 'moderator' | 'admin'
  * 
  * @deprecated Consider removing this feature flag entirely if not needed
  */
-const DISABLE_AUTH = false
+const HAS_SUPABASE_ENV = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+// Always open - no auth required
+const DISABLE_AUTH = true
 
 export async function getCurrentUser() {
-  // Auth bypass: Skip auth check when DISABLE_AUTH=true (testing only)
+  // Always open - return mock admin user if no real user
   if (DISABLE_AUTH) {
-    return null
+    // Try to get real user first if Supabase is configured
+    if (HAS_SUPABASE_ENV) {
+      const supabase = await createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+
+        if (profile) return profile
+      }
+    }
+
+    // Return mock admin user
+    return {
+      id: 'mock-admin',
+      email: 'admin@vlockster.test',
+      name: 'Admin User',
+      bio: null,
+      avatar_url: null,
+      role: 'admin',
+      role_scope: null,
+      is_premium_creator: false,
+      public_profile_slug: null,
+      preferred_lang: 'en',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    } as UserProfile
   }
 
   const supabase = await createClient()
@@ -63,49 +100,30 @@ export type UserProfile = {
 export async function requireAuth(): Promise<UserProfile> {
   const user = await getCurrentUser()
 
-  // Auth bypass: Return mock guest user when DISABLE_AUTH=true
-  if (!user && DISABLE_AUTH) {
+  // Always return mock admin user - everything is open
+  if (!user) {
     return {
-      id: 'guest-user',
-      email: 'guest@vlockster.com',
-      name: 'Guest User',
+      id: 'mock-admin',
+      email: 'admin@vlockster.test',
+      name: 'Admin User',
       bio: null,
       avatar_url: null,
-      role: 'viewer' as Role,
+      role: 'admin' as Role,
       role_scope: null,
       is_premium_creator: false,
       public_profile_slug: null,
-      preferred_lang: 'es',
+      preferred_lang: 'en',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     } as UserProfile
   }
-
-  // Redirect to login if user not authenticated
-  if (!user && !DISABLE_AUTH) {
-    redirect('/login')
-    // redirect nunca retorna, pero TypeScript no lo sabe
-    throw new Error('Redirect failed')
-  }
   
-  // Si llegamos aquí, user debe existir (TypeScript necesita esta verificación explícita)
-  if (user) {
-    return user as UserProfile
-  }
-  
-  // Fallback (no debería llegar aquí)
-  throw new Error('User not found and auth is required')
+  return user as UserProfile
 }
 
 export async function requireRole(allowedRoles: Role[]): Promise<UserProfile> {
   const user = await requireAuth()
-  // Auth bypass: Allow access with mock user when DISABLE_AUTH=true
-  if (DISABLE_AUTH) {
-    return user // Already returns mock profile from requireAuth
-  }
-  if (!allowedRoles.includes(user.role as Role)) {
-    redirect('/dashboard')
-  }
+  // Always allow access - everything is open
   return user
 }
 

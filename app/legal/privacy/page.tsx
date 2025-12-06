@@ -1,18 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Política de Privacidad - VLOCKSTER',
   description: 'Política de privacidad y protección de datos de VLOCKSTER',
 }
 
 export default function PrivacyPage() {
+  const lastUpdated = new Intl.DateTimeFormat('es-ES', {
+    dateStyle: 'long',
+  }).format(new Date())
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
       <div className="container mx-auto max-w-4xl">
         <main id="main-content" role="main" aria-label="Política de privacidad">
           <h1 className="text-4xl font-bold mb-8">Política de Privacidad</h1>
-          <p className="text-gray-300 mb-8">Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+          <p className="text-gray-300 mb-8">Última actualización: {lastUpdated}</p>
 
           <section className="space-y-6 mb-12">
             <h2 className="text-2xl font-semibold">1. Información que Recopilamos</h2>
@@ -148,4 +154,3 @@ export default function PrivacyPage() {
     </div>
   )
 }
-

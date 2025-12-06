@@ -87,9 +87,9 @@ export default async function WatchPage({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Video Catalog</h1>
+              <h1 className="text-3xl font-bold mb-2">Catálogo</h1>
               <p className="text-gray-300">
-                Discover independent content from creators around the world
+                Descubre contenido independiente de creadores alrededor del mundo
               </p>
             </div>
             <div className="w-full md:w-auto max-w-md">

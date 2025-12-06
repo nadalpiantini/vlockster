@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getCurrentUser } from '@/lib/utils/role-check'
+import { getCurrentUser, type UserProfile } from '@/lib/utils/role-check'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/types/database.types'
 import {
@@ -31,35 +30,16 @@ async function getMyProjects(userId: string) {
 export default async function MyProjectsPage() {
   const user = await getCurrentUser()
 
-  // Auth check: Redirect to login if authentication is enabled
-  // Fallback: Show login prompt if no user
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-gray-300 mb-4">
-                Login deshabilitado temporalmente. Esta página requiere autenticación.
-              </p>
-              <Link href="/dashboard">
-                <Button>Volver al Dashboard</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
+  // Always open - use mock admin user if no real user
+  const userProfile = (user || {
+    id: 'mock-admin',
+    email: 'admin@vlockster.test',
+    name: 'Admin User',
+    role: 'admin',
+  }) as UserProfile
 
-  const userProfile = user as Database['public']['Tables']['profiles']['Row'] | null
-  const isCreator = userProfile && ['creator', 'admin'].includes(userProfile.role)
-
-  if (!isCreator) {
-    redirect('/dashboard')
-  }
-
-  const projects = await getMyProjects(userProfile!.id)
+  // Everything is open - no role restrictions
+  const projects = await getMyProjects(userProfile.id)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white py-12 px-4">
