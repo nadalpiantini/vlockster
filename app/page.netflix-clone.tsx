@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Play, Plus, ThumbsUp, ChevronDown, Search, Bell, DollarSign, Info, X, Check } from 'lucide-react'
-import { inter, spaceGrotesk } from './fonts'
+import { Play, Plus, ThumbsUp, ChevronDown, Search, Bell, User, Star, Clock, Calendar, Heart, MessageCircle, TrendingUp, Users, DollarSign, ArrowRight, Film } from 'lucide-react'
+import { inter, spaceGrotesk } from '../fonts'
 
 // Types
 interface ContentItem {
