@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Route } from 'next'
 import Image from 'next/image'
 
 export default function UIDemosPage() {
@@ -209,7 +210,7 @@ export default function UIDemosPage() {
               {demos.map((demo) => (
                 <Link
                   key={demo.id}
-                  href={demo.link}
+                  href={demo.link as Route}
                   className="group relative p-8 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl transition-all duration-500 hover:border-white/30 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
@@ -299,7 +300,7 @@ export default function UIDemosPage() {
               {inspirationDemos.map((demo) => (
                 <Link
                   key={demo.id}
-                  href={demo.link}
+                  href={demo.link as Route}
                   className="group relative p-6 rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl transition-all duration-500 hover:border-white/30 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>

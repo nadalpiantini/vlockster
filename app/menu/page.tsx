@@ -320,7 +320,7 @@ export default function IntegrationMenuPage() {
                   {/* Actions */}
                   <div className="flex gap-3">
                     <Link
-                      href={repo.link}
+                      href={repo.link as Route}
                       className="flex-1 px-4 py-2.5 bg-[#FF0000] text-white rounded-lg font-semibold hover:bg-[#FF1a1a] transition-colors text-center text-sm flex items-center justify-center gap-2"
                     >
                       <Play className="w-4 h-4" />
