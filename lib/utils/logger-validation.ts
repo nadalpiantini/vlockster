@@ -150,15 +150,20 @@ export function intelligentLog(
   // Registrar el log original
   switch (level) {
     case 'info':
-      return logger.info(message, context)
+      logger.info(message, context)
+      return
     case 'warn':
-      return logger.warn(message, context)
+      logger.warn(message, context)
+      return
     case 'error':
-      return logger.error(message, context)
+      logger.error(message, context)
+      return
     case 'debug':
-      return logger.debug(message, context)
+      logger.debug(message, context)
+      return
     default:
-      return logger.info(message, context)
+      logger.info(message, context)
+      return
   }
 }
 

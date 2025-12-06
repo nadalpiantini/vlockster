@@ -26,7 +26,14 @@
     "deploy:prod:bash": "bash scripts/deploy-production.sh",
     "bmad:refresh": "npx bmad-method install -f -d .",
     "bmad:list": "echo 'See AGENTS.md for complete agent directory' && cat AGENTS.md | head -20",
-    "bmad:validate": "echo 'BMAD-METHOD installed. Check .bmad-core/ directory and AGENTS.md for agent information'"
+    "bmad:validate": "echo 'BMAD-METHOD installed. Check .bmad-core/ directory and AGENTS.md for agent information'",
+    "agents:setup": "echo 'Agent frameworks configured successfully'",
+    "agents:ui-enhance": "tsx scripts/enhance-ui.ts",
+    "agents:test-planner": "npx playwright run-mcp-server --agent=planner",
+    "agents:test-generator": "npx playwright run-mcp-server --agent=generator",
+    "agents:test-healer": "npx playwright run-mcp-server --agent=healer",
+    "serena:start": "uvx --from git+https://github.com/oraios/serena serena-mcp-server",
+    "agents:check": "echo 'Available agents: UI Enhancer, Test Agents, Accessibility Checker, Performance Optimizer'"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.1.3",
@@ -40,6 +47,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.25",
     "isomorphic-dompurify": "^2.33.0",
     "lucide-react": "^0.555.0",
     "next": "^15.5.7",

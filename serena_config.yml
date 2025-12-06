@@ -1,0 +1,27 @@
+# Serena MCP Server Configuration for VLOCKSTER
+project_name: "VLOCKSTER"
+language: "typescript"
+framework: "nextjs"
+features:
+  - semantic_code_analysis
+  - project_indexing
+  - shell_execution
+  - file_editing
+  - dashboard
+paths:
+  exclude:
+    - "node_modules/**"
+    - ".next/**"
+    - ".git/**"
+    - "dist/**"
+    - "build/**"
+  include:
+    - "**/*.ts"
+    - "**/*.tsx"
+    - "**/*.js"
+    - "**/*.jsx"
+    - "**/*.json"
+    - "**/*.md"
+logging:
+  level: "info"
+  dashboard: true
